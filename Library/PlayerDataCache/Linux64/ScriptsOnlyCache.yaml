@@ -8,14 +8,10 @@ ScriptsOnlyBuild:
     - UnityEditor.U2D.Animation.BoneGizmo
     Unity.2D.IK.Editor.dll:
     - UnityEditor.U2D.IK.IKEditorManager
-    - UnityEditor.U2D.IK.IKGizmos
     Unity.2D.IK.Runtime.dll:
     - UnityEditor.U2D.IK.IKEditorManagerHelper
     Unity.2D.Tilemap.Editor.dll:
-    - UnityEditor.Tilemaps.GridBrush
     - UnityEditor.Tilemaps.GridPaintingState
-    - UnityEditor.Tilemaps.GridPaletteBrushes
-    - UnityEditor.Tilemaps.GridPalettes
     - UnityEditor.Tilemaps.SceneViewGridManager
     - UnityEditor.Tilemaps.SceneViewOpenTilePaletteHelper
     - UnityEditor.Tilemaps.TileDragAndDropManager
@@ -67,27 +63,27 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 1846}
     - Class: 114
-      Script: {instanceID: 2228}
+      Script: {instanceID: 2234}
     - Class: 114
-      Script: {instanceID: 2650}
+      Script: {instanceID: 2656}
     - Class: 114
-      Script: {instanceID: 2810}
+      Script: {instanceID: 2818}
     - Class: 114
-      Script: {instanceID: 2856}
+      Script: {instanceID: 2864}
     - Class: 114
-      Script: {instanceID: 3026}
+      Script: {instanceID: 3034}
     - Class: 114
-      Script: {instanceID: 3270}
+      Script: {instanceID: 3278}
     - Class: 114
-      Script: {instanceID: 3382}
+      Script: {instanceID: 3390}
     - Class: 114
-      Script: {instanceID: 4474}
+      Script: {instanceID: 4488}
     - Class: 114
-      Script: {instanceID: 4560}
+      Script: {instanceID: 4576}
     - Class: 114
-      Script: {instanceID: 4714}
+      Script: {instanceID: 4732}
     - Class: 114
-      Script: {instanceID: 5092}
+      Script: {instanceID: 5110}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -136,7 +132,7 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 1572}
     - Class: 114
-      Script: {instanceID: 25988}
+      Script: {instanceID: 3618}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 157
@@ -446,6 +442,12 @@ ScriptsOnlyBuild:
     className: ContentSizeFitter
   - hash:
       serializedVersion: 2
+      Hash: d3e0279a8c83c28e56c20bbfc94ec46a
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: BombSpawner
+  - hash:
+      serializedVersion: 2
       Hash: caa533b001ae39b864ba8425019e2268
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
@@ -708,12 +710,6 @@ ScriptsOnlyBuild:
     assemblyName: Unity.2D.IK.Runtime.dll
     namespaceName: UnityEngine.U2D.IK
     className: FabrikSolver2D
-  - hash:
-      serializedVersion: 2
-      Hash: d3e0279a8c83c28e56c20bbfc94ec46a
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: BombSpawner
   platform: 24
   scenePathNames:
   - Assets/Scenes/MainMenu.unity
