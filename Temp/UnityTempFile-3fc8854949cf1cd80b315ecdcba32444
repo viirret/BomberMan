@@ -333,11 +333,12 @@
 /define:UNITY_STANDALONE_LINUX_API
 /define:UNITY_TEAM_LICENSE
 /define:USE_SEARCH_ENGINE_API
-"Assets/Bomb.cs"
 "Assets/Platformer Tileset/Materials/GradientSky/Scripts/Common/GradientSkyCommon.cs"
 "Assets/Platformer Tileset/Materials/GradientSky/Scripts/GradientSkyCamera.cs"
 "Assets/Platformer Tileset/Materials/GradientSky/Scripts/GradientSkyObject.cs"
+"Assets/Scripts/Bomb.cs"
 "Assets/Scripts/BombSpawner.cs"
 "Assets/Scripts/GameMap.cs"
 "Assets/Scripts/MainMenu.cs"
+"Assets/Scripts/MapDestroyer.cs"
 "Assets/Scripts/MenuScript.cs"

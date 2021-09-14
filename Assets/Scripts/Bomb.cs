@@ -11,6 +11,7 @@ public class Bomb : MonoBehaviour
 
         if(countdown <= 0f)
         {
+            FindObjectOfType<MapDestroyer>().Explode(transform.position);
             Debug.Log("Explosion!");
             Destroy(gameObject);
         }

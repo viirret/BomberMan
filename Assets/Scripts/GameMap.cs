@@ -16,7 +16,6 @@ public class GameMap : MonoBehaviour
         tilemap.SetTile(new Vector3Int(0,0,0), tile); // Or use SetTiles() for multiple tiles.
         */
 
-
     }
 
     // Update is called once per frame

@@ -340,4 +340,5 @@
 "Assets/Scripts/BombSpawner.cs"
 "Assets/Scripts/GameMap.cs"
 "Assets/Scripts/MainMenu.cs"
+"Assets/Scripts/MapDestroyer.cs"
 "Assets/Scripts/MenuScript.cs"
