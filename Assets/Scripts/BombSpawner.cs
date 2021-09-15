@@ -3,11 +3,15 @@ using UnityEngine.Tilemaps;
 
 public class BombSpawner : MonoBehaviour
 {
-    public Tilemap tilemap;
+    Tilemap tilemap;
 
-    public GameObject bombPrefab;
+    GameObject bombPrefab;
 
-    // Update is called once per frame
+    void Start() 
+    {
+        tilemap = GameObject.Find("TilemapTop").GetComponent<Tilemap>();
+        bombPrefab = Resources.Load<GameObject>("bomb");
+    }
     void Update()
     {
         if(Input.GetMouseButtonDown(0))
