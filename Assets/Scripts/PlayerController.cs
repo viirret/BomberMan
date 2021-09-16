@@ -11,17 +11,20 @@ public class PlayerController : MonoBehaviour
     Tile wallTile;
     Tile destructibleTile;
 
+    GameObject bombPrefab;
+
+    public static Vector2 bombposition;
     void Start() 
     {
         tilemap = GameObject.Find("TilemapTop").GetComponent<Tilemap>();   
         wallTile = Resources.Load<Tile>("GameTiles/Wall");
         destructibleTile = Resources.Load<Tile>("GameTiles/Destructible");
+        bombPrefab = Resources.Load<GameObject>("bomb");
     }
 
-    void Update() 
+    void FixedUpdate() 
     {
         Vector3Int pos = tilemap.WorldToCell(transform.position);
-
         Tile currentTile = tilemap.GetTile<Tile>(pos);
 
         // movement
@@ -34,23 +37,12 @@ public class PlayerController : MonoBehaviour
         if(Input.GetKey(KeyCode.D))
             transform.position += new Vector3(1, 0) * speed * Time.deltaTime;
         
-        //Vector2 newpos = new Vector2(pos.x, pos.y);
-        
-        //if(Input.GetKey(KeyCode.Space))
-        //{
-        //    MapDestroyer.Explode(currentTile);
-        //}
-        
 
-    }
-
-/*    private void OnCollisionEnter(Collision other) 
-    {
-        if(other.gameObject.name == "Wall")
+        // placing bomb
+        if(Input.GetKeyDown(KeyCode.Space))
         {
-            Debug.Log("Hit Rock!");
-            speed = 0;
+            bombposition = transform.position;
+            Instantiate(bombPrefab, transform.position, Quaternion.identity);
         }
     }
-*/
 }
