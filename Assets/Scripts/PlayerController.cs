@@ -6,16 +6,15 @@ using UnityEngine.Tilemaps;
 public class PlayerController : MonoBehaviour
 {
     // find the current position for player
-    float speed = 2f;
+    float speed;
     Tilemap tilemap;
     Tile wallTile;
     Tile destructibleTile;
-
     GameObject bombPrefab;
-
     public static Vector2 bombposition;
     void Start() 
     {
+        speed = Player.speed;
         tilemap = GameObject.Find("TilemapTop").GetComponent<Tilemap>();   
         wallTile = Resources.Load<Tile>("GameTiles/Wall");
         destructibleTile = Resources.Load<Tile>("GameTiles/Destructible");
@@ -37,7 +36,6 @@ public class PlayerController : MonoBehaviour
         if(Input.GetKey(KeyCode.D))
             transform.position += new Vector3(1, 0) * speed * Time.deltaTime;
         
-
         // placing bomb
         if(Input.GetKeyDown(KeyCode.Space))
         {

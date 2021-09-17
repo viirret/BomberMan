@@ -28,23 +28,37 @@ public class MapDestroyer : MonoBehaviour
 
         // standard values make these react to powerups
         ExplodeCell(origincell);
-        if(ExplodeCell(origincell + new Vector3Int(1, 0, 0)))
-        {
-            ExplodeCell(origincell + new Vector3Int(2, 0, 0));
+
+        // bomb explosion logic
+        for(int i = 0; i < Player.blastRadius; i++)
+        {                
+            if(ExplodeCell(origincell + new Vector3Int(i, 0, 0)))    
+                ExplodeCell(origincell + new Vector3Int(i, 0, 0));
+            else
+                break;
         }
-        if(ExplodeCell(origincell + new Vector3Int(0, 1, 0)))
+        for(int i = 0; i < Player.blastRadius; i++)
         {
-            ExplodeCell(origincell + new Vector3Int(0, 2, 0));
+            if(ExplodeCell(origincell + new Vector3Int((0-i), 0, 0)))
+                ExplodeCell(origincell + new Vector3Int((0-i), 0, 0));
+            else
+                break;
         }
-        if(ExplodeCell(origincell + new Vector3Int(-1, 0, 0)))
+        for(int i = 0; i < Player.blastRadius; i++)
         {
-            ExplodeCell(origincell + new Vector3Int(-2, 0, 0));
+            if(ExplodeCell(origincell + new Vector3Int(0, i, 0)))
+                ExplodeCell(origincell + new Vector3Int(0, i, 0));
+            else
+                break;
         }
-        if(ExplodeCell(origincell + new Vector3Int(0, -1, 0)))
+        for(int i = 0; i < Player.blastRadius; i++)
         {
-            ExplodeCell(origincell + new Vector3Int(0, -2, 0));
+            if(ExplodeCell(origincell + new Vector3Int(0, (0-i), 0)))
+                ExplodeCell(origincell + new Vector3Int(0, (0-i), 0));
+            else
+                break;
         }
-    }
+   }
 
     bool ExplodeCell(Vector3Int cell)
     {
