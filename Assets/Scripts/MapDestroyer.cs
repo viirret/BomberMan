@@ -26,7 +26,6 @@ public class MapDestroyer : MonoBehaviour
     {
         Vector3Int origincell = tilemap.WorldToCell(worldPos);
 
-        // standard values make these react to powerups
         ExplodeCell(origincell);
 
         // bomb explosion logic

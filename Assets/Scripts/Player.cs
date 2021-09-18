@@ -5,7 +5,7 @@ using UnityEngine;
 public static class Player
 {
     public static float speed = 5f;
-    public static int blastRadius = 3;
+    public static int blastRadius = 2;
     public static int bombsAtOnce = 1;
     public static int lives = 1;
 
@@ -27,5 +27,15 @@ public static class Player
         {
             Dead();
         }
+    }
+
+    public static void AddSpeed()
+    {
+        speed += 1;
+    }
+
+    public static void AddBlastRadius()
+    {
+        blastRadius++;
     }
 }
