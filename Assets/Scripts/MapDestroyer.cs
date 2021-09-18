@@ -30,35 +30,31 @@ public class MapDestroyer : MonoBehaviour
         ExplodeCell(origincell);
 
         // bomb explosion logic
-        for(int i = 0; i < Player.blastRadius; i++)
+        for(int i = 1; i < Player.blastRadius; i++)
         {                
             if(ExplodeCell(origincell + new Vector3Int(i, 0, 0)))
-            {
-                if(origincell + new Vector3Int(i, 0, 0) == PlayerController.playerPosition)
-                    Debug.Log("Hit Player"); 
-                ExplodeCell(origincell + new Vector3Int(i, 0, 0));
-            }
+                continue;
             else
                 break;
         }
-        for(int i = 0; i < Player.blastRadius; i++)
+        for(int i = 1; i < Player.blastRadius; i++)
         {
             if(ExplodeCell(origincell + new Vector3Int((0-i), 0, 0)))
-                ExplodeCell(origincell + new Vector3Int((0-i), 0, 0));
+                continue;
             else
                 break;
         }
-        for(int i = 0; i < Player.blastRadius; i++)
+        for(int i = 1; i < Player.blastRadius; i++)
         {
             if(ExplodeCell(origincell + new Vector3Int(0, i, 0)))
-                ExplodeCell(origincell + new Vector3Int(0, i, 0));
+                continue;
             else
                 break;
         }
-        for(int i = 0; i < Player.blastRadius; i++)
+        for(int i = 1; i < Player.blastRadius; i++)
         {
             if(ExplodeCell(origincell + new Vector3Int(0, (0-i), 0)))
-                ExplodeCell(origincell + new Vector3Int(0, (0-i), 0));
+                continue;
             else
                 break;
         }
@@ -72,9 +68,10 @@ public class MapDestroyer : MonoBehaviour
             return false;
 
         if(tile == destructibleTile)
-        {
             tilemap.SetTile(cell, null);
-        }
+
+        if(cell == PlayerController.playerPosition)
+            Player.RemoveLife();
 
         // create the explosion
         Vector3 pos = tilemap.GetCellCenterWorld(cell);

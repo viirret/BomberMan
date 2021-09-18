@@ -12,8 +12,7 @@ public class PlayerController : MonoBehaviour
     GameObject bombPrefab;
     public static Vector2 bombposition;
     public static Vector3Int playerPosition;
-    Vector3Int playerpos;
-    
+    public static Vector3 PlayerPos;
     public static int bombAmount = 0;
     void Start() 
     {
@@ -28,8 +27,9 @@ public class PlayerController : MonoBehaviour
     {
         // get the position of the player
         playerPosition = tilemap.WorldToCell(transform.position);
-        Debug.Log(playerPosition);
+        //Debug.Log(playerPosition);
         
+        PlayerPos = transform.position;
         // movement
         if(Input.GetKey(KeyCode.W))
             transform.position += new Vector3(0, 1) * speed * Time.deltaTime;
