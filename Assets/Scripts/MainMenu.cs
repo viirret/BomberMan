@@ -47,7 +47,7 @@ public class MainMenu : MonoBehaviour
 
     void StartGame()
     {
-        SceneManager.LoadScene("maptest");
+        SceneManager.LoadScene("game");
     }
 
     void QuitGame()

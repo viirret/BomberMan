@@ -4,9 +4,10 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 public class GameMap : MonoBehaviour
 {
-    Tile Wall;
-    Tile Dirt;
-    Tile Destructible;
+    public static Tile Wall;
+    public static Tile Dirt;
+    public static Tile Destructible;
+    public static Tilemap TilemapTop;
     void Start()
     {
         // loading tiles from resources
@@ -16,6 +17,7 @@ public class GameMap : MonoBehaviour
         
         // creating grid and bottom tilemap
         var grid = new GameObject("Grid").AddComponent<Grid>();
+        MapDestroyer mapdes = grid.GetComponent<MapDestroyer>();
         var go1 = new GameObject("TilemapBase");
         var tm1 = go1.AddComponent<Tilemap>();
         tm1.transform.position = new Vector3(0.5f, 0, 0);
@@ -32,6 +34,7 @@ public class GameMap : MonoBehaviour
         body.bodyType = RigidbodyType2D.Static;
         var tr2 = go2.AddComponent<TilemapRenderer>();
         tr2.sortingOrder = 2;
+        TilemapTop = go2.GetComponent<Tilemap>();
 
         go1.transform.SetParent(grid.transform);
         go2.transform.SetParent(grid.transform);
@@ -39,6 +42,21 @@ public class GameMap : MonoBehaviour
         // making one map for now
         SetBottonLayer(tm1);
         SetTopLayer(tm2);
+    }
+
+    public static Tilemap GetTilemap()
+    {
+        return TilemapTop;
+    }
+
+    public static Tile GetWallTile()
+    {
+        return Wall;
+    }
+
+    public static Tile GetDestructible()
+    {
+        return Destructible;
     }
 
     void SetBottonLayer(Tilemap t)
@@ -57,31 +75,49 @@ public class GameMap : MonoBehaviour
             t.SetTile(new Vector3Int(8, i, 0), Wall);
         }
 
-        // centre
+        // center
         for(int i = -9; i < 8; i++)
             for(int j = -6; j < 5; j++)
                 t.SetTile(new Vector3Int(i, j, 0), Dirt);
         
-        SinglesBottom(t);
-    }
-
-    void SinglesBottom(Tilemap t)
-    {
+        // single wall tiles in bottom layer
         for(int i = -9; i < 7; i++)
             if(i % 2 == 0)
-            {
-                t.SetTile(new Vector3Int(i, 3, 0), Wall);
-                t.SetTile(new Vector3Int(i, 1, 0), Wall);
-                t.SetTile(new Vector3Int(i, -1, 0), Wall);
-                t.SetTile(new Vector3Int(i, -3, 0), Wall);
-                t.SetTile(new Vector3Int(i, -5, 0), Wall);
-            }
-
+                for(int j = -5; j < 4; j++)
+                    if(j % 2 != 0)
+                        t.SetTile(new Vector3Int(i, j, 0), Wall);
     }
 
     void SetTopLayer(Tilemap t)
     {
+        // first two and last two rows
+        for(int i = -7; i < 6; i++)
+        {
+            t.SetTile(new Vector3Int(i, 4, 0), Destructible);
+            t.SetTile(new Vector3Int(i, -6, 0), Destructible);
+            if(i % 2 != 0)
+            {
+                t.SetTile(new Vector3Int(i, 3, 0), Destructible);
+                t.SetTile(new Vector3Int(i, -5, 9), Destructible);
+            }
+        }
 
+        // middle full rows
+        for(int i = -9; i < 8; i++)
+            for(int j = -4; j < 3; j++)
+                if(j % 2 == 0)
+                    t.SetTile(new Vector3Int(i, j, 0), Destructible);
+
+        // single tiles in the middle
+        for(int i = -9; i < 9; i++)
+        {
+            if(i % 2 != 0)
+            {
+                t.SetTile(new Vector3Int(i, 1, 0), Destructible);
+                t.SetTile(new Vector3Int(i, -1, 0), Destructible);
+                t.SetTile(new Vector3Int(i, -3, 0), Destructible);
+            }
+        }
     }
 
     void Update()

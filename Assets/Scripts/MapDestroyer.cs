@@ -5,9 +5,8 @@ using UnityEngine.Tilemaps;
 
 public class MapDestroyer : MonoBehaviour
 {
-    Tilemap tilemap;
-    Tile wallTile;
-    Tile destructibleTile;
+    Tile wallTile = GameMap.GetWallTile();
+    Tile destructibleTile = GameMap.GetDestructible();
     GameObject explosionPrefab;
 
     // Unity doesn't allow to destroy Prefab
@@ -16,7 +15,6 @@ public class MapDestroyer : MonoBehaviour
     void Start()
     {
         // defining components
-        tilemap = GameObject.Find("TilemapTop").GetComponent<Tilemap>();
         wallTile = Resources.Load<Tile>("GameTiles/Wall");
         destructibleTile = Resources.Load<Tile>("GameTiles/Destructible");
         explosionPrefab = Resources.Load<GameObject>("Explosion");
@@ -24,7 +22,7 @@ public class MapDestroyer : MonoBehaviour
 
     public void Explode(Vector2 worldPos)
     {
-        Vector3Int origincell = tilemap.WorldToCell(worldPos);
+        Vector3Int origincell = GameMap.TilemapTop.WorldToCell(worldPos);
 
         ExplodeCell(origincell);
 
@@ -61,19 +59,19 @@ public class MapDestroyer : MonoBehaviour
 
     bool ExplodeCell(Vector3Int cell)
     {
-        Tile tile = tilemap.GetTile<Tile>(cell);
+        Tile tile = GameMap.GetTilemap().GetTile<Tile>(cell);
 
         if(tile == wallTile)
             return false;
 
         if(tile == destructibleTile)
-            tilemap.SetTile(cell, null);
+            GameMap.GetTilemap().SetTile(cell, null);
 
         if(cell == PlayerController.playerPosition)
             Player.RemoveLife();
 
         // create the explosion
-        Vector3 pos = tilemap.GetCellCenterWorld(cell);
+        Vector3 pos = GameMap.GetTilemap().GetCellCenterWorld(cell);
         temp = Instantiate(explosionPrefab, pos, Quaternion.identity);
         Destroy(temp, 1);
         return true;        

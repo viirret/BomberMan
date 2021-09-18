@@ -6,7 +6,6 @@ using UnityEngine.Tilemaps;
 public class PlayerController : MonoBehaviour
 {
     float speed;
-    Tilemap tilemap;
     Tile wallTile;
     Tile destructibleTile;
     GameObject bombPrefab;
@@ -17,7 +16,6 @@ public class PlayerController : MonoBehaviour
     void Start() 
     {
         speed = Player.speed;
-        tilemap = GameObject.Find("TilemapTop").GetComponent<Tilemap>();   
         wallTile = Resources.Load<Tile>("GameTiles/Wall");
         destructibleTile = Resources.Load<Tile>("GameTiles/Destructible");
         bombPrefab = Resources.Load<GameObject>("bomb");
@@ -26,7 +24,7 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate() 
     {
         // get the position of the player
-        playerPosition = tilemap.WorldToCell(transform.position);
+        playerPosition = GameMap.TilemapTop.WorldToCell(transform.position);
         //Debug.Log(playerPosition);
         
         PlayerPos = transform.position;
