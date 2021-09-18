@@ -18,12 +18,14 @@ public class GameMap : MonoBehaviour
         var grid = new GameObject("Grid").AddComponent<Grid>();
         var go1 = new GameObject("TilemapBase");
         var tm1 = go1.AddComponent<Tilemap>();
+        tm1.transform.position = new Vector3(0.5f, 0, 0);
         var tr1 = go1.AddComponent<TilemapRenderer>();
         tr1.sortingOrder = 1;
         
         // creating top tilemap with colliders
         var go2 = new GameObject("TilemapTop");
         var tm2 = go2.AddComponent<Tilemap>();
+        tm2.transform.position = new Vector3(0.5f, 0, 0);
         var tc2D = go2.AddComponent<TilemapCollider2D>();
         var cc2D = go2.AddComponent<CompositeCollider2D>();
         Rigidbody2D body = go2.GetComponent<Rigidbody2D>();
@@ -35,17 +37,49 @@ public class GameMap : MonoBehaviour
         go2.transform.SetParent(grid.transform);
 
         // making one map for now
-        SetBottonLayer();
-        SetTopLayer();
+        SetBottonLayer(tm1);
+        SetTopLayer(tm2);
     }
 
-    void SetBottonLayer()
+    void SetBottonLayer(Tilemap t)
     {
-        //tm1.SetTile(new Vector3Int(0,0,0), Wall);
+        // up and down row
+        for(int i = -10; i < 9; i++)
+        {
+            t.SetTile(new Vector3Int(i,5,0), Wall);
+            t.SetTile(new Vector3Int(i,-7,0), Wall);
+        }
+
+        // left and right column
+        for(int i = -6; i < 5; i++)
+        {
+            t.SetTile(new Vector3Int(-10, i, 0), Wall);
+            t.SetTile(new Vector3Int(8, i, 0), Wall);
+        }
+
+        // centre
+        for(int i = -9; i < 8; i++)
+            for(int j = -6; j < 5; j++)
+                t.SetTile(new Vector3Int(i, j, 0), Dirt);
+        
+        SinglesBottom(t);
+    }
+
+    void SinglesBottom(Tilemap t)
+    {
+        for(int i = -9; i < 7; i++)
+            if(i % 2 == 0)
+            {
+                t.SetTile(new Vector3Int(i, 3, 0), Wall);
+                t.SetTile(new Vector3Int(i, 1, 0), Wall);
+                t.SetTile(new Vector3Int(i, -1, 0), Wall);
+                t.SetTile(new Vector3Int(i, -3, 0), Wall);
+                t.SetTile(new Vector3Int(i, -5, 0), Wall);
+            }
 
     }
 
-    void SetTopLayer()
+    void SetTopLayer(Tilemap t)
     {
 
     }
