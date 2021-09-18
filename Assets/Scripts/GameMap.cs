@@ -4,21 +4,28 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 public class GameMap : MonoBehaviour
 {
-    // Start is called before the first frame update
+    Tile Wall;
+    Tile Dirt;
+    Tile Destructible;
     void Start()
     {
-        /*
+        // loading tiles from resources
+        Wall = Resources.Load<Tile>("GameTiles/Wall");
+        Dirt = Resources.Load<Tile>("GameTiles/Dirt");
+        Destructible = Resources.Load<Tile>("GameTiles/Destructible");
+        
+        // creating grid and tilemaps
         var grid = new GameObject("Grid").AddComponent<Grid>();
-        var tilemap = new GameObject("Tilemap").AddComponent<Tilemap>();
-        tilemap.transform.SetParent(grid.gameObject);
+        var go = new GameObject("Tilemap");
+        var tm = go.AddComponent<Tilemap>();
+        var tr = go.AddComponent<TilemapRenderer>();
+        go.transform.SetParent(grid.transform);
 
-        Tilemaps.TileBase tile; // Assign a tile asset to this.
-        tilemap.SetTile(new Vector3Int(0,0,0), tile); // Or use SetTiles() for multiple tiles.
-        */
+        tm.SetTile(new Vector3Int(0,0,0), Wall); // Or use SetTiles() for multiple tiles.
+        
 
     }
 
-    // Update is called once per frame
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.Escape))
