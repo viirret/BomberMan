@@ -32,8 +32,12 @@ public class MapDestroyer : MonoBehaviour
         // bomb explosion logic
         for(int i = 0; i < Player.blastRadius; i++)
         {                
-            if(ExplodeCell(origincell + new Vector3Int(i, 0, 0)))    
+            if(ExplodeCell(origincell + new Vector3Int(i, 0, 0)))
+            {
+                if(origincell + new Vector3Int(i, 0, 0) == PlayerController.playerPosition)
+                    Debug.Log("Hit Player"); 
                 ExplodeCell(origincell + new Vector3Int(i, 0, 0));
+            }
             else
                 break;
         }

@@ -2,10 +2,10 @@ ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
     - Bomb
-    - BombSpawner
     - GameMap
     - MainMenu
     - MapDestroyer
+    - PlayerController
     Unity.2D.Animation.Editor.dll:
     - UnityEditor.U2D.Animation.BoneGizmo
     Unity.2D.IK.Editor.dll:
@@ -14,6 +14,8 @@ ScriptsOnlyBuild:
     - UnityEditor.U2D.IK.IKEditorManagerHelper
     Unity.2D.Tilemap.Editor.dll:
     - UnityEditor.Tilemaps.GridPaintingState
+    - UnityEditor.Tilemaps.GridPaletteBrushes
+    - UnityEditor.Tilemaps.GridPalettes
     - UnityEditor.Tilemaps.SceneViewGridManager
     - UnityEditor.Tilemaps.SceneViewOpenTilePaletteHelper
     - UnityEditor.Tilemaps.TileDragAndDropManager
@@ -27,6 +29,12 @@ ScriptsOnlyBuild:
     - TMPro.TMP_SpriteAsset
     - TMPro.TMP_StyleSheet
     - TMPro.TextMeshProUGUI
+    UnityEditor.Graphs.dll:
+    - UnityEditor.Graphs.AnimationBlendTree.Graph
+    - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.Graph
+    - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
+    - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
     - UnityEditor.TestTools.TestRunner.TestListCacheData
@@ -54,18 +62,28 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 49
       Script: {instanceID: 0}
+    - Class: 74
+      Script: {instanceID: 0}
     - Class: 81
+      Script: {instanceID: 0}
+    - Class: 91
+      Script: {instanceID: 0}
+    - Class: 95
       Script: {instanceID: 0}
     - Class: 104
       Script: {instanceID: 0}
     - Class: 114
       Script: {instanceID: -592}
     - Class: 114
+      Script: {instanceID: 650}
+    - Class: 114
       Script: {instanceID: 1542}
     - Class: 114
       Script: {instanceID: 1846}
     - Class: 114
       Script: {instanceID: 2234}
+    - Class: 114
+      Script: {instanceID: 2598}
     - Class: 114
       Script: {instanceID: 2658}
     - Class: 114
@@ -93,6 +111,8 @@ ScriptsOnlyBuild:
     - Class: 157
       Script: {instanceID: 0}
     - Class: 196
+      Script: {instanceID: 0}
+    - Class: 212
       Script: {instanceID: 0}
     - Class: 213
       Script: {instanceID: 0}
@@ -123,6 +143,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 50
       Script: {instanceID: 0}
+    - Class: 61
+      Script: {instanceID: 0}
     - Class: 66
       Script: {instanceID: 0}
     - Class: 81
@@ -134,11 +156,9 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 1572}
     - Class: 114
-      Script: {instanceID: 2598}
-    - Class: 114
-      Script: {instanceID: 3620}
-    - Class: 114
       Script: {instanceID: 5652}
+    - Class: 114
+      Script: {instanceID: 5692}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 157
@@ -304,7 +324,7 @@ ScriptsOnlyBuild:
     className: IKManager2D
   - hash:
       serializedVersion: 2
-      Hash: b79f91a4ec7eebc93598d0b48f0c2344
+      Hash: f3295b09ed0f58db192c102c026028c1
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Bomb
@@ -452,12 +472,6 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
     className: ContentSizeFitter
-  - hash:
-      serializedVersion: 2
-      Hash: d3e0279a8c83c28e56c20bbfc94ec46a
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: BombSpawner
   - hash:
       serializedVersion: 2
       Hash: caa533b001ae39b864ba8425019e2268
@@ -724,10 +738,16 @@ ScriptsOnlyBuild:
     className: FabrikSolver2D
   - hash:
       serializedVersion: 2
-      Hash: f452ae2b096d63586bfa171d280d89ad
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: MapDestroyer
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: PlayerController
   platform: 24
   scenePathNames:
   - Assets/Scenes/MainMenu.unity

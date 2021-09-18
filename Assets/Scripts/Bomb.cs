@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class Bomb : MonoBehaviour
 {
-    public float countdown = 2f;
     public Vector2 pos;
+    float countdown = 2f;
     GameObject bombPrefab; 
-    
     void Start()
     {
         bombPrefab = Resources.Load<GameObject>("bomb");
@@ -23,6 +22,7 @@ public class Bomb : MonoBehaviour
             FindObjectOfType<MapDestroyer>().Explode(pos);
             Debug.Log("Explosion!");
             Destroy(gameObject);
+            PlayerController.bombAmount--;
         }
     }
 }

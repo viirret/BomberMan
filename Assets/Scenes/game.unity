@@ -140,15 +140,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 448312, guid: be049fa8d7a60574995a2523913743e7, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.07096932
+      value: 0.06
       objectReference: {fileID: 0}
     - target: {fileID: 448312, guid: be049fa8d7a60574995a2523913743e7, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.053639017
+      value: 0.04
       objectReference: {fileID: 0}
     - target: {fileID: 448312, guid: be049fa8d7a60574995a2523913743e7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -7.9584
+      value: -7.958484
       objectReference: {fileID: 0}
     - target: {fileID: 448312, guid: be049fa8d7a60574995a2523913743e7, type: 3}
       propertyPath: m_LocalPosition.y
@@ -350,7 +350,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 1
-  m_Mass: 0.7040457
+  m_Mass: 0.44387493
   m_LinearDrag: 0
   m_AngularDrag: 0
   m_GravityScale: 0

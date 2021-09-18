@@ -5,13 +5,16 @@ using UnityEngine.Tilemaps;
 
 public class PlayerController : MonoBehaviour
 {
-    // find the current position for player
     float speed;
     Tilemap tilemap;
     Tile wallTile;
     Tile destructibleTile;
     GameObject bombPrefab;
     public static Vector2 bombposition;
+    public static Vector3Int playerPosition;
+    Vector3Int playerpos;
+    
+    public static int bombAmount = 0;
     void Start() 
     {
         speed = Player.speed;
@@ -23,9 +26,10 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate() 
     {
-        Vector3Int pos = tilemap.WorldToCell(transform.position);
-        Tile currentTile = tilemap.GetTile<Tile>(pos);
-
+        // get the position of the player
+        playerPosition = tilemap.WorldToCell(transform.position);
+        Debug.Log(playerPosition);
+        
         // movement
         if(Input.GetKey(KeyCode.W))
             transform.position += new Vector3(0, 1) * speed * Time.deltaTime;
@@ -37,8 +41,9 @@ public class PlayerController : MonoBehaviour
             transform.position += new Vector3(1, 0) * speed * Time.deltaTime;
         
         // placing bomb
-        if(Input.GetKeyDown(KeyCode.Space))
+        if(Input.GetKeyDown(KeyCode.Space) && bombAmount < Player.bombsAtOnce)
         {
+            bombAmount++;
             bombposition = transform.position;
             Instantiate(bombPrefab, transform.position, Quaternion.identity);
         }
