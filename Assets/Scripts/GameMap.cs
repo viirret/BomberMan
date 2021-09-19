@@ -8,6 +8,7 @@ public class GameMap : MonoBehaviour
     public static Tile Dirt;
     public static Tile Destructible;
     public static Tilemap TilemapTop;
+    public static Tilemap TilemapBottom;
     void Start()
     {
         // loading tiles from resources
@@ -24,7 +25,8 @@ public class GameMap : MonoBehaviour
         tm1.transform.position = new Vector3(0.5f, 0, 0);
         var tr1 = go1.AddComponent<TilemapRenderer>();
         tr1.sortingOrder = 1;
-        
+        TilemapBottom = go1.GetComponent<Tilemap>();
+
         // creating top tilemap with colliders
         var go2 = new GameObject("TilemapTop");
         var tm2 = go2.AddComponent<Tilemap>();
@@ -45,23 +47,18 @@ public class GameMap : MonoBehaviour
         SetTopLayer(tm2);
     }
 
-    public static Tilemap GetTilemap()
-    {
-        return TilemapTop;
-    }
-
-    public static Tile GetWallTile()
-    {
-        return Wall;
-    }
-
-    public static Tile GetDestructible()
-    {
-        return Destructible;
-    }
-
     void SetBottonLayer(Tilemap t)
     {
+        for(int i = -9; i < 8; i++)
+            for(int j = -6; j < 5; j++)
+                t.SetTile(new Vector3Int(i, j, 0), Dirt);
+
+    }
+
+    void SetTopLayer(Tilemap t)
+    {
+        // WALL TILES
+
         // up and down row
         for(int i = -10; i < 9; i++)
         {
@@ -75,11 +72,6 @@ public class GameMap : MonoBehaviour
             t.SetTile(new Vector3Int(-10, i, 0), Wall);
             t.SetTile(new Vector3Int(8, i, 0), Wall);
         }
-
-        // center
-        for(int i = -9; i < 8; i++)
-            for(int j = -6; j < 5; j++)
-                t.SetTile(new Vector3Int(i, j, 0), Dirt);
         
         // single wall tiles in bottom layer
         for(int i = -9; i < 7; i++)
@@ -87,10 +79,9 @@ public class GameMap : MonoBehaviour
                 for(int j = -5; j < 4; j++)
                     if(j % 2 != 0)
                         t.SetTile(new Vector3Int(i, j, 0), Wall);
-    }
-
-    void SetTopLayer(Tilemap t)
-    {
+        
+        
+        //  DESTRUCTIBLE TILES
         // first two and last two rows
         for(int i = -7; i < 6; i++)
         {

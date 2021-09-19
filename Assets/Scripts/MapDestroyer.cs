@@ -22,7 +22,6 @@ public class MapDestroyer : MonoBehaviour
 
     public void Explode(Vector2 worldPos)
     {
-        Debug.Log("Starting explode");
         Vector3Int origincell = GameMap.TilemapTop.WorldToCell(worldPos);
 
         ExplodeCell(origincell);
@@ -61,15 +60,17 @@ public class MapDestroyer : MonoBehaviour
     bool ExplodeCell(Vector3Int cell)
     {
         Tile tile = GameMap.TilemapTop.GetTile<Tile>(cell);
+ 
+        // fix this
+        if(cell == PlayerController.playerPosition)
+            Player.RemoveLife();
+       
+        if(tile == destructibleTile)
+            GameMap.TilemapTop.SetTile(cell, null);
 
         if(tile == wallTile)
             return false;
-
-        if(tile == destructibleTile)
-            GameMap.GetTilemap().SetTile(cell, null);
-
-        if(cell == PlayerController.playerPosition)
-            Player.RemoveLife();
+        
 
         // create the explosion
         Vector3 pos = GameMap.TilemapTop.GetCellCenterWorld(cell);
