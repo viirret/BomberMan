@@ -136,7 +136,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 448312, guid: be049fa8d7a60574995a2523913743e7, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 448312, guid: be049fa8d7a60574995a2523913743e7, type: 3}
       propertyPath: m_LocalScale.x
@@ -2987,9 +2987,9 @@ CompositeCollider2D:
     - - {x: -6, y: -5.9999704}
       - {x: -8, y: -5.9999704}
       - {x: -7.9999704, y: -4}
-      - {x: -7.0000095, y: -4.0000296}
-      - {x: -6.9999743, y: -5.00001}
-      - {x: -6, y: -5.000039}
+      - {x: -7, y: -4.0000296}
+      - {x: -6.9999704, y: -5}
+      - {x: -6, y: -5.0000296}
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.00005
 --- !u!50 &1685461227
@@ -4694,5 +4694,5 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

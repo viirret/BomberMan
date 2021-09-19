@@ -16,8 +16,8 @@ public class PlayerController : MonoBehaviour
     void Start() 
     {
         speed = Player.speed;
-        wallTile = Resources.Load<Tile>("GameTiles/Wall");
-        destructibleTile = Resources.Load<Tile>("GameTiles/Destructible");
+        wallTile = GameMap.Wall;
+        destructibleTile = GameMap.Destructible;
         bombPrefab = Resources.Load<GameObject>("bomb");
     }
 

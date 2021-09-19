@@ -5,8 +5,8 @@ using UnityEngine.Tilemaps;
 
 public class MapDestroyer : MonoBehaviour
 {
-    Tile wallTile = GameMap.GetWallTile();
-    Tile destructibleTile = GameMap.GetDestructible();
+    Tile wallTile;
+    Tile destructibleTile;
     GameObject explosionPrefab;
 
     // Unity doesn't allow to destroy Prefab
@@ -15,13 +15,14 @@ public class MapDestroyer : MonoBehaviour
     void Start()
     {
         // defining components
-        wallTile = Resources.Load<Tile>("GameTiles/Wall");
-        destructibleTile = Resources.Load<Tile>("GameTiles/Destructible");
+        wallTile = GameMap.Wall;
+        destructibleTile = GameMap.Destructible;
         explosionPrefab = Resources.Load<GameObject>("Explosion");
     }
 
     public void Explode(Vector2 worldPos)
     {
+        Debug.Log("Starting explode");
         Vector3Int origincell = GameMap.TilemapTop.WorldToCell(worldPos);
 
         ExplodeCell(origincell);
@@ -59,7 +60,7 @@ public class MapDestroyer : MonoBehaviour
 
     bool ExplodeCell(Vector3Int cell)
     {
-        Tile tile = GameMap.GetTilemap().GetTile<Tile>(cell);
+        Tile tile = GameMap.TilemapTop.GetTile<Tile>(cell);
 
         if(tile == wallTile)
             return false;
@@ -71,7 +72,7 @@ public class MapDestroyer : MonoBehaviour
             Player.RemoveLife();
 
         // create the explosion
-        Vector3 pos = GameMap.GetTilemap().GetCellCenterWorld(cell);
+        Vector3 pos = GameMap.TilemapTop.GetCellCenterWorld(cell);
         temp = Instantiate(explosionPrefab, pos, Quaternion.identity);
         Destroy(temp, 1);
         return true;        

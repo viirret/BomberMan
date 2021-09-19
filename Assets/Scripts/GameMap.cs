@@ -16,8 +16,9 @@ public class GameMap : MonoBehaviour
         Destructible = Resources.Load<Tile>("GameTiles/Destructible");
         
         // creating grid and bottom tilemap
-        var grid = new GameObject("Grid").AddComponent<Grid>();
-        MapDestroyer mapdes = grid.GetComponent<MapDestroyer>();
+        var g = new GameObject("Grid");
+        var grid = g.AddComponent<Grid>();
+        var mapdes = g.AddComponent<MapDestroyer>();
         var go1 = new GameObject("TilemapBase");
         var tm1 = go1.AddComponent<Tilemap>();
         tm1.transform.position = new Vector3(0.5f, 0, 0);
