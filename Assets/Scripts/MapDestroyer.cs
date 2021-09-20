@@ -60,8 +60,7 @@ public class MapDestroyer : MonoBehaviour
     bool ExplodeCell(Vector3Int cell)
     {
         Tile tile = GameMap.TilemapTop.GetTile<Tile>(cell);
- 
-        // fix this
+
         if(cell == PlayerController.playerPosition)
             Player.RemoveLife();
        

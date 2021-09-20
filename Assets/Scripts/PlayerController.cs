@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     Tile destructibleTile;
     GameObject bombPrefab;
     public static Vector2 bombposition;
+    static Vector3Int playerPositionorig;
     public static Vector3Int playerPosition;
     public static Vector3 PlayerPos;
     public static int bombAmount = 0;
@@ -23,9 +24,10 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate() 
     {
-        // get the position of the player
-        playerPosition = GameMap.TilemapTop.WorldToCell(transform.position);
-        //Debug.Log(playerPosition);
+        // z value is -6 by default so changing to to match to map
+        playerPositionorig = GameMap.TilemapTop.WorldToCell(transform.position);
+        playerPosition = playerPositionorig;
+        playerPosition.z = 0;
         
         PlayerPos = transform.position;
         // movement

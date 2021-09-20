@@ -58,7 +58,6 @@ public class GameMap : MonoBehaviour
     void SetTopLayer(Tilemap t)
     {
         // WALL TILES
-
         // up and down row
         for(int i = -10; i < 9; i++)
         {
@@ -90,7 +89,7 @@ public class GameMap : MonoBehaviour
             if(i % 2 != 0)
             {
                 t.SetTile(new Vector3Int(i, 3, 0), Destructible);
-                t.SetTile(new Vector3Int(i, -5, 9), Destructible);
+                t.SetTile(new Vector3Int(i, -5, 0), Destructible);
             }
         }
 

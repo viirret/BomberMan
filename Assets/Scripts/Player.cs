@@ -7,7 +7,7 @@ public static class Player
     public static float speed = 5f;
     public static int blastRadius = 3;
     public static int bombsAtOnce = 1;
-    public static int lives = 1;
+    public static int lives = 3;
 
     static void Dead()
     {
