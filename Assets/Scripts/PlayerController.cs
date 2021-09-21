@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     Tile wallTile;
     Tile destructibleTile;
     GameObject bombPrefab;
+    GameObject blueBird;
     public static Vector2 bombposition;
     static Vector3Int playerPositionorig;
     public static Vector3Int playerPosition;
@@ -24,11 +25,11 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate() 
     {
-        // z value is -6 by default so changing to to match to map
+        // z value is -6 by default so changing to match to map
         playerPositionorig = GameMap.TilemapTop.WorldToCell(transform.position);
         playerPosition = playerPositionorig;
         playerPosition.z = 0;
-        
+
         PlayerPos = transform.position;
         // movement
         if(Input.GetKey(KeyCode.W))
