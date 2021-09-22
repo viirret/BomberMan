@@ -63,6 +63,9 @@ public class MapDestroyer : MonoBehaviour
 
         if(cell == PlayerController.playerPosition)
             Player.RemoveLife();
+        
+        if(cell == EnemyController.playerPosition)
+            EnemyController.RemoveLife();
        
         if(tile == destructibleTile)
             GameMap.TilemapTop.SetTile(cell, null);

@@ -8,6 +8,17 @@ public static class Player
     public static int blastRadius = 3;
     public static int bombsAtOnce = 1;
     public static int lives = 3;
+    public static int score = 0;
+
+    public static void AddScore(int amount)
+    {
+        score += amount;
+    }
+
+    public static void RemoveScore(int amount)
+    {
+        score -= amount;
+    }
 
     static void Dead()
     {
