@@ -6,8 +6,6 @@ using UnityEngine.Tilemaps;
 public class PlayerController : MonoBehaviour
 {
     float speed;
-    Tile wallTile;
-    Tile destructibleTile;
     GameObject bombPrefab;
     GameObject blueBird;
     public static Vector2 bombposition;
@@ -18,8 +16,6 @@ public class PlayerController : MonoBehaviour
     void Start() 
     {
         speed = Player.speed;
-        wallTile = GameMap.Wall;
-        destructibleTile = GameMap.Destructible;
         bombPrefab = Resources.Load<GameObject>("bomb");
     }
 
