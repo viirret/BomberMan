@@ -11,6 +11,8 @@ public class MapDestroyer : MonoBehaviour
     
     // Unity doesn't allow to destroy Prefab
     GameObject temp;
+
+    public static List <GameObject> enemyControllers = new List<GameObject>();
     
     void Start()
     {
@@ -18,6 +20,11 @@ public class MapDestroyer : MonoBehaviour
         wallTile = GameMap.Wall;
         destructibleTile = GameMap.Destructible;
         explosionPrefab = Resources.Load<GameObject>("Explosion");
+    }
+
+    public static void AddMe(GameObject obj)
+    {
+        enemyControllers.Add(obj);
     }
 
     public void Explode(Vector2 worldPos)
@@ -63,10 +70,11 @@ public class MapDestroyer : MonoBehaviour
 
         if(cell == PlayerController.playerPosition)
             Player.RemoveLife();
-        
-        //if(cell == EnemyController.playerPosition)
-        //    EnemyController.RemoveLife();
-       
+
+        for(int i = 0; i < enemyControllers.Count; i++)
+            if(enemyControllers[i].GetComponent<EnemyController>().playerPosition == cell)
+                enemyControllers[i].GetComponent<EnemyController>().RemoveLife();
+
         if(tile == destructibleTile)
             GameMap.TilemapTop.SetTile(cell, null);
 

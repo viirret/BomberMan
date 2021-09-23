@@ -15,6 +15,7 @@ public class CharacterSpawner : MonoBehaviour
     List<Vector3> spawnPoints = new List<Vector3>(4);
 
     bool level1 = true;
+
     void Start()
     {
         CreateSpawnPoints(spawnPoints);
@@ -24,7 +25,6 @@ public class CharacterSpawner : MonoBehaviour
         eagle = Resources.Load<GameObject>("Eagle");
         owl = Resources.Load<GameObject>("Owl");
         yellowBird = Resources.Load<GameObject>("Yellow Bird");
-
          
         // create the player first
         int spawn1 = Random.Range(0, 4);
@@ -57,9 +57,9 @@ public class CharacterSpawner : MonoBehaviour
         BoxCollider2D bc = obj.AddComponent<BoxCollider2D>();
         if(enemy)
         {
+            MapDestroyer.AddMe(obj);
             EnemyController ec = obj.AddComponent<EnemyController>();
             EnemyController EC = obj.GetComponent<EnemyController>();
-            EC.obj = obj;
             
             switch(bird.name)
             {
