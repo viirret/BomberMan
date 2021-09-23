@@ -59,6 +59,7 @@ public class CharacterSpawner : MonoBehaviour
         {
             EnemyController ec = obj.AddComponent<EnemyController>();
             EnemyController EC = obj.GetComponent<EnemyController>();
+            EC.obj = obj;
             
             switch(bird.name)
             {

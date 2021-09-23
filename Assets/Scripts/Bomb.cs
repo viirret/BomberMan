@@ -5,30 +5,30 @@ using UnityEngine;
 public class Bomb : MonoBehaviour
 {
     public Vector2 pos;
-    float countdown = 2f;
     GameObject bombPrefab;
     GameObject gm; 
     MapDestroyer mapdes;
+    GameObject b;
     void Start()
     {
         bombPrefab = Resources.Load<GameObject>("bomb");
-        // get elements from scene
+        b = Instantiate(bombPrefab, pos, Quaternion.identity);
         gm = GameObject.Find("Grid");
         mapdes = gm.GetComponent<MapDestroyer>();
+        StartCoroutine(WaitTwo());
     }
-    void Update()
-    {
-        countdown -= Time.deltaTime;
-        // getting the position where player plants the bomb
-        pos = PlayerController.bombposition;
 
-        if(countdown <= 0f)
-        {
-            mapdes.Explode(pos);
-            Debug.Log("Explosion!");
-            Destroy(gameObject);
-            // decrease the amount of bombs currently played
-            PlayerController.bombAmount--;
-        }
+    IEnumerator WaitTwo()
+    {
+        yield return new WaitForSeconds(2);
+        GoOff();
+    }
+
+    public void GoOff()
+    {
+        mapdes.Explode(pos);
+        Debug.Log("Explosion!");
+        PlayerController.bombAmount--;
+        Destroy(b);
     }
 }
