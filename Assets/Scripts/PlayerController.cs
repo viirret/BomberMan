@@ -11,9 +11,7 @@ public class PlayerController : MonoBehaviour
     static Vector3Int playerPositionorig;
     public static Vector3Int playerPosition;
     public static int bombAmount = 0;
-    float destroyAfter = 2f;
 
-    bool spawned = false;
     void Start() 
     {
         speed = Player.speed;
@@ -38,34 +36,13 @@ public class PlayerController : MonoBehaviour
             transform.position += new Vector3(1, 0) * speed * Time.deltaTime;
         
         // placing bomb
-        if(Input.GetKeyDown(KeyCode.Space) && bombAmount < Player.bombsAtOnce && spawned == false)
+        if(Input.GetKeyDown(KeyCode.Space) && bombAmount < Player.bombsAtOnce)
         {
-            spawned = true;
             bombAmount++;
             var bomb = new GameObject();
             Bomb b = bomb.AddComponent<Bomb>();
             b.pos = transform.position;
-/*
-            destroyAfter -= Time.fixedDeltaTime;
-            Debug.Log(destroyAfter);
-            if(destroyAfter <= 0f)
-            {
-                Debug.Log("GameObject should be destroyed");
-                Destroy(bomb);
-                bombAmount--;
-            }
-            */
-            WaitTwo(bomb);
-
-
+            Destroy(bomb, 3);
         }
-    }
-
-    IEnumerator WaitTwo(GameObject bomb)
-    {
-        yield return new WaitForSeconds(2);
-        Debug.Log("GameObject should be destroyed");
-        Destroy(bomb);
-        bombAmount--;
     }
 }
