@@ -8,23 +8,55 @@ public class EnemyController : MonoBehaviour
     public int blastRadius;
     public int bombsAtOnce;
     public int lives;
-
+    public int killReward;
     public Vector3Int playerPosition;
 
-    void Start()
-    {
-    
-    }
-    void FixedUpdate()
-    {
-        playerPosition = GameMap.TilemapTop.WorldToCell(transform.position);
-        transform.position += new Vector3(1, 0) * speed * Time.deltaTime;
-        transform.position += new Vector3(0, 1) * speed * Time.deltaTime;
-    }
+    int bombAmount = 0;
 
     public void RemoveLife()
     {
         Debug.Log("Hit enemy");
-        Player.AddScore(100);
+        Player.AddScore(killReward);
+    }
+
+    // all the actions for enemy
+    void MoveUp()
+    {
+        transform.position += new Vector3(0, 1) * speed * Time.deltaTime;
+    }
+    void MoveDown()
+    {
+        transform.position += new Vector3(0, -1) * speed * Time.deltaTime;
+    }
+    void MoveRight()
+    {
+        transform.position += new Vector3(1, 0) * speed * Time.deltaTime;
+    }
+    void MoveLeft()
+    {
+        transform.position += new Vector3(-1, 0) * speed * Time.deltaTime;
+    }
+    void DropBomb()
+    {
+        if(bombAmount < bombsAtOnce)
+        {
+            bombAmount++;
+            var bomb = new GameObject();
+            Bomb b = bomb.AddComponent<Bomb>();
+            b.pos = transform.position;
+            Destroy(bomb, 3);
+        }
+    }
+    void FixedUpdate()
+    {
+        playerPosition = GameMap.TilemapTop.WorldToCell(transform.position);
+
+        // logic for enemy movement here
+    }
+
+    IEnumerator WaitBomb()
+    {
+        yield return new WaitForSeconds(2);
+        bombAmount--;
     }
 }

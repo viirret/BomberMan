@@ -28,7 +28,6 @@ public class Bomb : MonoBehaviour
     {
         mapdes.Explode(pos);
         Debug.Log("Explosion!");
-        PlayerController.bombAmount--;
         Destroy(b);
     }
 }

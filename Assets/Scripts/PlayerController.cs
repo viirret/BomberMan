@@ -15,7 +15,6 @@ public class PlayerController : MonoBehaviour
     void Start() 
     {
         speed = Player.speed;
-        bombPrefab = Resources.Load<GameObject>("bomb");
     }
 
     void FixedUpdate() 
@@ -43,6 +42,13 @@ public class PlayerController : MonoBehaviour
             Bomb b = bomb.AddComponent<Bomb>();
             b.pos = transform.position;
             Destroy(bomb, 3);
+            StartCoroutine(WaitBomb());
         }
+    }
+
+    IEnumerator WaitBomb()
+    {
+        yield return new WaitForSeconds(2);
+        bombAmount--;
     }
 }

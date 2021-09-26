@@ -68,6 +68,7 @@ public class CharacterSpawner : MonoBehaviour
                     EC.blastRadius = 2;
                     EC.bombsAtOnce = 1;
                     EC.lives = 1;
+                    EC.killReward = 100;
                 break;
                 // rest of the birds
                 default: break;
