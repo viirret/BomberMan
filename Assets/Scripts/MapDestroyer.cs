@@ -5,6 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class MapDestroyer : MonoBehaviour
 {
+    public static List <GameObject> enemyControllers = new List<GameObject>();
     Tile wallTile;
     Tile destructibleTile;
     GameObject explosionPrefab;
@@ -12,8 +13,6 @@ public class MapDestroyer : MonoBehaviour
     // Unity doesn't allow to destroy Prefab
     GameObject temp;
 
-    public static List <GameObject> enemyControllers = new List<GameObject>();
-    
     void Start()
     {
         // defining components
@@ -73,7 +72,7 @@ public class MapDestroyer : MonoBehaviour
 
         for(int i = 0; i < enemyControllers.Count; i++)
             if(enemyControllers[i].GetComponent<EnemyController>().playerPosition == cell)
-                enemyControllers[i].GetComponent<EnemyController>().RemoveLife();
+                enemyControllers[i].GetComponent<EnemyController>().HitEnemy();
 
         if(tile == destructibleTile)
             GameMap.TilemapTop.SetTile(cell, null);

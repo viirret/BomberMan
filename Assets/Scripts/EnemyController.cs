@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour 
 {
+    public GameObject obj;
     public float speed;
     public int blastRadius;
     public int bombsAtOnce;
@@ -13,10 +14,11 @@ public class EnemyController : MonoBehaviour
 
     int bombAmount = 0;
 
-    public void RemoveLife()
+    public void HitEnemy()
     {
         Debug.Log("Hit enemy");
         Player.AddScore(killReward);
+        Destroy(obj);
     }
 
     // all the actions for enemy

@@ -60,7 +60,7 @@ public class CharacterSpawner : MonoBehaviour
             MapDestroyer.AddMe(obj);
             EnemyController ec = obj.AddComponent<EnemyController>();
             EnemyController EC = obj.GetComponent<EnemyController>();
-            
+            EC.obj = obj;
             switch(bird.name)
             {
                 case "Yellow Bird":
