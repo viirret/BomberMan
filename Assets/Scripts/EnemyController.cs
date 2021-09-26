@@ -25,5 +25,6 @@ public class EnemyController : MonoBehaviour
     public void RemoveLife()
     {
         Debug.Log("Hit enemy");
+        Player.AddScore(100);
     }
 }
