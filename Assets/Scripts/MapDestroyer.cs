@@ -71,8 +71,9 @@ public class MapDestroyer : MonoBehaviour
             Player.RemoveLife();
 
         for(int i = 0; i < enemyControllers.Count; i++)
-            if(enemyControllers[i].GetComponent<EnemyController>().playerPosition == cell)
-                enemyControllers[i].GetComponent<EnemyController>().HitEnemy();
+            if(enemyControllers[i] != null)
+                if(enemyControllers[i].GetComponent<EnemyController>().playerPosition == cell)
+                    enemyControllers[i].GetComponent<EnemyController>().HitEnemy();
 
         if(tile == destructibleTile)
             GameMap.TilemapTop.SetTile(cell, null);

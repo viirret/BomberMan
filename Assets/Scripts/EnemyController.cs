@@ -13,6 +13,8 @@ public class EnemyController : MonoBehaviour
     public Vector3Int playerPosition;
 
     int bombAmount = 0;
+    float currentSpeed;
+    Vector2 oldPosition;
 
     public void HitEnemy()
     {
@@ -52,9 +54,13 @@ public class EnemyController : MonoBehaviour
     void FixedUpdate()
     {
         playerPosition = GameMap.TilemapTop.WorldToCell(transform.position);
-
+        currentSpeed = Vector3.Distance(oldPosition, transform.position) * 100f;
+        oldPosition = transform.position;
+        
         // logic for enemy movement here
     }
+
+    
 
     IEnumerator WaitBomb()
     {
