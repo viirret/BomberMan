@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class EnemyController : MonoBehaviour 
 {
@@ -10,8 +11,12 @@ public class EnemyController : MonoBehaviour
     public int bombsAtOnce;
     public int lives;
     public int killReward;
-    public Vector3Int playerPosition;
-
+    public Vector3 playerPosition;
+    
+    Vector3 topView;
+    Vector3 bottomView;
+    Vector3 leftView;
+    Vector3 rightView;
     int bombAmount = 0;
     float currentSpeed;
     Vector2 oldPosition;
@@ -51,13 +56,69 @@ public class EnemyController : MonoBehaviour
             Destroy(bomb, 3);
         }
     }
+
     void FixedUpdate()
     {
         playerPosition = GameMap.TilemapTop.WorldToCell(transform.position);
         currentSpeed = Vector3.Distance(oldPosition, transform.position) * 100f;
         oldPosition = transform.position;
         
+        
+        // using one different bird for testing
+        if(obj.name == "Eagle(Clone)")
+        {
+            Debug.Log(playerPosition);
+
+            // I think this is correct
+            topView = (playerPosition + new Vector3(0, 1, 0));
+            bottomView = (playerPosition + new Vector3(0, -1, 0));
+            rightView = (playerPosition + new Vector3(1, 0, 0));
+            leftView = (playerPosition + new Vector3(-1, 0, 0));
+
+
+            Tile topTile = GameMap.TilemapTop.GetTile<Tile>(Vector3Int.FloorToInt(topView));
+            Tile bottomTile = GameMap.TilemapTop.GetTile<Tile>(Vector3Int.FloorToInt(bottomView));
+            Tile rightTile = GameMap.TilemapTop.GetTile<Tile>(Vector3Int.FloorToInt(rightView));
+            Tile leftTile = GameMap.TilemapTop.GetTile<Tile>(Vector3Int.FloorToInt(leftView));
+
+            if(topTile == GameMap.Wall)
+                Debug.Log("Wall ahead");
+            if(bottomTile == GameMap.Wall)
+                Debug.Log("Wall ahead");
+            if(rightTile == GameMap.Wall)
+                Debug.Log("Wall to the right");
+            if(leftTile == GameMap.Wall)
+                Debug.Log("Wall to the left");
+
+        }
+
+        
         // logic for enemy movement here
+        //if(currentSpeed == 0)
+        //    randomMovement(currentSpeed);
+
+        if(currentSpeed == 0)
+        {
+            MoveUp();
+        }
+    }
+
+    void randomMovement(float currentSpeed)
+    {
+        int dir = randonNum();
+        switch(dir)
+        {
+            case 1: MoveUp(); break;
+            case 2: MoveDown(); break;
+            case 3: MoveLeft(); break;
+            case 4: MoveRight(); break;
+        }
+    }
+
+    static int randonNum()
+    {
+        int num = Random.Range(1, 4);
+        return num;
     }
 
     

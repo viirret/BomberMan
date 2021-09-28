@@ -28,20 +28,20 @@ public class CharacterSpawner : MonoBehaviour
          
         // create the player first
         int spawn1 = Random.Range(0, 4);
-        GameObject player = CreateBird(blueBird, spawnPoints[spawn1], false);
+        CreateBird(blueBird, spawnPoints[spawn1], false);
         spawnPoints.RemoveAt(spawn1);
 
         if(level1)
         {
-            GameObject enemy1 = CreateBird(yellowBird, spawnPoints[0], true);
-            GameObject ememy2 = CreateBird(yellowBird, spawnPoints[1], true);
-            GameObject enemy3 = CreateBird(yellowBird, spawnPoints[2], true);
+            //CreateBird(yellowBird, spawnPoints[0], true);
+            //CreateBird(yellowBird, spawnPoints[2], true);
+            CreateBird(eagle, spawnPoints[0], true);
         }
 
     }
 
     // making the bird
-    GameObject CreateBird(GameObject bird, Vector3 spawn, bool enemy)
+    void CreateBird(GameObject bird, Vector3 spawn, bool enemy)
     {
         GameObject obj;
         bird.transform.localScale = new Vector3(0.06f, 0.04f, 1f);
@@ -55,6 +55,8 @@ public class CharacterSpawner : MonoBehaviour
         body.gravityScale = 0;
         body.freezeRotation = true;
         BoxCollider2D bc = obj.AddComponent<BoxCollider2D>();
+        // this might be useful
+        TilemapCollider2D tc = obj.AddComponent<TilemapCollider2D>();
         if(enemy)
         {
             MapDestroyer.AddMe(obj);
@@ -70,6 +72,13 @@ public class CharacterSpawner : MonoBehaviour
                     EC.lives = 1;
                     EC.killReward = 100;
                 break;
+                case "Eagle":
+                    EC.speed = 5;
+                    EC.blastRadius = 2;
+                    EC.bombsAtOnce = 1;
+                    EC.lives = 1;
+                    EC.killReward = 200;
+                break;
                 // rest of the birds
                 default: break;
             }
@@ -78,7 +87,6 @@ public class CharacterSpawner : MonoBehaviour
         {
             PlayerController pc = obj.AddComponent<PlayerController>();
         }
-        return obj;
     }
     
     

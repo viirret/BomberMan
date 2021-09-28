@@ -42,7 +42,7 @@ public class MapDestroyer : MonoBehaviour
         }
         for(int i = 1; i < Player.blastRadius; i++)
         {
-            if(ExplodeCell(origincell + new Vector3Int((0-i), 0, 0)))
+            if(ExplodeCell(origincell + new Vector3Int(-i, 0, 0)))
                 continue;
             else
                 break;
@@ -56,7 +56,7 @@ public class MapDestroyer : MonoBehaviour
         }
         for(int i = 1; i < Player.blastRadius; i++)
         {
-            if(ExplodeCell(origincell + new Vector3Int(0, (0-i), 0)))
+            if(ExplodeCell(origincell + new Vector3Int(0, -i, 0)))
                 continue;
             else
                 break;
