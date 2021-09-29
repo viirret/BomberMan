@@ -8,11 +8,13 @@ public class Bomb : MonoBehaviour
     GameObject bombPrefab;
     GameObject gm; 
     MapDestroyer mapdes;
-    GameObject b;
+    GameObject bomb;
+
+    // create the bomb
     void Start()
     {
         bombPrefab = Resources.Load<GameObject>("bomb");
-        b = Instantiate(bombPrefab, pos, Quaternion.identity);
+        bomb = Instantiate(bombPrefab, pos, Quaternion.identity);
         gm = GameObject.Find("Grid");
         mapdes = gm.GetComponent<MapDestroyer>();
         StartCoroutine(WaitTwo());
@@ -24,10 +26,11 @@ public class Bomb : MonoBehaviour
         GoOff();
     }
 
+    // destroy the bomb
     public void GoOff()
     {
         mapdes.Explode(pos);
         Debug.Log("Explosion!");
-        Destroy(b);
+        Destroy(bomb);
     }
 }

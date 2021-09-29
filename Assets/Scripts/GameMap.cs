@@ -52,7 +52,6 @@ public class GameMap : MonoBehaviour
         for(int i = -9; i < 8; i++)
             for(int j = -6; j < 5; j++)
                 t.SetTile(new Vector3Int(i, j, 0), Dirt);
-
     }
 
     void SetTopLayer(Tilemap t)
@@ -111,6 +110,7 @@ public class GameMap : MonoBehaviour
         }
     }
 
+    // here for now, but will be changed 
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.Escape))

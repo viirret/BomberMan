@@ -11,20 +11,17 @@ public class MapDestroyer : MonoBehaviour
     GameObject explosionPrefab;
     
     // Unity doesn't allow to destroy Prefab
-    GameObject temp;
+    GameObject tempBomb;
 
     void Start()
     {
-        // defining components
         wallTile = GameMap.Wall;
         destructibleTile = GameMap.Destructible;
         explosionPrefab = Resources.Load<GameObject>("Explosion");
     }
 
-    public static void AddMe(GameObject obj)
-    {
-        enemyControllers.Add(obj);
-    }
+    // list of enemies
+    public static void AddMe(GameObject obj) => enemyControllers.Add(obj);
 
     public void Explode(Vector2 worldPos)
     {
@@ -33,6 +30,8 @@ public class MapDestroyer : MonoBehaviour
         ExplodeCell(origincell);
 
         // bomb explosion logic
+        
+        // Player.blastRadius will be changed later
         for(int i = 1; i < Player.blastRadius; i++)
         {                
             if(ExplodeCell(origincell + new Vector3Int(i, 0, 0)))
@@ -65,27 +64,32 @@ public class MapDestroyer : MonoBehaviour
 
     bool ExplodeCell(Vector3Int cell)
     {
+        // getting the tile in position
         Tile tile = GameMap.TilemapTop.GetTile<Tile>(cell);
 
+        // if hit player
         if(cell == PlayerController.playerPosition)
             Player.RemoveLife();
 
+        // if hit any of the enemies
         for(int i = 0; i < enemyControllers.Count; i++)
             if(enemyControllers[i] != null)
                 if(enemyControllers[i].GetComponent<EnemyController>().playerPosition == cell)
                     enemyControllers[i].GetComponent<EnemyController>().HitEnemy();
 
+        // destoying a destructible tile
         if(tile == destructibleTile)
             GameMap.TilemapTop.SetTile(cell, null);
 
+        // returning false if wall, and exploding wont't continue in this direction
         if(tile == wallTile)
             return false;
         
 
-        // create the explosion
+        // create the explosion effect
         Vector3 pos = GameMap.TilemapTop.GetCellCenterWorld(cell);
-        temp = Instantiate(explosionPrefab, pos, Quaternion.identity);
-        Destroy(temp, 1);
+        tempBomb = Instantiate(explosionPrefab, pos, Quaternion.identity);
+        Destroy(tempBomb, 1);
         return true;        
     }   
 }

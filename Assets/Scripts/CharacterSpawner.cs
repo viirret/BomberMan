@@ -26,9 +26,9 @@ public class CharacterSpawner : MonoBehaviour
         owl = Resources.Load<GameObject>("Owl");
         yellowBird = Resources.Load<GameObject>("Yellow Bird");
          
-        // create the player first
+        // create the player first in random spawnpoint
         int spawn1 = Random.Range(0, 4);
-        CreateBird(blueBird, spawnPoints[spawn1], false);
+        CreateBird(blueBird, spawnPoints[Random.Range(0, 4)], false);
         spawnPoints.RemoveAt(spawn1);
 
         if(level1)
@@ -55,13 +55,14 @@ public class CharacterSpawner : MonoBehaviour
         body.gravityScale = 0;
         body.freezeRotation = true;
         BoxCollider2D bc = obj.AddComponent<BoxCollider2D>();
-        // this might be useful
-        TilemapCollider2D tc = obj.AddComponent<TilemapCollider2D>();
         if(enemy)
         {
+            // hitting characters happens in Mapdestroyer
             MapDestroyer.AddMe(obj);
+            // adding controller and values
             EnemyController ec = obj.AddComponent<EnemyController>();
             EnemyController EC = obj.GetComponent<EnemyController>();
+            // for identifying
             EC.obj = obj;
             switch(bird.name)
             {
@@ -76,7 +77,7 @@ public class CharacterSpawner : MonoBehaviour
                     EC.speed = 5;
                     EC.blastRadius = 2;
                     EC.bombsAtOnce = 1;
-                    EC.lives = 1;
+                    EC.lives = 10;
                     EC.killReward = 200;
                 break;
                 // rest of the birds
@@ -95,6 +96,7 @@ public class CharacterSpawner : MonoBehaviour
         
     }
 
+    // all the spawnpoints in the corners of the map
     void CreateSpawnPoints(List<Vector3> spawnPoints)
     {
         spawnPoints.Add(new Vector3(-8, -5.5f, 0));
