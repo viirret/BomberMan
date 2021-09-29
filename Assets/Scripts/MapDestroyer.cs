@@ -6,6 +6,7 @@ using UnityEngine.Tilemaps;
 public class MapDestroyer : MonoBehaviour
 {
     public static List <GameObject> enemyControllers = new List<GameObject>();
+    public int blastRadius;
     Tile wallTile;
     Tile destructibleTile;
     GameObject explosionPrefab;
@@ -30,30 +31,28 @@ public class MapDestroyer : MonoBehaviour
         ExplodeCell(origincell);
 
         // bomb explosion logic
-        
-        // Player.blastRadius will be changed later
-        for(int i = 1; i < Player.blastRadius; i++)
+        for(int i = 0; i < blastRadius; i++)
         {                
             if(ExplodeCell(origincell + new Vector3Int(i, 0, 0)))
                 continue;
             else
                 break;
         }
-        for(int i = 1; i < Player.blastRadius; i++)
+        for(int i = 0; i < blastRadius; i++)
         {
             if(ExplodeCell(origincell + new Vector3Int(-i, 0, 0)))
                 continue;
             else
                 break;
         }
-        for(int i = 1; i < Player.blastRadius; i++)
+        for(int i = 0; i < blastRadius; i++)
         {
             if(ExplodeCell(origincell + new Vector3Int(0, i, 0)))
                 continue;
             else
                 break;
         }
-        for(int i = 1; i < Player.blastRadius; i++)
+        for(int i = 0; i < blastRadius; i++)
         {
             if(ExplodeCell(origincell + new Vector3Int(0, -i, 0)))
                 continue;

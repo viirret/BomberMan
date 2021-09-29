@@ -68,14 +68,14 @@ public class CharacterSpawner : MonoBehaviour
             {
                 case "Yellow Bird":
                     EC.speed = 4f;
-                    EC.blastRadius = 2;
+                    EC.blastRadius = 3;
                     EC.bombsAtOnce = 1;
                     EC.lives = 1;
                     EC.killReward = 100;
                 break;
                 case "Eagle":
                     EC.speed = 5;
-                    EC.blastRadius = 2;
+                    EC.blastRadius = 3;
                     EC.bombsAtOnce = 1;
                     EC.lives = 10;
                     EC.killReward = 200;

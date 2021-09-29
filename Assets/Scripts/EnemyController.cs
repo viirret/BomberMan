@@ -66,6 +66,7 @@ public class EnemyController : MonoBehaviour
             var bomb = new GameObject();
             Bomb b = bomb.AddComponent<Bomb>();
             b.pos = transform.position;
+            b.blastRadius = blastRadius;
             Destroy(bomb, 3);
             StartCoroutine(WaitBomb());
         }
@@ -122,6 +123,7 @@ public class EnemyController : MonoBehaviour
                 randomOn = true;
             }
         }
+        
     }
 
     void OppositeDirection(string lastDirection)

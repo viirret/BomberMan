@@ -5,6 +5,7 @@ using UnityEngine;
 public class Bomb : MonoBehaviour
 {
     public Vector2 pos;
+    public int blastRadius;
     GameObject bombPrefab;
     GameObject gm; 
     MapDestroyer mapdes;
@@ -17,6 +18,7 @@ public class Bomb : MonoBehaviour
         bomb = Instantiate(bombPrefab, pos, Quaternion.identity);
         gm = GameObject.Find("Grid");
         mapdes = gm.GetComponent<MapDestroyer>();
+        mapdes.blastRadius = blastRadius;
         StartCoroutine(WaitTwo());
     }
 

@@ -41,6 +41,7 @@ public class PlayerController : MonoBehaviour
             var bomb = new GameObject();
             Bomb b = bomb.AddComponent<Bomb>();
             b.pos = transform.position;
+            b.blastRadius = Player.blastRadius;
             Destroy(bomb, 3);
             StartCoroutine(WaitBomb());
         }
