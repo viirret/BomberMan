@@ -28,14 +28,14 @@ public class CharacterSpawner : MonoBehaviour
          
         // create the player first in random spawnpoint
         int spawn1 = Random.Range(0, 4);
-        CreateBird(blueBird, spawnPoints[Random.Range(0, 4)], false);
+        CreateBird(blueBird, spawnPoints[2], false);
         spawnPoints.RemoveAt(spawn1);
 
         if(level1)
         {
             //CreateBird(yellowBird, spawnPoints[0], true);
             //CreateBird(yellowBird, spawnPoints[2], true);
-            CreateBird(eagle, spawnPoints[0], true);
+            CreateBird(eagle, spawnPoints[2], true);
         }
 
     }
@@ -50,10 +50,9 @@ public class CharacterSpawner : MonoBehaviour
         sr.sortingOrder = 1;
         Tilemap tm = obj.AddComponent<Tilemap>();
         Rigidbody2D b = obj.AddComponent<Rigidbody2D>();
-        Rigidbody2D body = obj.GetComponent<Rigidbody2D>();
-        body.angularDrag = 0;
-        body.gravityScale = 0;
-        body.freezeRotation = true;
+        b.angularDrag = 0;
+        b.gravityScale = 0;
+        b.freezeRotation = true;
         BoxCollider2D bc = obj.AddComponent<BoxCollider2D>();
         if(enemy)
         {
@@ -74,7 +73,7 @@ public class CharacterSpawner : MonoBehaviour
                     EC.killReward = 100;
                 break;
                 case "Eagle":
-                    EC.speed = 5;
+                    EC.speed = 3;
                     EC.blastRadius = 3;
                     EC.bombsAtOnce = 1;
                     EC.lives = 10;

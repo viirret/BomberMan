@@ -12,6 +12,7 @@ public class EnemyController : MonoBehaviour
     public int lives;
     public int killReward;
     public Vector3 playerPosition;
+    Vector2 playerPosition2;
     
     Vector3 topView;
     Vector3 bottomView;
@@ -22,13 +23,20 @@ public class EnemyController : MonoBehaviour
     Vector2 oldPosition;
     string lastDirection;
 
-    bool randomOn = false;
+    Tile upTile;
+    Tile downTile;
+    Tile leftTile;
+    Tile rightTile;
+
+    // for the update
+    bool getNewRandom = true;
+    int dir;
 
     public void HitEnemy()
     {
         Debug.Log("Hit enemy");
         Player.AddScore(killReward);
-        RemoveLife();
+        lives--;
         if(lives == 0)
             Destroy(obj);
     }
@@ -37,25 +45,21 @@ public class EnemyController : MonoBehaviour
     void MoveUp()
     {
         transform.position += new Vector3(0, 1) * speed * Time.deltaTime;
-        Debug.Log("moving up");
         lastDirection = "up";
     }
     void MoveDown()
     {
         transform.position += new Vector3(0, -1) * speed * Time.deltaTime;
-        Debug.Log("moving down");
         lastDirection = "down";
     }
     void MoveRight()
     {
         transform.position += new Vector3(1, 0) * speed * Time.deltaTime;
-        Debug.Log("moving right");
         lastDirection = "right";
     }
     void MoveLeft()
     {
         transform.position += new Vector3(-1, 0) * speed * Time.deltaTime;
-        Debug.Log("moving left");
         lastDirection = "left";
     }
     void DropBomb()
@@ -77,53 +81,52 @@ public class EnemyController : MonoBehaviour
         playerPosition = transform.position;
         currentSpeed = Vector3.Distance(oldPosition, transform.position) * 100f;
         oldPosition = transform.position;
+        playerPosition2 = playerPosition;
         
-        // the view of the enemy
-        topView = (playerPosition + new Vector3(0, 0.1f, 0));
-        bottomView = (playerPosition + new Vector3(0, -0.1f, 0));
-        rightView = (playerPosition + new Vector3(0.1f, 0, 0));
-        leftView = (playerPosition + new Vector3(-0.1f, 0, 0));
+        BirdMovement();
 
-        // tiles nearby enemy
-        Tile topTile = GameMap.TilemapTop.GetTile<Tile>(Vector3Int.FloorToInt(topView));
-        Tile bottomTile = GameMap.TilemapTop.GetTile<Tile>(Vector3Int.FloorToInt(bottomView));
-        Tile rightTile = GameMap.TilemapTop.GetTile<Tile>(Vector3Int.FloorToInt(rightView));
-        Tile leftTile = GameMap.TilemapTop.GetTile<Tile>(Vector3Int.FloorToInt(leftView));
+        upTile = targetTile(new Vector2(0, 0.28f), new Vector2(0, 1));
+        downTile = targetTile(new Vector2(0, -0.28f), new Vector2(0, -1));
+        leftTile = targetTile(new Vector2(-0.5f, 0), new Vector2(-1, 0));
+        rightTile = targetTile(new Vector2(0.5f, 0), new Vector2(1, 0));
 
-        if(topTile == GameMap.Wall)
-            Debug.Log("Wall ahead");
-        if(bottomTile == GameMap.Wall)
-            Debug.Log("Wall ahead");
-        if(rightTile == GameMap.Wall)
-            Debug.Log("Wall to the right");
-        if(leftTile == GameMap.Wall)
-            Debug.Log("Wall to the left");
+        if(upTile != null){Debug.Log("Uptile: " + upTile.name);}
+        if(downTile != null){Debug.Log("Downtile: " + downTile.name);}
+        if(leftTile != null){Debug.Log("Lefttile: " + leftTile.name);}
+        if(rightTile != null){Debug.Log("Righttile: " + rightTile.name);}
+       
+    }
 
-
-        // main logic
-        // just trying out stuff
-        if(rightTile == GameMap.Destructible)
+    Tile targetTile(Vector2 ownPosition, Vector2 lookingPosition)
+    {
+        RaycastHit2D hit = Physics2D.Raycast((playerPosition2 + ownPosition), lookingPosition);
+            
+        if(hit.collider != null)
         {
-            Debug.Log("enemy dropping bomb");
-            if(bombAmount == 0)
-            {
-                DropBomb();
-                randomOn = false;
-            }
-            else
-            {
-                OppositeDirection(lastDirection);
-            }
-        }
-        else
-        {
-            if(!randomOn)
-            {
-                randomMovement();
-                randomOn = true;
-            }
-        }
+            Vector3Int target = GameMap.TilemapTop.WorldToCell(hit.point);
         
+            Tile tile = GameMap.TilemapTop.GetTile<Tile>(target); 
+
+            return tile;
+        }
+
+        return null;
+    }
+
+    void BirdMovement()
+    {
+        if(getNewRandom)
+        {
+            dir = Random.Range(1, 5);
+            getNewRandom = false;
+        }
+
+        randomMovement(dir);
+        if(currentSpeed == 0)
+        {
+            getNewRandom = true;
+        }
+
     }
 
     void OppositeDirection(string lastDirection)
@@ -138,10 +141,9 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    void randomMovement()
+    void randomMovement(int num)
     {
-        int dir = randonNum();
-        switch(dir)
+        switch(num)
         {
             case 1: MoveUp(); break;
             case 2: MoveDown(); break;
@@ -150,11 +152,6 @@ public class EnemyController : MonoBehaviour
             default: break;
         }
     }
-
-    static int randonNum() => Random.Range(1, 4); 
-
-    void RemoveLife() => lives--;
-    
 
     IEnumerator WaitBomb()
     {

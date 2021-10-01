@@ -15,7 +15,7 @@ public class GameMap : MonoBehaviour
         Wall = Resources.Load<Tile>("GameTiles/Wall");
         Dirt = Resources.Load<Tile>("GameTiles/Dirt");
         Destructible = Resources.Load<Tile>("GameTiles/Destructible");
-        
+
         // creating grid and bottom tilemap
         var g = new GameObject("Grid");
         var grid = g.AddComponent<Grid>();
