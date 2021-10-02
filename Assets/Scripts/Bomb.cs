@@ -24,7 +24,12 @@ public class Bomb : MonoBehaviour
 
     IEnumerator WaitTwo()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(0.5f);
+        // adding box collider to the bomb
+        BoxCollider2D bc = bomb.AddComponent<BoxCollider2D>();
+        BoxCollider2D x = bomb.GetComponent<BoxCollider2D>();
+        x.size = new Vector3(0.5f, 0.5f, 0.5f);
+        yield return new WaitForSeconds(1.5f); 
         GoOff();
     }
 

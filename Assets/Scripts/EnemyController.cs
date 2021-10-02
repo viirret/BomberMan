@@ -14,14 +14,15 @@ public class EnemyController : MonoBehaviour
     public Vector3 playerPosition;
     Vector2 playerPosition2;
     
-    Vector3 topView;
-    Vector3 bottomView;
-    Vector3 leftView;
-    Vector3 rightView;
     int bombAmount = 0;
     float currentSpeed;
     Vector2 oldPosition;
-    string lastDirection;
+    int lastDirection;
+    // 1 -> up
+    // 2 -> down
+    // 3 -> left
+    // 4 -> right
+
 
     Tile upTile;
     Tile downTile;
@@ -29,8 +30,10 @@ public class EnemyController : MonoBehaviour
     Tile rightTile;
 
     // for the update
+    bool seePlayer = false;
     bool getNewRandom = true;
     int dir;
+    bool doRandom = true;
 
     public void HitEnemy()
     {
@@ -45,22 +48,22 @@ public class EnemyController : MonoBehaviour
     void MoveUp()
     {
         transform.position += new Vector3(0, 1) * speed * Time.deltaTime;
-        lastDirection = "up";
+        lastDirection = 1;
     }
     void MoveDown()
     {
         transform.position += new Vector3(0, -1) * speed * Time.deltaTime;
-        lastDirection = "down";
-    }
-    void MoveRight()
-    {
-        transform.position += new Vector3(1, 0) * speed * Time.deltaTime;
-        lastDirection = "right";
+        lastDirection = 2;
     }
     void MoveLeft()
     {
         transform.position += new Vector3(-1, 0) * speed * Time.deltaTime;
-        lastDirection = "left";
+        lastDirection = 3;
+    }
+    void MoveRight()
+    {
+        transform.position += new Vector3(1, 0) * speed * Time.deltaTime;
+        lastDirection = 4;
     }
     void DropBomb()
     {
@@ -85,24 +88,33 @@ public class EnemyController : MonoBehaviour
         
         BirdMovement();
 
-        upTile = targetTile(new Vector2(0, 0.28f), new Vector2(0, 1));
-        downTile = targetTile(new Vector2(0, -0.28f), new Vector2(0, -1));
-        leftTile = targetTile(new Vector2(-0.5f, 0), new Vector2(-1, 0));
-        rightTile = targetTile(new Vector2(0.5f, 0), new Vector2(1, 0));
+        upTile = TargetTile(new Vector2(0, 0.28f), new Vector2(0, 1));
+        downTile = TargetTile(new Vector2(0, -0.28f), new Vector2(0, -1));
+        leftTile = TargetTile(new Vector2(-0.5f, 0), new Vector2(-1, 0));
+        rightTile = TargetTile(new Vector2(0.5f, 0), new Vector2(1, 0));
 
-        if(upTile != null){Debug.Log("Uptile: " + upTile.name);}
-        if(downTile != null){Debug.Log("Downtile: " + downTile.name);}
-        if(leftTile != null){Debug.Log("Lefttile: " + leftTile.name);}
-        if(rightTile != null){Debug.Log("Righttile: " + rightTile.name);}
+        //if(upTile != null){Debug.Log("Uptile: " + upTile.name);}
+        //if(downTile != null){Debug.Log("Downtile: " + downTile.name);}
+        //if(leftTile != null){Debug.Log("Lefttile: " + leftTile.name);}
+        //if(rightTile != null){Debug.Log("Righttile: " + rightTile.name);}
        
     }
 
-    Tile targetTile(Vector2 ownPosition, Vector2 lookingPosition)
+    void FreeDirections()
     {
-        RaycastHit2D hit = Physics2D.Raycast((playerPosition2 + ownPosition), lookingPosition);
+
+    }
+
+    Tile TargetTile(Vector2 ownPosition, Vector2 lookingPosition)
+    {
+        RaycastHit2D hit = Physics2D.Raycast((playerPosition2 + ownPosition), lookingPosition, 5);
             
         if(hit.collider != null)
         {
+            if(hit.collider.name == "Blue Bird(Clone)")
+            {
+                seePlayer = true;
+            }
             Vector3Int target = GameMap.TilemapTop.WorldToCell(hit.point);
         
             Tile tile = GameMap.TilemapTop.GetTile<Tile>(target); 
@@ -118,25 +130,24 @@ public class EnemyController : MonoBehaviour
         if(getNewRandom)
         {
             dir = Random.Range(1, 5);
-            getNewRandom = false;
         }
 
-        randomMovement(dir);
-        if(currentSpeed == 0)
+        if(seePlayer)
         {
-            getNewRandom = true;
+            DropBomb();
+            seePlayer = false;
         }
 
     }
 
-    void OppositeDirection(string lastDirection)
+    void OppositeDirection(int lastDirection)
     {
         switch(lastDirection)
         {
-            case "up": MoveDown(); break;
-            case "down": MoveUp(); break;
-            case "left": MoveRight(); break;
-            case "right": MoveLeft(); break;
+            case 1: MoveDown(); break;
+            case 2: MoveUp(); break;
+            case 3: MoveRight(); break;
+            case 4: MoveLeft(); break;
             default: break;
         }
     }
