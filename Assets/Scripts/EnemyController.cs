@@ -28,6 +28,8 @@ public class EnemyController : MonoBehaviour
     Tile downTile;
     Tile leftTile;
     Tile rightTile;
+    List<Tile> tiles = new List<Tile>(4);
+    List<int> directions = new List<int>(4);
 
     // for the update
     bool seePlayer = false;
@@ -93,6 +95,14 @@ public class EnemyController : MonoBehaviour
         leftTile = TargetTile(new Vector2(-0.5f, 0), new Vector2(-1, 0));
         rightTile = TargetTile(new Vector2(0.5f, 0), new Vector2(1, 0));
 
+        // adding tiles to list
+        tiles.Add(upTile);
+        tiles.Add(downTile);
+        tiles.Add(leftTile);
+        tiles.Add(rightTile);
+
+        FreeDirections();
+
         //if(upTile != null){Debug.Log("Uptile: " + upTile.name);}
         //if(downTile != null){Debug.Log("Downtile: " + downTile.name);}
         //if(leftTile != null){Debug.Log("Lefttile: " + leftTile.name);}
@@ -103,6 +113,18 @@ public class EnemyController : MonoBehaviour
     void FreeDirections()
     {
 
+        for(int i = 1; i < tiles.Count; i++)
+        {
+            if(tiles[i] != null)
+            {
+                directions[i] = i;
+            }
+            else
+            {
+                directions[i] = -1; 
+            }
+        }
+        
     }
 
     Tile TargetTile(Vector2 ownPosition, Vector2 lookingPosition)
@@ -115,6 +137,12 @@ public class EnemyController : MonoBehaviour
             {
                 seePlayer = true;
             }
+
+            if(hit.collider.name == "bomb(Clone)")
+            {
+                Debug.Log("I see bomb");
+            }
+
             Vector3Int target = GameMap.TilemapTop.WorldToCell(hit.point);
         
             Tile tile = GameMap.TilemapTop.GetTile<Tile>(target); 
