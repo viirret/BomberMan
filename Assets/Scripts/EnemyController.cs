@@ -28,14 +28,16 @@ public class EnemyController : MonoBehaviour
     Tile downTile;
     Tile leftTile;
     Tile rightTile;
-    List<Tile> tiles = new List<Tile>(4);
-    List<int> directions = new List<int>(4);
 
     // for the update
     bool seePlayer = false;
     bool getNewRandom = true;
     int dir;
     bool doRandom = true;
+    bool upIsFree;
+    bool downIsFree;
+    bool leftIsFree;
+    bool rightIsFree;
 
     public void HitEnemy()
     {
@@ -44,6 +46,14 @@ public class EnemyController : MonoBehaviour
         lives--;
         if(lives == 0)
             Destroy(obj);
+    }
+
+    void Start()
+    {
+       upIsFree = false;
+       rightIsFree = false;
+       leftIsFree = false;
+       rightIsFree = false;
     }
 
     // all the actions for enemy
@@ -80,92 +90,10 @@ public class EnemyController : MonoBehaviour
             StartCoroutine(WaitBomb());
         }
     }
-
-    void FixedUpdate()
+    IEnumerator WaitBomb()
     {
-        playerPosition = transform.position;
-        currentSpeed = Vector3.Distance(oldPosition, transform.position) * 100f;
-        oldPosition = transform.position;
-        playerPosition2 = playerPosition;
-        
-        BirdMovement();
-
-        upTile = TargetTile(new Vector2(0, 0.28f), new Vector2(0, 1));
-        downTile = TargetTile(new Vector2(0, -0.28f), new Vector2(0, -1));
-        leftTile = TargetTile(new Vector2(-0.5f, 0), new Vector2(-1, 0));
-        rightTile = TargetTile(new Vector2(0.5f, 0), new Vector2(1, 0));
-
-        // adding tiles to list
-        tiles.Add(upTile);
-        tiles.Add(downTile);
-        tiles.Add(leftTile);
-        tiles.Add(rightTile);
-
-        FreeDirections();
-
-        //if(upTile != null){Debug.Log("Uptile: " + upTile.name);}
-        //if(downTile != null){Debug.Log("Downtile: " + downTile.name);}
-        //if(leftTile != null){Debug.Log("Lefttile: " + leftTile.name);}
-        //if(rightTile != null){Debug.Log("Righttile: " + rightTile.name);}
-       
-    }
-
-    void FreeDirections()
-    {
-
-        for(int i = 1; i < tiles.Count; i++)
-        {
-            if(tiles[i] != null)
-            {
-                directions[i] = i;
-            }
-            else
-            {
-                directions[i] = -1; 
-            }
-        }
-        
-    }
-
-    Tile TargetTile(Vector2 ownPosition, Vector2 lookingPosition)
-    {
-        RaycastHit2D hit = Physics2D.Raycast((playerPosition2 + ownPosition), lookingPosition, 5);
-            
-        if(hit.collider != null)
-        {
-            if(hit.collider.name == "Blue Bird(Clone)")
-            {
-                seePlayer = true;
-            }
-
-            if(hit.collider.name == "bomb(Clone)")
-            {
-                Debug.Log("I see bomb");
-            }
-
-            Vector3Int target = GameMap.TilemapTop.WorldToCell(hit.point);
-        
-            Tile tile = GameMap.TilemapTop.GetTile<Tile>(target); 
-
-            return tile;
-        }
-
-        return null;
-    }
-
-    void BirdMovement()
-    {
-        if(getNewRandom)
-        {
-            dir = Random.Range(1, 5);
-        }
-
-        if(seePlayer)
-        {
-            DropBomb();
-            seePlayer = false;
-        }
-
+        yield return new WaitForSeconds(2);
+        bombAmount--;
     }
 
     void OppositeDirection(int lastDirection)
@@ -192,10 +120,79 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    IEnumerator WaitBomb()
+   // enemy vision to closest objects
+    Tile TargetTile(Vector2 ownPosition, Vector2 lookingPosition)
     {
-        yield return new WaitForSeconds(2);
-        bombAmount--;
+        RaycastHit2D hit = Physics2D.Raycast((playerPosition2 + ownPosition), lookingPosition, 0.1f);
+            
+        if(hit.collider != null)
+        {
+            if(hit.collider.name == "Blue Bird(Clone)")
+                seePlayer = true;
+
+            if(hit.collider.name == "bomb(Clone)")
+                Debug.Log("I see bomb");
+
+            // getting the tile
+            Vector3Int target = GameMap.TilemapTop.WorldToCell(hit.point);
+            Tile tile = GameMap.TilemapTop.GetTile<Tile>(target); 
+
+            return tile;
+        }
+
+        return null;
+    }
+
+
+    void Tiles()
+    {
+        upTile = TargetTile(new Vector2(0, 0.28f), new Vector2(0, 1));
+        downTile = TargetTile(new Vector2(0, -0.28f), new Vector2(0, -1));
+        leftTile = TargetTile(new Vector2(-0.5f, 0), new Vector2(-1, 0));
+        rightTile = TargetTile(new Vector2(0.5f, 0), new Vector2(1, 0));
+    }
+   
+    // keep track of free routes 
+    void FreeDirections()
+    {
+        upIsFree = (upTile == null) ? true : false;
+        downIsFree = (upTile == null) ? true : false;
+        leftIsFree = (leftTile == null) ? true : false;
+        rightIsFree = (rightTile == null) ? true : false;
+    }
+
+
+    void BirdMovement()
+    {
+        if(getNewRandom)
+        {
+            dir = Random.Range(1, 5);
+        }
+
+        if(seePlayer)
+        {
+            DropBomb();
+            seePlayer = false;
+        }
+        if(leftIsFree)
+        {
+            MoveLeft();
+        }
+
+    }
+
+    void FixedUpdate()
+    {
+        playerPosition = transform.position;
+        currentSpeed = Vector3.Distance(oldPosition, transform.position) * 100f;
+        oldPosition = transform.position;
+        playerPosition2 = playerPosition;
+        
+        Tiles();
+
+        FreeDirections();
+
+        BirdMovement();
     }
 
 }
