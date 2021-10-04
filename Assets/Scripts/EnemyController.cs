@@ -18,11 +18,6 @@ public class EnemyController : MonoBehaviour
     float currentSpeed;
     Vector2 oldPosition;
     int lastDirection;
-    // 1 -> up
-    // 2 -> down
-    // 3 -> left
-    // 4 -> right
-
 
     Tile upTile;
     Tile downTile;
@@ -31,13 +26,10 @@ public class EnemyController : MonoBehaviour
 
     // for the update
     bool seePlayer = false;
-    bool getNewRandom = true;
-    int dir;
+    bool seeBomb = false;
     bool doRandom = true;
-    bool upIsFree;
-    bool downIsFree;
-    bool leftIsFree;
-    bool rightIsFree;
+    int direction = -1;
+
 
     public void HitEnemy()
     {
@@ -48,34 +40,27 @@ public class EnemyController : MonoBehaviour
             Destroy(obj);
     }
 
-    void Start()
-    {
-       upIsFree = false;
-       rightIsFree = false;
-       leftIsFree = false;
-       rightIsFree = false;
-    }
 
     // all the actions for enemy
     void MoveUp()
     {
         transform.position += new Vector3(0, 1) * speed * Time.deltaTime;
-        lastDirection = 1;
+        lastDirection = 0;
     }
     void MoveDown()
     {
         transform.position += new Vector3(0, -1) * speed * Time.deltaTime;
-        lastDirection = 2;
+        lastDirection = 1;
     }
     void MoveLeft()
     {
         transform.position += new Vector3(-1, 0) * speed * Time.deltaTime;
-        lastDirection = 3;
+        lastDirection = 2;
     }
     void MoveRight()
     {
         transform.position += new Vector3(1, 0) * speed * Time.deltaTime;
-        lastDirection = 4;
+        lastDirection = 3;
     }
     void DropBomb()
     {
@@ -96,34 +81,14 @@ public class EnemyController : MonoBehaviour
         bombAmount--;
     }
 
-    void OppositeDirection(int lastDirection)
-    {
-        switch(lastDirection)
-        {
-            case 1: MoveDown(); break;
-            case 2: MoveUp(); break;
-            case 3: MoveRight(); break;
-            case 4: MoveLeft(); break;
-            default: break;
-        }
-    }
+    // return opposite direction from lastDirection
+    int OppositeDirection(int last) => last = (last == 0 || last == 2) ? ++last : --last;
 
-    void randomMovement(int num)
-    {
-        switch(num)
-        {
-            case 1: MoveUp(); break;
-            case 2: MoveDown(); break;
-            case 3: MoveLeft(); break;
-            case 4: MoveRight(); break;
-            default: break;
-        }
-    }
 
    // enemy vision to closest objects
     Tile TargetTile(Vector2 ownPosition, Vector2 lookingPosition)
     {
-        RaycastHit2D hit = Physics2D.Raycast((playerPosition2 + ownPosition), lookingPosition, 0.1f);
+        RaycastHit2D hit = Physics2D.Raycast((playerPosition2 + ownPosition), lookingPosition, 0.3f);
             
         if(hit.collider != null)
         {
@@ -131,7 +96,7 @@ public class EnemyController : MonoBehaviour
                 seePlayer = true;
 
             if(hit.collider.name == "bomb(Clone)")
-                Debug.Log("I see bomb");
+                seeBomb = true; 
 
             // getting the tile
             Vector3Int target = GameMap.TilemapTop.WorldToCell(hit.point);
@@ -139,46 +104,131 @@ public class EnemyController : MonoBehaviour
 
             return tile;
         }
-
         return null;
     }
 
+// Idea for longer vision
+/*
+    Tile LongVision(Vector2 ownPosition, Vector2 lookingPosition)
+    {
+        RaycastHit2D hit = Physics2D.Raycast((playerPosition2 + ownPosition), lookingPosition, 15f);
+        if(hit.collider != null)
+        {
+            Vector3Int target = GameMap.TilemapTop.WorldToCell(hit.point);
+            Tile tile = GameMap.TilemapTop.GetTile<Tile>(target);
 
+            if(hit.collider.name == "bomb(Clone)")
+                Debug.Log("I see bomb");
+            return tile;
+
+            // see if this is the whole range or just this one place
+            //if(tile == null)
+            //    if(hit.collider.name == "bomb(Clone)")
+                    //return true;
+            //else
+            //    return false;
+            
+        }
+        // dont know if this is needed
+        return null;
+    }
+
+    void Vision()
+    {
+        upVision = LongVision(new Vector2(0, 0.28f), new Vector2(0, 1));
+        downVision = LongVision(new Vector2(0, -0.28f), new Vector2(0, -1));
+        leftVision = LongVision(new Vector2(-0.5f, 0), new Vector2(-1, 0));
+        rightVision = LongVision(new Vector2(0.5f, 0), new Vector2(1, 0));
+    }
+*/
+    // update closest tiles
     void Tiles()
     {
         upTile = TargetTile(new Vector2(0, 0.28f), new Vector2(0, 1));
         downTile = TargetTile(new Vector2(0, -0.28f), new Vector2(0, -1));
         leftTile = TargetTile(new Vector2(-0.5f, 0), new Vector2(-1, 0));
         rightTile = TargetTile(new Vector2(0.5f, 0), new Vector2(1, 0));
-    }
-   
-    // keep track of free routes 
-    void FreeDirections()
+    } 
+
+    // random free direction
+    int RandomRoute()
     {
-        upIsFree = (upTile == null) ? true : false;
-        downIsFree = (upTile == null) ? true : false;
-        leftIsFree = (leftTile == null) ? true : false;
-        rightIsFree = (rightTile == null) ? true : false;
+        List<int?> routes = new List<int?>(4);
+        routes.Add((upTile == null) ? 0 : (int?)null);
+        routes.Add((downTile == null) ? 1 : (int?)null);
+        routes.Add((leftTile == null) ? 2 : (int?)null);
+        routes.Add((rightTile == null) ? 3 : (int?)null);
+        
+        return Choose(routes);
+    }
+    
+    // choose random number from list
+    int Choose(List<int?> list)
+    {
+        int rnd = Random.Range(0, 4);
+        if(list[rnd] != null)
+            return rnd;
+        else
+            return Choose(list);
     }
 
+    // check if closest tiles are destructible and act accordingly
+    int StartLooking()
+    {
+        if  ((upTile != null && upTile.name == "Destructible") ||
+            (downTile != null && downTile.name == "Destructible") ||
+            (leftTile != null && leftTile.name == "Destructible") ||
+            (rightTile != null && rightTile.name == "Destructible"))
+        {
+            doRandom = false;
+            DropBomb();
+            return OppositeDirection(direction);
+        }
+        else
+            return -1;
+    }
 
     void BirdMovement()
     {
-        if(getNewRandom)
+        if(direction == -1)
         {
-            dir = Random.Range(1, 5);
+            doRandom = true;
+        }
+        
+        if(currentSpeed == 0)
+        {
+            direction = StartLooking();
+        }
+        
+        if(doRandom)
+        {
+            direction = RandomRoute();
+            doRandom = false;
         }
 
+        switch(direction)
+        {
+            case 0: MoveUp(); break;
+            case 1: MoveDown(); break;
+            case 2: MoveLeft(); break;
+            case 3: MoveRight(); break;
+            default: break;
+        } 
+        
+        // react to special events
+        if(seeBomb)
+        {
+            doRandom = false;
+            direction = OppositeDirection(lastDirection);
+            seeBomb = false;
+        }
+        
         if(seePlayer)
         {
+            doRandom = false;   
             DropBomb();
             seePlayer = false;
         }
-        if(leftIsFree)
-        {
-            MoveLeft();
-        }
-
     }
 
     void FixedUpdate()
@@ -190,9 +240,6 @@ public class EnemyController : MonoBehaviour
         
         Tiles();
 
-        FreeDirections();
-
         BirdMovement();
     }
-
 }
