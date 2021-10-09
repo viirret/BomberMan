@@ -17,8 +17,6 @@ public class EnemyController : MonoBehaviour
     int bombAmount = 0;
     float currentSpeed;
     Vector2 oldPosition;
-    int lastDirection;
-
     Tile upTile;
     Tile downTile;
     Tile leftTile;
@@ -26,10 +24,13 @@ public class EnemyController : MonoBehaviour
 
     // for the update
     bool seePlayer = false;
-    bool seeBomb = false;
     bool doRandom = true;
-    int direction = -1;
+    int direction = -1; 
 
+    void Start()
+    {
+        gameObject.tag = "Enemy";
+    }
 
     public void HitEnemy()
     {
@@ -45,22 +46,18 @@ public class EnemyController : MonoBehaviour
     void MoveUp()
     {
         transform.position += new Vector3(0, 1) * speed * Time.deltaTime;
-        lastDirection = 0;
     }
     void MoveDown()
     {
         transform.position += new Vector3(0, -1) * speed * Time.deltaTime;
-        lastDirection = 1;
     }
     void MoveLeft()
     {
         transform.position += new Vector3(-1, 0) * speed * Time.deltaTime;
-        lastDirection = 2;
     }
     void MoveRight()
     {
         transform.position += new Vector3(1, 0) * speed * Time.deltaTime;
-        lastDirection = 3;
     }
     void DropBomb()
     {
@@ -72,13 +69,14 @@ public class EnemyController : MonoBehaviour
             b.pos = transform.position;
             b.blastRadius = blastRadius;
             Destroy(bomb, 3);
-            StartCoroutine(WaitBomb());
+            StartCoroutine(WaitBomb(true));
         }
     }
-    IEnumerator WaitBomb()
+    IEnumerator WaitBomb(bool reduceAmount)
     {
         yield return new WaitForSeconds(2);
-        bombAmount--;
+        if(reduceAmount)
+            bombAmount--;
     }
 
     // return opposite direction from lastDirection
@@ -88,7 +86,7 @@ public class EnemyController : MonoBehaviour
    // enemy vision to closest objects
     Tile TargetTile(Vector2 ownPosition, Vector2 lookingPosition)
     {
-        RaycastHit2D hit = Physics2D.Raycast((playerPosition2 + ownPosition), lookingPosition, 0.3f);
+        RaycastHit2D hit = Physics2D.Raycast((playerPosition2 + ownPosition), lookingPosition, 0.5f);
             
         if(hit.collider != null)
         {
@@ -96,8 +94,19 @@ public class EnemyController : MonoBehaviour
                 seePlayer = true;
 
             if(hit.collider.name == "bomb(Clone)")
-                seeBomb = true; 
-
+            {
+                direction = OppositeDirection(direction);
+                doRandom = false;
+                StartCoroutine(WaitBomb(false));
+            }
+            
+            // there is somthing odd about this
+            if(hit.transform.tag == "Enemy")
+            {
+                direction = OppositeDirection(direction);
+                doRandom = false;
+                StartCoroutine(WaitBomb(false));
+            }
             // getting the tile
             Vector3Int target = GameMap.TilemapTop.WorldToCell(hit.point);
             Tile tile = GameMap.TilemapTop.GetTile<Tile>(target); 
@@ -144,10 +153,21 @@ public class EnemyController : MonoBehaviour
     // update closest tiles
     void Tiles()
     {
-        upTile = TargetTile(new Vector2(0, 0.28f), new Vector2(0, 1));
-        downTile = TargetTile(new Vector2(0, -0.28f), new Vector2(0, -1));
-        leftTile = TargetTile(new Vector2(-0.5f, 0), new Vector2(-1, 0));
-        rightTile = TargetTile(new Vector2(0.5f, 0), new Vector2(1, 0));
+        // this is for testing. Make this more pretty code later 
+        if(obj.name != "Yellow Bird(Clone)")
+        {
+            upTile = TargetTile(new Vector2(0, 0.28f), new Vector2(0, 1));
+            downTile = TargetTile(new Vector2(0, -0.28f), new Vector2(0, -1));
+            leftTile = TargetTile(new Vector2(-0.5f, 0), new Vector2(-1, 0));
+            rightTile = TargetTile(new Vector2(0.5f, 0), new Vector2(1, 0));
+        }
+        else
+        {
+            upTile = TargetTile(new Vector2(0, 0.5f), new Vector2(0, 1));
+            downTile = TargetTile(new Vector2(0, -0.5f), new Vector2(0, -1));
+            leftTile = TargetTile(new Vector2(-0.7f, 0), new Vector2(-1, 0));
+            rightTile = TargetTile(new Vector2(0.7f, 0), new Vector2(1, 0));
+        }
     } 
 
     // random free direction
@@ -158,7 +178,7 @@ public class EnemyController : MonoBehaviour
         routes.Add((downTile == null) ? 1 : (int?)null);
         routes.Add((leftTile == null) ? 2 : (int?)null);
         routes.Add((rightTile == null) ? 3 : (int?)null);
-        
+
         return Choose(routes);
     }
     
@@ -190,16 +210,16 @@ public class EnemyController : MonoBehaviour
 
     void BirdMovement()
     {
-        if(direction == -1)
-        {
-            doRandom = true;
-        }
-        
         if(currentSpeed == 0)
         {
             direction = StartLooking();
         }
-        
+
+        if(direction == -1)
+        {
+            doRandom = true;
+        }
+       
         if(doRandom)
         {
             direction = RandomRoute();
@@ -216,13 +236,6 @@ public class EnemyController : MonoBehaviour
         } 
         
         // react to special events
-        if(seeBomb)
-        {
-            doRandom = false;
-            direction = OppositeDirection(lastDirection);
-            seeBomb = false;
-        }
-        
         if(seePlayer)
         {
             doRandom = false;   

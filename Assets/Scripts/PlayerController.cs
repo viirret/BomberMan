@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
         speed = Player.speed;
     }
 
-    void FixedUpdate() 
+    void Update() 
     {
         // z value is -6 by default so changing to match to map
         playerPositionorig = GameMap.TilemapTop.WorldToCell(transform.position);

@@ -28,14 +28,15 @@ public class CharacterSpawner : MonoBehaviour
          
         // create the player first in random spawnpoint
         int spawn1 = Random.Range(0, 4);
-        CreateBird(blueBird, spawnPoints[2], false);
+        CreateBird(blueBird, spawnPoints[spawn1], false);
         spawnPoints.RemoveAt(spawn1);
 
         if(level1)
         {
-            //CreateBird(yellowBird, spawnPoints[0], true);
-            //CreateBird(yellowBird, spawnPoints[2], true);
-            CreateBird(eagle, spawnPoints[2], true);
+            CreateBird(owl, spawnPoints[0], true);
+            CreateBird(chicken, spawnPoints[2], true);
+            CreateBird(yellowBird, spawnPoints[1], true);
+            //CreateBird(eagle, spawnPoints[2], true);
         }
 
     }
@@ -66,7 +67,7 @@ public class CharacterSpawner : MonoBehaviour
             switch(bird.name)
             {
                 case "Yellow Bird":
-                    EC.speed = 4f;
+                    EC.speed = 4;
                     EC.blastRadius = 3;
                     EC.bombsAtOnce = 1;
                     EC.lives = 1;
@@ -77,6 +78,20 @@ public class CharacterSpawner : MonoBehaviour
                     EC.blastRadius = 3;
                     EC.bombsAtOnce = 1;
                     EC.lives = 10;
+                    EC.killReward = 200;
+                break;
+                case "Owl":
+                    EC.speed = 3;
+                    EC.blastRadius = 3;
+                    EC.bombsAtOnce = 1;
+                    EC.lives = 5;
+                    EC.killReward = 500;
+                break;
+                case "Chicken":
+                    EC.speed = 6;
+                    EC.blastRadius = 3;
+                    EC.bombsAtOnce = 1;
+                    EC.lives = 2;
                     EC.killReward = 200;
                 break;
                 // rest of the birds
@@ -90,11 +105,6 @@ public class CharacterSpawner : MonoBehaviour
     }
     
     
-    void Update()
-    {
-        
-    }
-
     // all the spawnpoints in the corners of the map
     void CreateSpawnPoints(List<Vector3> spawnPoints)
     {
