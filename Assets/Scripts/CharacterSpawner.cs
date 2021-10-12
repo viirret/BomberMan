@@ -14,8 +14,6 @@ public class CharacterSpawner : MonoBehaviour
 
     List<Vector3> spawnPoints = new List<Vector3>(4);
 
-    bool level1 = true;
-
     void Start()
     {
         CreateSpawnPoints(spawnPoints);
@@ -30,15 +28,28 @@ public class CharacterSpawner : MonoBehaviour
         int spawn1 = Random.Range(0, 4);
         CreateBird(blueBird, spawnPoints[spawn1], false);
         spawnPoints.RemoveAt(spawn1);
+        
+    }
 
-        if(level1)
+    void Update()
+    {
+        // called from Levels.NewLevel()
+        if(Levels.StartNewLevel)
         {
-            CreateBird(owl, spawnPoints[0], true);
-            CreateBird(chicken, spawnPoints[2], true);
-            CreateBird(yellowBird, spawnPoints[1], true);
-            //CreateBird(eagle, spawnPoints[2], true);
+            Levels.StartNewLevel = false;
+            switch(Levels.GetCurrentLevel())
+            {
+                case 1:
+                CreateBird(owl, spawnPoints[0], true);
+                CreateBird(chicken, spawnPoints[1], true);
+                CreateBird(eagle, spawnPoints[2], true);
+                break;
+                case 2:
+                CreateBird(eagle, spawnPoints[0], true);
+                break;
+                default: break;
+            }   
         }
-
     }
 
     // making the bird
@@ -94,7 +105,6 @@ public class CharacterSpawner : MonoBehaviour
                     EC.lives = 2;
                     EC.killReward = 200;
                 break;
-                // rest of the birds
                 default: break;
             }
         }

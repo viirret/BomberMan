@@ -23,9 +23,8 @@ public class EnemyController : MonoBehaviour
     Tile rightTile;
 
     // for the update
-    bool seePlayer = false;
     bool doRandom = true;
-    int direction = -1; 
+    int direction = -1;
 
     void Start()
     {
@@ -91,7 +90,10 @@ public class EnemyController : MonoBehaviour
         if(hit.collider != null)
         {
             if(hit.collider.name == "Blue Bird(Clone)")
-                seePlayer = true;
+            {
+                doRandom = false;
+                DropBomb();
+            }
 
             if(hit.collider.name == "bomb(Clone)")
             {
@@ -118,17 +120,17 @@ public class EnemyController : MonoBehaviour
 
 // Idea for longer vision
 /*
-    Tile LongVision(Vector2 ownPosition, Vector2 lookingPosition)
+    bool LongVision(Vector2 ownPosition, Vector2 lookingPosition)
     {
         RaycastHit2D hit = Physics2D.Raycast((playerPosition2 + ownPosition), lookingPosition, 15f);
         if(hit.collider != null)
         {
-            Vector3Int target = GameMap.TilemapTop.WorldToCell(hit.point);
-            Tile tile = GameMap.TilemapTop.GetTile<Tile>(target);
+            //Vector3Int target = GameMap.TilemapTop.WorldToCell(hit.point);
+            //Tile tile = GameMap.TilemapTop.GetTile<Tile>(target);
 
             if(hit.collider.name == "bomb(Clone)")
-                Debug.Log("I see bomb");
-            return tile;
+                return true;
+            //return tile;
 
             // see if this is the whole range or just this one place
             //if(tile == null)
@@ -138,36 +140,25 @@ public class EnemyController : MonoBehaviour
             //    return false;
             
         }
+        return false;
         // dont know if this is needed
-        return null;
+        //return null;
     }
-
     void Vision()
     {
-        upVision = LongVision(new Vector2(0, 0.28f), new Vector2(0, 1));
-        downVision = LongVision(new Vector2(0, -0.28f), new Vector2(0, -1));
-        leftVision = LongVision(new Vector2(-0.5f, 0), new Vector2(-1, 0));
-        rightVision = LongVision(new Vector2(0.5f, 0), new Vector2(1, 0));
+        upVision = LongVision(new Vector2(0, 0.5f), new Vector2(0, 1));
+        downVision = LongVision(new Vector2(0, -0.5f), new Vector2(0, -1));
+        leftVision = LongVision(new Vector2(-0.7f, 0), new Vector2(-1, 0));
+        rightVision = LongVision(new Vector2(0.7f, 0), new Vector2(1, 0));
     }
-*/
+    */
     // update closest tiles
     void Tiles()
     {
-        // this is for testing. Make this more pretty code later 
-        if(obj.name != "Yellow Bird(Clone)")
-        {
-            upTile = TargetTile(new Vector2(0, 0.28f), new Vector2(0, 1));
-            downTile = TargetTile(new Vector2(0, -0.28f), new Vector2(0, -1));
-            leftTile = TargetTile(new Vector2(-0.5f, 0), new Vector2(-1, 0));
-            rightTile = TargetTile(new Vector2(0.5f, 0), new Vector2(1, 0));
-        }
-        else
-        {
-            upTile = TargetTile(new Vector2(0, 0.5f), new Vector2(0, 1));
-            downTile = TargetTile(new Vector2(0, -0.5f), new Vector2(0, -1));
-            leftTile = TargetTile(new Vector2(-0.7f, 0), new Vector2(-1, 0));
-            rightTile = TargetTile(new Vector2(0.7f, 0), new Vector2(1, 0));
-        }
+        upTile = TargetTile(new Vector2(0, 0.5f), new Vector2(0, 1));
+        downTile = TargetTile(new Vector2(0, -0.5f), new Vector2(0, -1));
+        leftTile = TargetTile(new Vector2(-0.7f, 0), new Vector2(-1, 0));
+        rightTile = TargetTile(new Vector2(0.7f, 0), new Vector2(1, 0));
     } 
 
     // random free direction
@@ -217,11 +208,6 @@ public class EnemyController : MonoBehaviour
 
         if(direction == -1)
         {
-            doRandom = true;
-        }
-       
-        if(doRandom)
-        {
             direction = RandomRoute();
             doRandom = false;
         }
@@ -233,15 +219,8 @@ public class EnemyController : MonoBehaviour
             case 2: MoveLeft(); break;
             case 3: MoveRight(); break;
             default: break;
-        } 
-        
-        // react to special events
-        if(seePlayer)
-        {
-            doRandom = false;   
-            DropBomb();
-            seePlayer = false;
         }
+
     }
 
     void FixedUpdate()
