@@ -8,8 +8,9 @@ public class PlayerController : MonoBehaviour
     float speed;
     GameObject bombPrefab;
     public static Vector2 bombposition;
-    static Vector3Int playerPositionorig;
     public static Vector3Int playerPosition;
+    public static Vector3 playerPos;
+
     public static int bombAmount = 0;
 
     void Start() 
@@ -20,9 +21,11 @@ public class PlayerController : MonoBehaviour
     void Update() 
     {
         // z value is -6 by default so changing to match to map
-        playerPositionorig = GameMap.TilemapTop.WorldToCell(transform.position);
+        Vector3Int playerPositionorig = GameMap.TilemapTop.WorldToCell(transform.position);
         playerPosition = playerPositionorig;
         playerPosition.z = 0;
+
+        playerPos = transform.position;
 
         // movement
         if(Input.GetKey(KeyCode.W))

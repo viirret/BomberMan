@@ -22,8 +22,8 @@ public class EnemyController : MonoBehaviour
     Tile leftTile;
     Tile rightTile;
 
-    // for the update
-    bool doRandom = true;
+    bool moveToPlayer = true;
+
     int direction = -1;
 
     void Start()
@@ -68,14 +68,18 @@ public class EnemyController : MonoBehaviour
             b.pos = transform.position;
             b.blastRadius = blastRadius;
             Destroy(bomb, 3);
-            StartCoroutine(WaitBomb(true));
+            StartCoroutine(WaitBomb(1));
         }
     }
-    IEnumerator WaitBomb(bool reduceAmount)
+    IEnumerator WaitBomb(int action)
     {
         yield return new WaitForSeconds(2);
-        if(reduceAmount)
-            bombAmount--;
+        switch(action)
+        {
+            case 1: bombAmount--; break;
+            case 2: moveToPlayer = true; break;
+            default: break;
+        }
     }
 
     // return opposite direction from lastDirection
@@ -91,23 +95,19 @@ public class EnemyController : MonoBehaviour
         {
             if(hit.collider.name == "Blue Bird(Clone)")
             {
-                doRandom = false;
                 DropBomb();
             }
 
             if(hit.collider.name == "bomb(Clone)")
             {
                 direction = OppositeDirection(direction);
-                doRandom = false;
-                StartCoroutine(WaitBomb(false));
+                StartCoroutine(WaitBomb(0));
             }
             
-            // there is somthing odd about this
             if(hit.transform.tag == "Enemy")
             {
-                direction = OppositeDirection(direction);
-                doRandom = false;
-                StartCoroutine(WaitBomb(false));
+                //direction = OppositeDirection(direction);
+                //StartCoroutine(WaitBomb(0));
             }
             // getting the tile
             Vector3Int target = GameMap.TilemapTop.WorldToCell(hit.point);
@@ -161,6 +161,9 @@ public class EnemyController : MonoBehaviour
         rightTile = TargetTile(new Vector2(0.7f, 0), new Vector2(1, 0));
     } 
 
+    
+   // might use these two for something else
+
     // random free direction
     int RandomRoute()
     {
@@ -184,41 +187,92 @@ public class EnemyController : MonoBehaviour
     }
 
     // check if closest tiles are destructible and act accordingly
-    int StartLooking()
+    void StartLooking()
     {
         if  ((upTile != null && upTile.name == "Destructible") ||
             (downTile != null && downTile.name == "Destructible") ||
             (leftTile != null && leftTile.name == "Destructible") ||
             (rightTile != null && rightTile.name == "Destructible"))
         {
-            doRandom = false;
             DropBomb();
-            return OppositeDirection(direction);
         }
-        else
-            return -1;
     }
+
+    void LookDirection(int direction)
+    {
+        switch(direction)
+        {
+            case 0: if(upTile != null && upTile.name == "Destructible") {DropBomb();} break;
+            case 1: if(downTile != null && downTile.name == "Destructible") {DropBomb();}break;
+            case 2: if(leftTile != null && leftTile.name == "Destructible") {DropBomb();} break;
+            case 3: if(rightTile != null && rightTile.name == "Destructible") {DropBomb();} break;
+            default: break;
+        }
+    }
+    
+
+    int GoTowardsPlayer()
+    {
+        float dUp = PlayerController.playerPos.y - playerPosition.y;
+        float dDown = -(PlayerController.playerPos.y - playerPosition.y); 
+        float dLeft =  -(PlayerController.playerPos.x - playerPosition.x);
+        float dRight =  PlayerController.playerPos.x - playerPosition.x;
+
+        // find the largest value
+        var largest = (dUp > dDown) ? (dUp > dLeft) ? (dUp > dRight) ? dUp 
+        : dRight : (dLeft > dRight) ? dLeft : dRight : (dDown > dLeft) ? (dDown > dRight) 
+        ? dDown : dRight : (dLeft > dRight) ? dLeft : dRight;
+
+        // move towards largest distance
+        if (largest == dUp)
+            return 0;
+        else if (largest == dDown)
+            return 1;
+        else if (largest == dLeft)
+            return 2;
+        else if (largest == dRight)
+            return 3;
+        else
+            return -2;
+    }
+
+    IEnumerator Test()
+    {
+        yield return new WaitForSeconds(3);
+        direction = OppositeDirection(direction);
+        moveToPlayer = true;
+    }
+
 
     void BirdMovement()
     {
-        if(currentSpeed == 0)
+        // testing only for one bird
+        if(obj.name == "Eagle(Clone)")
         {
-            direction = StartLooking();
-        }
+            Debug.Log(direction);
+            
+            if(moveToPlayer)
+                direction = GoTowardsPlayer();
+                if(currentSpeed == 0)
+                    moveToPlayer = false;
+            else
+            {
+                LookDirection(direction);
+                StartCoroutine(Test());
+            }
 
-        if(direction == -1)
-        {
-            direction = RandomRoute();
-            doRandom = false;
-        }
 
-        switch(direction)
-        {
-            case 0: MoveUp(); break;
-            case 1: MoveDown(); break;
-            case 2: MoveLeft(); break;
-            case 3: MoveRight(); break;
-            default: break;
+
+            // main movement
+            switch(direction)
+            {
+                case 0: MoveUp(); break;
+                case 1: MoveDown(); break;
+                case 2: MoveLeft(); break;
+                case 3: MoveRight(); break;
+                default: break;
+            }
+                
         }
 
     }
