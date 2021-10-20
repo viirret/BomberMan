@@ -25,6 +25,7 @@ public class EnemyController : MonoBehaviour
     bool moveToPlayer = true;
 
     int direction = -1;
+    bool doOpposite = false;
 
     void Start()
     {
@@ -100,12 +101,15 @@ public class EnemyController : MonoBehaviour
 
             if(hit.collider.name == "bomb(Clone)")
             {
-                direction = OppositeDirection(direction);
-                StartCoroutine(WaitBomb(0));
+                //Debug.Log("I see my own bomb");
+                // this doesn't recognize it's own bombs after deployment
+                //direction = OppositeDirection(direction);
+                //StartCoroutine(WaitBomb(0));
             }
             
             if(hit.transform.tag == "Enemy")
             {
+                // if you see the enemy
                 //direction = OppositeDirection(direction);
                 //StartCoroutine(WaitBomb(0));
             }
@@ -118,41 +122,7 @@ public class EnemyController : MonoBehaviour
         return null;
     }
 
-// Idea for longer vision
-/*
-    bool LongVision(Vector2 ownPosition, Vector2 lookingPosition)
-    {
-        RaycastHit2D hit = Physics2D.Raycast((playerPosition2 + ownPosition), lookingPosition, 15f);
-        if(hit.collider != null)
-        {
-            //Vector3Int target = GameMap.TilemapTop.WorldToCell(hit.point);
-            //Tile tile = GameMap.TilemapTop.GetTile<Tile>(target);
-
-            if(hit.collider.name == "bomb(Clone)")
-                return true;
-            //return tile;
-
-            // see if this is the whole range or just this one place
-            //if(tile == null)
-            //    if(hit.collider.name == "bomb(Clone)")
-                    //return true;
-            //else
-            //    return false;
-            
-        }
-        return false;
-        // dont know if this is needed
-        //return null;
-    }
-    void Vision()
-    {
-        upVision = LongVision(new Vector2(0, 0.5f), new Vector2(0, 1));
-        downVision = LongVision(new Vector2(0, -0.5f), new Vector2(0, -1));
-        leftVision = LongVision(new Vector2(-0.7f, 0), new Vector2(-1, 0));
-        rightVision = LongVision(new Vector2(0.7f, 0), new Vector2(1, 0));
-    }
-    */
-    // update closest tiles
+   // update closest tiles
     void Tiles()
     {
         upTile = TargetTile(new Vector2(0, 0.5f), new Vector2(0, 1));
@@ -162,8 +132,6 @@ public class EnemyController : MonoBehaviour
     } 
 
     
-   // might use these two for something else
-
     // random free direction
     int RandomRoute()
     {
@@ -202,11 +170,42 @@ public class EnemyController : MonoBehaviour
     {
         switch(direction)
         {
-            case 0: if(upTile != null && upTile.name == "Destructible") {DropBomb();} break;
-            case 1: if(downTile != null && downTile.name == "Destructible") {DropBomb();}break;
-            case 2: if(leftTile != null && leftTile.name == "Destructible") {DropBomb();} break;
-            case 3: if(rightTile != null && rightTile.name == "Destructible") {DropBomb();} break;
-            default: break;
+            case 0: if(upTile != null && upTile.name == "Destructible") 
+            {
+                DropBomb();
+                doOpposite = true;
+                StartCoroutine(WaitBomb(2));
+                //direction = OppositeDirection(direction);    
+            }
+            break;
+            case 1: if(downTile != null && downTile.name == "Destructible")
+            {
+                DropBomb();
+                doOpposite = true;
+                StartCoroutine(WaitBomb(2));
+                //direction = OppositeDirection(direction);
+            }
+            break;
+            case 2: if(leftTile != null && leftTile.name == "Destructible")
+            {
+                DropBomb();
+                doOpposite = true;
+                StartCoroutine(WaitBomb(2));
+                //direction = OppositeDirection(direction);
+            }
+            break;
+            case 3: if(rightTile != null && rightTile.name == "Destructible")
+            {
+                DropBomb();
+                doOpposite = true;
+                StartCoroutine(WaitBomb(2));
+                //direction = OppositeDirection(direction);    
+            }
+            break;
+            default: 
+                moveToPlayer = true; 
+                Debug.Log("moveToPlayer is now true");
+            break;
         }
     }
     
@@ -233,7 +232,7 @@ public class EnemyController : MonoBehaviour
         else if (largest == dRight)
             return 3;
         else
-            return -2;
+            return -1;
     }
 
     IEnumerator Test()
@@ -252,16 +251,27 @@ public class EnemyController : MonoBehaviour
             Debug.Log(direction);
             
             if(moveToPlayer)
+            {
+                Debug.Log("Moving towards player");
                 direction = GoTowardsPlayer();
+            
                 if(currentSpeed == 0)
+                {
                     moveToPlayer = false;
+                }
+            }
             else
             {
+                Debug.Log("Not moving towards player");
                 LookDirection(direction);
-                StartCoroutine(Test());
+                if(doOpposite)
+                {
+                    direction = OppositeDirection(direction);
+                    doOpposite = false;
+                }
+
             }
-
-
+            
 
             // main movement
             switch(direction)
@@ -289,3 +299,38 @@ public class EnemyController : MonoBehaviour
         BirdMovement();
     }
 }
+// Idea for longer vision
+/*
+    bool LongVision(Vector2 ownPosition, Vector2 lookingPosition)
+    {
+        RaycastHit2D hit = Physics2D.Raycast((playerPosition2 + ownPosition), lookingPosition, 15f);
+        if(hit.collider != null)
+        {
+            //Vector3Int target = GameMap.TilemapTop.WorldToCell(hit.point);
+            //Tile tile = GameMap.TilemapTop.GetTile<Tile>(target);
+
+            if(hit.collider.name == "bomb(Clone)")
+                return true;
+            //return tile;
+
+            // see if this is the whole range or just this one place
+            //if(tile == null)
+            //    if(hit.collider.name == "bomb(Clone)")
+                    //return true;
+            //else
+            //    return false;
+            
+        }
+        return false;
+        // dont know if this is needed
+        //return null;
+    }
+    void Vision()
+    {
+        upVision = LongVision(new Vector2(0, 0.5f), new Vector2(0, 1));
+        downVision = LongVision(new Vector2(0, -0.5f), new Vector2(0, -1));
+        leftVision = LongVision(new Vector2(-0.7f, 0), new Vector2(-1, 0));
+        rightVision = LongVision(new Vector2(0.7f, 0), new Vector2(1, 0));
+    }
+    */
+ 
