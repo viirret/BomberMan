@@ -33,6 +33,10 @@ public class MainMenu : MonoBehaviour
 
         // set panel unactive
         OptionsPanel.SetActive(false);
+
+        // play theme
+        AudioSource s = Audio.LoadSound("sounds/theme", "theme", gameObject);
+        s.Play();
     }
 
     void ShowPanel(GameObject UI)
