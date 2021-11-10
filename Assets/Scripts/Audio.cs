@@ -10,10 +10,18 @@ public class Audio : MonoBehaviour
     static GameObject audioObj;
     // list of already loaded clips
     static Dictionary<string, AudioClip> clips = new Dictionary<string, AudioClip>();
+    static bool created = false;
 
     void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+        if(!created)
+        {
+            DontDestroyOnLoad(this.gameObject);
+            created = true;
+        }
+        else
+            Destroy(this.gameObject);
+        
         audioObj = gameObject;
         mixer = Resources.Load<AudioMixer>("myMixer");
     }
