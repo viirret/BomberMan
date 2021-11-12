@@ -10,6 +10,7 @@ public class MainMenu : MonoBehaviour
     Button ExtraButton;
     Button QuitButton;
     Button BackButtonOptions;
+    AudioSource clickSound;
 
     void Start()
     {
@@ -23,18 +24,25 @@ public class MainMenu : MonoBehaviour
         PlayButton.onClick.AddListener(StartGame);
 
         OptionsButton.onClick.AddListener(() => { PauseMenu.PauseGame(); });
-        //ExtraButton.onClick.AddListener();
+        ExtraButton.onClick.AddListener(ExtrasButton);
         QuitButton.onClick.AddListener(QuitGame);
 
         // play theme
         AudioSource s = Audio.LoadSound("sounds/theme", "theme", gameObject);
         s.Play();
-    }
 
+        clickSound = Audio.LoadSound("sounds/clicksound", "effects");
+    }
 
     void StartGame()
     {
         SceneManager.LoadScene("game");
+        clickSound.Play();
+    }
+
+    void ExtrasButton()
+    {
+        clickSound.Play();
     }
 
     void QuitGame()

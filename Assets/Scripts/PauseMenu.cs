@@ -10,10 +10,12 @@ public class PauseMenu : MonoBehaviour
     static public bool gameIsPaused;
     static Button Main;
     static bool created = false;
+    static AudioSource clickSound;
     void Start()
     {
         if(!created)
         {
+            clickSound = Audio.LoadSound("sounds/clicksound", "effects");
             DontDestroyOnLoad(this.gameObject);
             // ui elements
             Pause = GameObject.Find("PauseMenuObj");
@@ -48,6 +50,7 @@ public class PauseMenu : MonoBehaviour
 
     void ResumeGame()
     {
+        clickSound.Play();
         Pause.SetActive(false);
         gameIsPaused = false;
         Scene scene = SceneManager.GetActiveScene();
@@ -57,6 +60,7 @@ public class PauseMenu : MonoBehaviour
 
     public static void PauseGame()
     {
+        clickSound.Play();
         Pause.SetActive(true);
         gameIsPaused = true;
         Scene scene = SceneManager.GetActiveScene();
@@ -74,6 +78,7 @@ public class PauseMenu : MonoBehaviour
 
     void MainMenu()
     {
+        clickSound.Play();
         SceneManager.LoadScene("MainMenu");
         Time.timeScale = 1f;
         Main.gameObject.SetActive(false);
