@@ -10,12 +10,13 @@ public class Bomb : MonoBehaviour
     GameObject gm; 
     MapDestroyer mapdes;
     GameObject bomb;
-    AudioSource s;
+    AudioSource bombsound;
 
     // create the bomb
     void Start()
     {
-        s = Audio.LoadSound("sounds/bomb", "game");
+        bombsound = Audio.LoadSound("sounds/bomb", "game");
+        CharacterSpawner.audios.Add(bombsound);
         bombPrefab = Resources.Load<GameObject>("bomb");
         bomb = Instantiate(bombPrefab, pos, Quaternion.identity);
         gm = GameObject.Find("Grid");
@@ -38,7 +39,7 @@ public class Bomb : MonoBehaviour
     // destroy the bomb
     public void GoOff()
     {
-        s.Play();
+        bombsound.Play();
         mapdes.Explode(pos);
         Debug.Log("Explosion!");
         Destroy(bomb);

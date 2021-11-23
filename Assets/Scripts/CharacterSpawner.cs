@@ -13,10 +13,16 @@ public class CharacterSpawner : MonoBehaviour
     GameObject yellowBird;
 
     List<Vector3> spawnPoints = new List<Vector3>(4);
+    
+
+    public static List<AudioSource> audios = new List<AudioSource>();
+    AudioSource level1;
 
     void Start()
     {
         CreateSpawnPoints(spawnPoints);
+        level1 = Audio.LoadSound("sounds/game", "game", gameObject);
+        audios.Add(level1);
         
         blueBird = Resources.Load<GameObject>("Blue bird");
         chicken = Resources.Load<GameObject>("Chicken");
@@ -43,12 +49,22 @@ public class CharacterSpawner : MonoBehaviour
                 CreateBird(owl, spawnPoints[0], true);
                 CreateBird(chicken, spawnPoints[1], true);
                 CreateBird(eagle, spawnPoints[2], true);
+                level1.Play();
                 break;
                 case 2:
                 CreateBird(eagle, spawnPoints[0], true);
                 break;
                 default: break;
             }   
+        }
+
+        // handle audio with pausemenu
+        for(int i = 0; i < audios.Count; i++)
+        {
+            if(PauseMenu.gameIsPaused)
+                audios[i].Pause();
+            else
+                audios[i].UnPause();
         }
     }
 
