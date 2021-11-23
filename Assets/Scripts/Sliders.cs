@@ -6,8 +6,6 @@ using UnityEngine.Audio;
 
 public class Sliders : MonoBehaviour
 {
-    // set preferences from volume later
-    
     AudioMixer myMixer;
 
     // sliders
@@ -20,17 +18,11 @@ public class Sliders : MonoBehaviour
     Text themePercent;
     Text sfxPercent;
 
-    // float for percentage
-    float gameSliderPercentage;
-    float themeSliderPercentage;
-    float sfxSliderPercentage;
-
-
     void Start()
     {
         myMixer = Resources.Load<AudioMixer>("myMixer");
 
-        //sliders
+        // sliders
         gameSlider = GameObject.Find("gameSlider").GetComponent<Slider>();
         themeSlider = GameObject.Find("themeSlider").GetComponent<Slider>();
         sfxSlider = GameObject.Find("effectsSlider").GetComponent<Slider>();
@@ -40,55 +32,52 @@ public class Sliders : MonoBehaviour
         themePercent = GameObject.Find("themeSliderPercent").GetComponent<Text>();
         sfxPercent = GameObject.Find("effectsSliderPercent").GetComponent<Text>();
 
-        // default value for sliders
-        gameSlider.value = 0.5f;
-        //themeSlider.value = 0.75f;
-        sfxSlider.value = 0.5f;
+        // set preferences
+        Preferences(sfxSlider, sfxPercent, "sfxValue", "sfxPercentage", "mySfxVolume", "sfxVolume");
+        Preferences(gameSlider, gamePercent, "gameValue", "gamePercentage", "myGameVolume", "gameVolume"); 
+        Preferences(themeSlider, themePercent, "themeValue", "themePercentage", "myThemeVolume", "themeVolume");
+
+        // set listeners
+        sfxSlider.onValueChanged.AddListener(delegate 
+        { 
+            SetVolume(sfxSlider, sfxPercent, "sfxValue", "sfxPercentage", "mySfxVolume", "sfxVolume"); 
+        });
+
+        gameSlider.onValueChanged.AddListener(delegate 
+        { 
+            SetVolume(gameSlider, gamePercent, "gameValue", "gamePercentage", "myGameVolume", "gameVolume"); 
+        });
+
+        themeSlider.onValueChanged.AddListener(delegate 
+        { 
+            SetVolume(themeSlider, themePercent, "themeValue", "themePercentage", "myThemeVolume", "themeVolume"); 
+        });
+    }
+
+    // load preferences, if not set sliders have the same default value
+    void Preferences(Slider slider, Text percentageText, string sliderValue, string percentage, string actualValue, string mixerName)
+    {
+        slider.value = PlayerPrefs.GetFloat(sliderValue, 0.75f);
+        percentageText.text = PlayerPrefs.GetString(percentage, "75%");
         
-        Preferences();
-        // listeners
-        gameSlider.onValueChanged.AddListener(delegate { SetGameVolume(); });
-        themeSlider.onValueChanged.AddListener(delegate { SetThemeVolume(); });
-        sfxSlider.onValueChanged.AddListener(delegate { SetSfxVolume(); });
-   
+        // problems with myMixer.GetFloat so this a little workaround
+        float vol = PlayerPrefs.GetFloat(actualValue, -10.5f);
+        myMixer.SetFloat(mixerName, vol);
     }
 
-    void Preferences()
+    void SetVolume(Slider slider, Text percentageText, string sliderValue, string percentage, string actualValue, string mixerName)
     {
-        themeSlider.value = PlayerPrefs.GetFloat("myVolume", 0.5f);
-        themePercent.text = PlayerPrefs.GetString("myPercent", "50%");
-        float vol = PlayerPrefs.GetFloat("testing", 0f);
-        
-        myMixer.SetFloat("themeVolume", vol);
-     
+        // make volume and percentage from slider
+        float vol = (1 - Mathf.Sqrt(slider.value)) * -80f;
+        string percent = Mathf.RoundToInt(slider.value * 100) + "%";
+
+        // set preferences
+        PlayerPrefs.SetFloat(sliderValue, slider.value);
+        PlayerPrefs.SetString(percentage, percent);
+        PlayerPrefs.SetFloat(actualValue, vol);
+
+        // set text and mixer
+        percentageText.text = percent;
+        myMixer.SetFloat(mixerName, vol);
     }
-
-    void SetThemeVolume()
-    {
-        float vol = (1 - Mathf.Sqrt(themeSlider.value)) * -80f;
-        string percent = Mathf.RoundToInt(themeSlider.value * 100) + "%";
-
-        PlayerPrefs.SetFloat("myVolume", themeSlider.value);
-        PlayerPrefs.SetString("myPercent", percent);
-        // workaround for GetFloat not working
-        PlayerPrefs.SetFloat("testing", vol);
-
-        themePercent.text = percent;
-        myMixer.SetFloat("themeVolume", vol);
-    }
-
-
-    // this all could be made as one function. Might make it later
-    void SetGameVolume()
-    {
-        gamePercent.text = Mathf.RoundToInt(gameSlider.value * 100) + "%";
-        myMixer.SetFloat("gameVolume", Mathf.Log10(gameSlider.value) * 20);
-    }
-
-    void SetSfxVolume()
-    {
-        sfxPercent.text = Mathf.RoundToInt(sfxSlider.value * 100) + "%";
-        myMixer.SetFloat("sfxVolume", Mathf.Log10(sfxSlider.value) * 20);
-    }
-
 }
