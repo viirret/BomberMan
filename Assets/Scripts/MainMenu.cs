@@ -30,6 +30,7 @@ public class MainMenu : MonoBehaviour
         // play theme
         AudioSource s = Audio.LoadSound("sounds/theme", "theme", gameObject);
         s.Play();
+        s.loop = true;
 
         clickSound = Audio.LoadSound("sounds/clicksound", "effects");
     }

@@ -13,6 +13,10 @@ public class PlayerController : MonoBehaviour
 
     public static int bombAmount = 0;
 
+    // vectors used in raycasting
+    Vector2 lookingPosition = new Vector2(0, 0);
+    Vector2 extraPosition = new Vector2(0, 0);
+
     void Start() 
     {
         speed = Player.speed;
@@ -24,18 +28,38 @@ public class PlayerController : MonoBehaviour
         Vector3Int playerPositionorig = GameMap.TilemapTop.WorldToCell(transform.position);
         playerPosition = playerPositionorig;
         playerPosition.z = 0;
-
         playerPos = transform.position;
+    
+        Vector2 playerPosition2 = playerPos;
 
         // movement
         if(Input.GetKey(KeyCode.W))
+        {
             transform.position += new Vector3(0, 1) * speed * Time.deltaTime;
+            lookingPosition = new Vector2(0, 1);
+            extraPosition = new Vector2(0, 0.28f);
+        }
+
         if(Input.GetKey(KeyCode.S))
+        {
             transform.position += new Vector3(0, -1) * speed * Time.deltaTime;
+            lookingPosition = new Vector2(0, -1);
+            extraPosition = new Vector2(0, -0.3f);
+        }
+
         if(Input.GetKey(KeyCode.A))
+        {
             transform.position += new Vector3(-1, 0) * speed * Time.deltaTime;
+            lookingPosition = new Vector2(-1, 0);
+            extraPosition = new Vector2(-0.45f, 0);
+        }
+
         if(Input.GetKey(KeyCode.D))
+        {
             transform.position += new Vector3(1, 0) * speed * Time.deltaTime;
+            lookingPosition = new Vector2(1, 0);
+            extraPosition = new Vector2(0.45f, 0);
+        }
         
         // placing bomb
         if(Input.GetKeyDown(KeyCode.Space) && bombAmount < Player.bombsAtOnce)
@@ -48,6 +72,27 @@ public class PlayerController : MonoBehaviour
             Destroy(bomb, 3);
             StartCoroutine(WaitBomb());
         }
+
+        // check if wall in ongoing direction to stop vibrating
+        RaycastHit2D vision = Physics2D.Raycast((playerPosition2 + extraPosition), lookingPosition, 0.1f);
+        Vector3Int target = GameMap.TilemapTop.WorldToCell(vision.point);
+        Tile tile = GameMap.TilemapTop.GetTile<Tile>(target);
+        if(tile == GameMap.Wall)
+        {
+            transform.position += ReverseVector(lookingPosition) * speed * Time.deltaTime;
+        }
+
+        // for some reason the destructible tiles show wrong
+        if(tile == GameMap.Destructible)
+        {
+        }
+    }
+
+    Vector3 ReverseVector(Vector2 vector)
+    {
+        int x = (vector.x == 0) ? 0 : -(int)(vector.x);
+        int y = (vector.y == 0) ? 0 : -(int)(vector.y);
+        return new Vector3(x, y);
     }
 
     IEnumerator WaitBomb()

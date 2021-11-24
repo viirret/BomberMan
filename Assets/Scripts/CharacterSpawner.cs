@@ -22,6 +22,7 @@ public class CharacterSpawner : MonoBehaviour
     {
         CreateSpawnPoints(spawnPoints);
         level1 = Audio.LoadSound("sounds/game", "game", gameObject);
+        level1.loop = true;
         audios.Add(level1);
         
         blueBird = Resources.Load<GameObject>("Blue bird");

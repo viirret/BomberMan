@@ -115,9 +115,10 @@ public class EnemyController : MonoBehaviour
                 //direction = OppositeDirection(direction);
                 //StartCoroutine(WaitBomb(0));
             }
+
             // getting the tile
             Vector3Int target = GameMap.TilemapTop.WorldToCell(hit.point);
-            Tile tile = GameMap.TilemapTop.GetTile<Tile>(target); 
+            Tile tile = GameMap.TilemapTop.GetTile<Tile>(target);
 
             return tile;
         }
@@ -221,7 +222,6 @@ public class EnemyController : MonoBehaviour
         : dRight : (dLeft > dRight) ? dLeft : dRight : (dDown > dLeft) ? (dDown > dRight) 
         ? dDown : dRight : (dLeft > dRight) ? dLeft : dRight;
 
-        Debug.Log(largest);
         if(x)
         {
             // move towards largest distance
@@ -282,7 +282,6 @@ public class EnemyController : MonoBehaviour
         {
             if(moveToPlayer && !lookForSecond)
             {
-                Debug.Log("moving towards player");
                 direction = GoTowardsPlayer(true);
             
                 if(currentSpeed == 0)
@@ -294,7 +293,6 @@ public class EnemyController : MonoBehaviour
             }
             else if(!moveToPlayer && !lookForSecond)
             {
-                Debug.Log("Not moving towards player");
                 LookDirection(direction);
 
                 if(doOpposite)
@@ -312,7 +310,6 @@ public class EnemyController : MonoBehaviour
             
             else if(lookForSecond)
             {
-                Debug.Log("look for second direction");
                 direction = GoTowardsPlayer(false);
                 if(currentSpeed == 0)
                 {
@@ -321,7 +318,6 @@ public class EnemyController : MonoBehaviour
             }
             else
             {
-                Debug.Log("Going to random direction");
                 direction = RandomRoute();
                 if(currentSpeed == 0)
                 {
