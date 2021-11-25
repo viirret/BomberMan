@@ -5,6 +5,11 @@ using UnityEngine.Tilemaps;
 
 public class EnemyController : MonoBehaviour 
 {
+    public IEnemyState currentState;
+    public InitialState initialState;
+    public NormalState normalState;
+    public ChaseState chaseState;
+
     public GameObject obj;
     public float speed;
     public int blastRadius;
@@ -28,9 +33,17 @@ public class EnemyController : MonoBehaviour
     bool doOpposite = false;
     bool lookForSecond = false;
 
+    private void Awake()
+    {
+        initialState = new InitialState(this);
+        normalState = new NormalState(this);
+        chaseState = new ChaseState(this);
+    }
+
     void Start()
     {
         gameObject.tag = "Enemy";
+        currentState = initialState;
     }
 
     public void HitEnemy()
@@ -346,10 +359,12 @@ public class EnemyController : MonoBehaviour
         currentSpeed = Vector3.Distance(oldPosition, transform.position) * 100f;
         oldPosition = transform.position;
         playerPosition2 = playerPosition;
-        
-        Tiles();
 
-        BirdMovement();
+        currentState.UpdateState();
+        
+        //Tiles();
+
+        //BirdMovement();
     }
 }
 // Idea for longer vision

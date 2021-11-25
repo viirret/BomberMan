@@ -103,7 +103,7 @@ public class CharacterSpawner : MonoBehaviour
                 break;
                 case "Eagle":
                     EC.speed = 3;
-                    EC.blastRadius = 3;
+                    EC.blastRadius = 2;
                     EC.bombsAtOnce = 1;
                     EC.lives = 10;
                     EC.killReward = 200;
