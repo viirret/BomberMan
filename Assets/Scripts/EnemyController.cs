@@ -5,35 +5,43 @@ using UnityEngine.Tilemaps;
 
 public class EnemyController : MonoBehaviour 
 {
+    // all the states
     public IEnemyState currentState;
     public InitialState initialState;
     public NormalState normalState;
     public ChaseState chaseState;
 
+    // this gameobject used in another classes
     public GameObject obj;
+    
+    // attributes to the enemy
     public float speed;
     public int blastRadius;
     public int bombsAtOnce;
     public int lives;
     public int killReward;
     public Vector3 playerPosition;
-    Vector2 playerPosition2;
+    public int direction = -1;
+    public float currentSpeed;
     
-    int bombAmount = 0;
-    float currentSpeed;
-    Vector2 oldPosition;
-    Tile upTile;
-    Tile downTile;
-    Tile leftTile;
-    Tile rightTile;
+    // tiles next to player
+    public Tile upTile;
+    public Tile downTile;
+    public Tile leftTile;
+    public Tile rightTile;
 
+    
     bool moveToPlayer = true;
 
-    int direction = -1;
     bool doOpposite = false;
     bool lookForSecond = false;
+    Vector2 playerPosition2;
+    int bombAmount = 0;
+    Vector2 oldPosition;
+    
 
-    private void Awake()
+
+    void Awake()
     {
         initialState = new InitialState(this);
         normalState = new NormalState(this);
@@ -56,24 +64,28 @@ public class EnemyController : MonoBehaviour
     }
 
 
-    // all the actions for enemy
-    void MoveUp()
+    // enemy's moving
+    public void MoveUp()
     {
         transform.position += new Vector3(0, 1) * speed * Time.deltaTime;
     }
-    void MoveDown()
+    public void MoveDown()
     {
         transform.position += new Vector3(0, -1) * speed * Time.deltaTime;
     }
-    void MoveLeft()
+    public void MoveLeft()
     {
         transform.position += new Vector3(-1, 0) * speed * Time.deltaTime;
     }
-    void MoveRight()
+    public void MoveRight()
     {
         transform.position += new Vector3(1, 0) * speed * Time.deltaTime;
     }
-    void DropBomb()
+    public void Stop()
+    {
+        transform.position = new Vector3(0, 0);
+    }
+    public void DropBomb()
     {
         if(bombAmount < bombsAtOnce)
         {
@@ -86,6 +98,8 @@ public class EnemyController : MonoBehaviour
             StartCoroutine(WaitBomb(1));
         }
     }
+
+    // look into this later
     IEnumerator WaitBomb(int action)
     {
         yield return new WaitForSeconds(2);
@@ -99,10 +113,18 @@ public class EnemyController : MonoBehaviour
     }
 
     // return opposite direction from lastDirection
-    int OppositeDirection(int last) => last = (last == 0 || last == 2) ? ++last : --last;
+    public int OppositeDirection(int last) => last = (last == 0 || last == 2) ? ++last : --last;
 
 
-   // enemy vision to closest objects
+   // update closest tiles
+    void Tiles()
+    {
+        upTile = TargetTile(new Vector2(0, 0.5f), new Vector2(0, 1));
+        downTile = TargetTile(new Vector2(0, -0.5f), new Vector2(0, -1));
+        leftTile = TargetTile(new Vector2(-0.7f, 0), new Vector2(-1, 0));
+        rightTile = TargetTile(new Vector2(0.7f, 0), new Vector2(1, 0));
+    } 
+    
     Tile TargetTile(Vector2 ownPosition, Vector2 lookingPosition)
     {
         RaycastHit2D hit = Physics2D.Raycast((playerPosition2 + ownPosition), lookingPosition, 0.5f);
@@ -111,7 +133,7 @@ public class EnemyController : MonoBehaviour
         {
             if(hit.collider.name == "Blue Bird(Clone)")
             {
-                DropBomb();
+                //DropBomb();
             }
 
             if(hit.collider.name == "bomb(Clone)")
@@ -138,18 +160,11 @@ public class EnemyController : MonoBehaviour
         return null;
     }
 
-   // update closest tiles
-    void Tiles()
-    {
-        upTile = TargetTile(new Vector2(0, 0.5f), new Vector2(0, 1));
-        downTile = TargetTile(new Vector2(0, -0.5f), new Vector2(0, -1));
-        leftTile = TargetTile(new Vector2(-0.7f, 0), new Vector2(-1, 0));
-        rightTile = TargetTile(new Vector2(0.7f, 0), new Vector2(1, 0));
-    } 
+
 
     
     // random free direction
-    int RandomRoute()
+    public int RandomRoute()
     {
         List<int?> routes = new List<int?>(4);
         routes.Add((upTile == null) ? 0 : (int?)null);
@@ -171,7 +186,7 @@ public class EnemyController : MonoBehaviour
     }
 
     // check if closest tiles are destructible and act accordingly
-    void StartLooking()
+    public void StartLooking()
     {
         if  ((upTile != null && upTile.name == "Destructible") ||
             (downTile != null && downTile.name == "Destructible") ||
@@ -182,6 +197,20 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    public bool DestructibleNear()
+    {
+        if  ((upTile != null && upTile.name == "Destructible") ||
+            (downTile != null && downTile.name == "Destructible") ||
+            (leftTile != null && leftTile.name == "Destructible") ||
+            (rightTile != null && rightTile.name == "Destructible"))
+        {
+            return true;
+        }
+        else
+            return false;
+    }
+
+    // this is bad code
     void LookDirection(int dir)
     {
         switch(dir)
@@ -223,7 +252,9 @@ public class EnemyController : MonoBehaviour
     }
     
 
-    int GoTowardsPlayer(bool x)
+    // true for larger distance, false for second largest (x, y)
+    // this could also be implemented in chasestate
+    public int GoTowardsPlayer(bool x)
     {
         float dUp = PlayerController.playerPos.y - playerPosition.y;
         float dDown = -(PlayerController.playerPos.y - playerPosition.y); 
@@ -282,12 +313,12 @@ public class EnemyController : MonoBehaviour
             }
         }
     }
-
     float SecondLargest(float a, float b, float c)
     {
         return (a > b && a > c) ? ((b > c) ? b : c) : ((b > c) ? ((a > c) ? a : c) : ((a > b) ? a : b));
     }
 
+    // old logic for enemy, bad code
     void BirdMovement()
     {
         // testing only for one bird
@@ -338,17 +369,6 @@ public class EnemyController : MonoBehaviour
                 }
             }
             
-
-            // main movement
-            switch(direction)
-            {
-                case 0: MoveUp(); break;
-                case 1: MoveDown(); break;
-                case 2: MoveLeft(); break;
-                case 3: MoveRight(); break;
-                default: break;
-            }
-                
         }
 
     }
@@ -360,9 +380,20 @@ public class EnemyController : MonoBehaviour
         oldPosition = transform.position;
         playerPosition2 = playerPosition;
 
+        Tiles();
+
+        // only one bird for testing
         currentState.UpdateState();
         
-        //Tiles();
+        // main movement
+        switch(direction)
+        {
+            case 0: MoveUp(); break;
+            case 1: MoveDown(); break;
+            case 2: MoveLeft(); break;
+            case 3: MoveRight(); break;
+            default: Stop(); break;
+        }
 
         //BirdMovement();
     }
