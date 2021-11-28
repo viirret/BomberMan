@@ -9,6 +9,7 @@ public class NormalState : IEnemyState
     public NormalState(EnemyController enemy)
     {
         this.enemy = enemy;
+        Debug.Log("IN NORMAL STATE");
     }
 
     public void UpdateState()

@@ -5,98 +5,30 @@ using UnityEngine;
 public class InitialState : IEnemyState
 {   
     EnemyController enemy;
-    int droppedBombs;
-    bool initialMovement;
-    bool goBackOnce;
+    bool initialMovement = true;
     bool nextMovement = true;
     int dir;
-    
-    bool drop1 = true;
-
+    bool drop = true;
     bool checker = true;
-    bool failedSpawn = false;
-    bool y = false;
+
+    bool nextFunction = false;
+    bool doNextFunction = false;
 
     public InitialState(EnemyController enemy)
     {
         this.enemy = enemy;
-        droppedBombs = 0;
-        initialMovement = true;
-        goBackOnce = true;
     }
 
 
     public void UpdateState()
     {
-        if(MoveToDestructible())
-        {
-            if(BackToStart())
-            {
-                if(NextMovement(dir))
-                {
-
-                }
-            }
-        }
-        
-
-        // end the Initial state
-        if(droppedBombs >= 2)
-        {
-            ToNormalState();
-        }
+        MoveToDestructible();
+        if(doNextFunction)
+            NextMovement(dir);
     }
 
-    bool BackToStart()
-    {
-        if(goBackOnce)
-        {
-            goBackOnce = false;
-            if(enemy.currentSpeed == 0)
-            {
-                enemy.direction = enemy.OppositeDirection(enemy.direction);
-            }
-            return (enemy.currentSpeed == 0) ? true : false;
-        }
-        if(enemy.currentSpeed == 0)
-        {
-            y = true;
-        }
 
-        return (enemy.currentSpeed == 0) ? true : false;
-    }
-
-    bool NextMovement(int x)
-    {
-        if(nextMovement)
-        {
-            nextMovement = true;
-            if(enemy.currentSpeed == 0)    
-            {
-                if(y)
-                {
-                    switch(x)
-                    {
-                        
-                        case 0:
-                        if(enemy.leftTile != null)
-                        {
-                            enemy.direction = 3;
-                        }
-                        else
-                        {
-                            enemy.direction = 2;
-                        }
-                        break;
-                    }
-                }
-            }
-        }
-
-        return (enemy.currentSpeed == 0) ? true : false;
-    }
-
-    bool MoveToDestructible()
+    void MoveToDestructible()
     {
         if(initialMovement)
         {
@@ -114,26 +46,53 @@ public class InitialState : IEnemyState
             {
                 if(enemy.DestructibleNear())
                 {
-                    if(drop1)
+                    if(drop)
                     {
                         enemy.DropBomb();
-                        drop1 = false;
+                        drop = false;
                         checker = false;
+                        enemy.direction = enemy.OppositeDirection(enemy.direction);
+                        nextFunction = true;
                     }
                 }
                 else
                 {
                     Debug.Log("FAILED SPAWN!");
                     initialMovement = true;
-                    failedSpawn = true;
                 }
             }
-            return true;
         }
-        else
-            return false;
-        
+        if(enemy.currentSpeed == 0 && !enemy.DestructibleNear() && nextFunction)
+        {
+            nextFunction = false;
+            doNextFunction = true;
+        }
     }
+
+    void NextMovement(int x)
+    {
+        if(nextMovement)
+        {
+            nextMovement = false;
+            switch(x)
+            {
+                case 0: enemy.direction = (enemy.leftTile == null) ? 2 : 3; break;
+                case 1: enemy.direction = (enemy.leftTile == null) ? 2 : 3; break;
+                case 2: enemy.direction = (enemy.downTile == null) ? 1 : 0; break;
+                case 3: enemy.direction = (enemy.downTile == null) ? 1 : 0; break;
+            }
+        }
+
+        // start normalstate if enemy is in correct place
+        if(enemy.currentSpeed == 0)
+        {
+            if(enemy.DestructibleNear())
+                ToNormalState();
+            else
+                nextMovement = true;
+        }
+    }
+
 
     public void ToNormalState()
     {
