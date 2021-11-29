@@ -23,6 +23,7 @@ public class EnemyController : MonoBehaviour
     public Vector3 playerPosition;
     public int direction = -1;
     public float currentSpeed;
+    public GameObject bomb;
     
     // tiles next to player
     public Tile upTile;
@@ -38,8 +39,6 @@ public class EnemyController : MonoBehaviour
     Vector2 playerPosition2;
     int bombAmount = 0;
     Vector2 oldPosition;
-    
-
 
     void Awake()
     {
@@ -65,32 +64,45 @@ public class EnemyController : MonoBehaviour
 
 
     // enemy's moving
-    public void MoveUp()
+    void MoveUp()
     {
         transform.position += new Vector3(0, 1) * speed * Time.deltaTime;
     }
-    public void MoveDown()
+    void MoveDown()
     {
         transform.position += new Vector3(0, -1) * speed * Time.deltaTime;
     }
-    public void MoveLeft()
+    void MoveLeft()
     {
         transform.position += new Vector3(-1, 0) * speed * Time.deltaTime;
     }
-    public void MoveRight()
+    void MoveRight()
     {
         transform.position += new Vector3(1, 0) * speed * Time.deltaTime;
     }
-    public void Stop()
+    void Stop()
     {
         transform.position = new Vector3(0, 0);
     }
+
+    public Vector2 getLookingPosition(int dir)
+    {
+        switch(dir)
+        {
+            case 0: return new Vector2(0, 1);
+            case 1: return new Vector2(0, -1);
+            case 2: return new Vector2(-1, 0);
+            case 3: return new Vector2(1, 0);
+            default: return new Vector2(0, 0);
+        }
+    }
+
     public void DropBomb()
     {
         if(bombAmount < bombsAtOnce)
         {
             bombAmount++;
-            var bomb = new GameObject();
+            bomb = new GameObject();
             Bomb b = bomb.AddComponent<Bomb>();
             b.pos = transform.position;
             b.blastRadius = blastRadius;
@@ -112,6 +124,8 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    public bool BombAlive() => bomb ? true : false;
+    
     // return opposite direction from lastDirection
     public int OppositeDirection(int last) => last = (last == 0 || last == 2) ? ++last : --last;
 
@@ -131,26 +145,6 @@ public class EnemyController : MonoBehaviour
             
         if(hit.collider != null)
         {
-            if(hit.collider.name == "Blue Bird(Clone)")
-            {
-                //DropBomb();
-            }
-
-            if(hit.collider.name == "bomb(Clone)")
-            {
-                //Debug.Log("I see my own bomb");
-                // this doesn't recognize it's own bombs after deployment
-                //direction = OppositeDirection(direction);
-                //StartCoroutine(WaitBomb(0));
-            }
-            
-            if(hit.transform.tag == "Enemy")
-            {
-                // if you see the enemy
-                //direction = OppositeDirection(direction);
-                //StartCoroutine(WaitBomb(0));
-            }
-
             // getting the tile
             Vector3Int target = GameMap.TilemapTop.WorldToCell(hit.point);
             Tile tile = GameMap.TilemapTop.GetTile<Tile>(target);
@@ -160,13 +154,27 @@ public class EnemyController : MonoBehaviour
         return null;
     }
 
+    // see if there is any bombs in the vision
+    public int BombVision()
+    {
+        var hits = new List<RaycastHit2D>(); 
+        hits.Add(Physics2D.Raycast((playerPosition2 + new Vector2(0, 0.5f)), new Vector2(0, 1), 5f));
+        hits.Add(Physics2D.Raycast((playerPosition2 + new Vector2(0, -0.5f)), new Vector2(0, -1), 5f));
+        hits.Add(Physics2D.Raycast((playerPosition2 + new Vector2(-0.7f, 0)), new Vector2(-1, 0), 5f));
+        hits.Add(Physics2D.Raycast((playerPosition2 + new Vector2(0.7f, 0)), new Vector2(1, 0), 5f));
 
+        for(int i = 0; i < 4; i++)
+            if(hits[i].collider != null)
+                if(hits[i].collider.name == "bomb(Clone)")
+                    return i;
+        return -1;
+    }
 
     
     // random free direction
     public int RandomRoute()
     {
-        List<int?> routes = new List<int?>(4);
+        var routes = new List<int?>(4);
         routes.Add((upTile == null) ? 0 : (int?)null);
         routes.Add((downTile == null) ? 1 : (int?)null);
         routes.Add((leftTile == null) ? 2 : (int?)null);
@@ -185,18 +193,6 @@ public class EnemyController : MonoBehaviour
             return Choose(list);
     }
 
-    // check if closest tiles are destructible and act accordingly
-    public void StartLooking()
-    {
-        if  ((upTile != null && upTile.name == "Destructible") ||
-            (downTile != null && downTile.name == "Destructible") ||
-            (leftTile != null && leftTile.name == "Destructible") ||
-            (rightTile != null && rightTile.name == "Destructible"))
-        {
-            DropBomb();
-        }
-    }
-
     public bool DestructibleNear()
     {
         if  ((upTile != null && upTile.name == "Destructible") ||
@@ -210,45 +206,26 @@ public class EnemyController : MonoBehaviour
             return false;
     }
 
-    // this is bad code
-    void LookDirection(int dir)
+
+    public bool LookDirection(int dir)
     {
         switch(dir)
         {
-            case 0: if(upTile != null && upTile.name == "Destructible") 
-            {
-                DropBomb();
-                doOpposite = true;
-                StartCoroutine(WaitBomb(2));
-                //direction = OppositeDirection(direction);    
-            }
-            break;
-            case 1: if(downTile != null && downTile.name == "Destructible")
-            {
-                DropBomb();
-                doOpposite = true;
-                StartCoroutine(WaitBomb(2));
-                //direction = OppositeDirection(direction);
-            }
-            break;
-            case 2: if(leftTile != null && leftTile.name == "Destructible")
-            {
-                DropBomb();
-                doOpposite = true;
-                StartCoroutine(WaitBomb(2));
-                //direction = OppositeDirection(direction);
-            }
-            break;
-            case 3: if(rightTile != null && rightTile.name == "Destructible")
-            {
-                DropBomb();
-                doOpposite = true;
-                StartCoroutine(WaitBomb(2));
-                //direction = OppositeDirection(direction);    
-            }
-            break;
-            default: break;
+            case 0: return checkDirection(upTile) ? true : false;
+            case 1: return checkDirection(downTile) ? true : false;
+            case 2: return checkDirection(leftTile) ? true : false;
+            case 3: return checkDirection(rightTile) ? true : false;
+            
+            default: return false;
         }
+    }
+
+    bool checkDirection(Tile tile)
+    {
+        if(tile != null)
+            if(tile.name == "Wall" || tile.name == "Destructible")
+                return false;
+        return true;
     }
     
 
@@ -382,7 +359,6 @@ public class EnemyController : MonoBehaviour
 
         Tiles();
 
-        // only one bird for testing
         currentState.UpdateState();
         
         // main movement
@@ -394,42 +370,6 @@ public class EnemyController : MonoBehaviour
             case 3: MoveRight(); break;
             default: Stop(); break;
         }
-
-        //BirdMovement();
     }
-}
-// Idea for longer vision
-/*
-    bool LongVision(Vector2 ownPosition, Vector2 lookingPosition)
-    {
-        RaycastHit2D hit = Physics2D.Raycast((playerPosition2 + ownPosition), lookingPosition, 15f);
-        if(hit.collider != null)
-        {
-            //Vector3Int target = GameMap.TilemapTop.WorldToCell(hit.point);
-            //Tile tile = GameMap.TilemapTop.GetTile<Tile>(target);
 
-            if(hit.collider.name == "bomb(Clone)")
-                return true;
-            //return tile;
-
-            // see if this is the whole range or just this one place
-            //if(tile == null)
-            //    if(hit.collider.name == "bomb(Clone)")
-                    //return true;
-            //else
-            //    return false;
-            
-        }
-        return false;
-        // dont know if this is needed
-        //return null;
-    }
-    void Vision()
-    {
-        upVision = LongVision(new Vector2(0, 0.5f), new Vector2(0, 1));
-        downVision = LongVision(new Vector2(0, -0.5f), new Vector2(0, -1));
-        leftVision = LongVision(new Vector2(-0.7f, 0), new Vector2(-1, 0));
-        rightVision = LongVision(new Vector2(0.7f, 0), new Vector2(1, 0));
-    }
-    */
- 
+} 

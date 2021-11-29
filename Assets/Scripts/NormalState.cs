@@ -5,6 +5,9 @@ using UnityEngine;
 public class NormalState : IEnemyState
 {
     EnemyController enemy;
+    bool initialMovement = true;
+    bool start = false;
+    int dir;
 
     public NormalState(EnemyController enemy)
     {
@@ -14,12 +17,48 @@ public class NormalState : IEnemyState
 
     public void UpdateState()
     {
+        StartNormal();
+        
+        if(start)
+        {
+            NormalGame();
+        }
+    }
 
+    void NormalGame()
+    {
+        // if there is bomb near by
+        if(enemy.BombVision() != -1)
+        {
+            // if there is space on the opposite direction of the bomb
+            if(enemy.LookDirection(enemy.OppositeDirection(enemy.BombVision())))
+            {
+                // go to opposite of the bomb
+                enemy.direction = enemy.OppositeDirection(enemy.BombVision());
+            }
+            else
+                Debug.Log("Must go elsewhere");
+        }
+        else
+        {
+            if(enemy.DestructibleNear())
+                enemy.DropBomb();
+        }
+    }
+
+    void StartNormal()
+    {
+        if(initialMovement)
+            if(!enemy.BombAlive())
+            {
+                initialMovement = false;
+                start = true;
+            }
     }
 
     public void ToChaseState()
     {
-
+        enemy.currentState = enemy.chaseState;
     }
     public void ToInitialState() {}
     public void ToNormalState() {}

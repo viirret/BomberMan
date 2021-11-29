@@ -19,7 +19,6 @@ public class InitialState : IEnemyState
         this.enemy = enemy;
     }
 
-
     public void UpdateState()
     {
         MoveToDestructible();
