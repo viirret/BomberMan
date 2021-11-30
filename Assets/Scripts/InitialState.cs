@@ -13,6 +13,8 @@ public class InitialState : IEnemyState
 
     bool nextFunction = false;
     bool doNextFunction = false;
+    bool ready = false;
+    bool nextFunctionDone = false;
 
     public InitialState(EnemyController enemy)
     {
@@ -24,6 +26,9 @@ public class InitialState : IEnemyState
         MoveToDestructible();
         if(doNextFunction)
             NextMovement(dir);
+        
+        if(ready)
+            ToChaseState();
     }
 
 
@@ -55,10 +60,7 @@ public class InitialState : IEnemyState
                     }
                 }
                 else
-                {
-                    Debug.Log("FAILED SPAWN!");
                     initialMovement = true;
-                }
             }
         }
         if(enemy.currentSpeed == 0 && !enemy.DestructibleNear() && nextFunction)
@@ -80,15 +82,20 @@ public class InitialState : IEnemyState
                 case 2: enemy.direction = (enemy.downTile == null) ? 1 : 0; break;
                 case 3: enemy.direction = (enemy.downTile == null) ? 1 : 0; break;
             }
+            nextFunctionDone = true;
         }
 
-        // start normalstate if enemy is in correct place
-        if(enemy.currentSpeed == 0)
+        // start other state if enemy is in correct place
+        if(nextFunctionDone)
         {
-            if(enemy.DestructibleNear())
-                ToNormalState();
-            else
-                nextMovement = true;
+            if(enemy.currentSpeed == 0)
+                if(enemy.DestructibleNear())
+                {
+                    if(!enemy.BombAlive())
+                        ready = true;
+                }
+                else
+                    nextMovement = true;
         }
     }
 
@@ -98,7 +105,10 @@ public class InitialState : IEnemyState
         enemy.currentState = enemy.normalState;
     }
 
-    public void ToChaseState() {}
+    public void ToChaseState() 
+    {
+        enemy.currentState = enemy.chaseState;
+    }
     public void ToInitialState() {}
 
 }

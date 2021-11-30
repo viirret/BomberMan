@@ -12,7 +12,6 @@ public class NormalState : IEnemyState
     public NormalState(EnemyController enemy)
     {
         this.enemy = enemy;
-        Debug.Log("IN NORMAL STATE");
     }
 
     public void UpdateState()
@@ -33,19 +32,27 @@ public class NormalState : IEnemyState
             // if there is space on the opposite direction of the bomb
             if(enemy.LookDirection(enemy.OppositeDirection(enemy.BombVision())))
             {
+                Debug.Log("Space on the opposite direction");
                 // go to opposite of the bomb
                 enemy.direction = enemy.OppositeDirection(enemy.BombVision());
             }
             else
-                Debug.Log("Must go elsewhere");
+                enemy.direction = enemy.RandomRoute();
         }
         else
         {
             if(enemy.DestructibleNear())
+            {
                 enemy.DropBomb();
+            }
+            else
+            {
+                //ToChaseState();
+            }
         }
     }
 
+    // start doing the normal mode after the first bomb is exploded
     void StartNormal()
     {
         if(initialMovement)

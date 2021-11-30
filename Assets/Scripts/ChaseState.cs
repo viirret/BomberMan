@@ -13,12 +13,11 @@ public class ChaseState : IEnemyState
 
     public void UpdateState()
     {
-
+        Debug.Log("in chase state");
     }
 
     public void ToNormalState()
     {
-
     }
 
     public void ToInitialState() {}
