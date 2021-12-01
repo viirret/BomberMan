@@ -133,6 +133,9 @@ public class EnemyController : MonoBehaviour
     // return opposite direction from lastDirection
     public int OppositeDirection(int last) => last = (last == 0 || last == 2) ? ++last : --last;
 
+    public void GoOpposite() => direction = OppositeDirection(direction);
+    
+
 
    // update closest tiles
     void Tiles()
@@ -211,25 +214,60 @@ public class EnemyController : MonoBehaviour
     }
 
 
-    public bool LookDirection(int dir)
+    public bool LookDirection(int dir, bool wall)
     {
         switch(dir)
         {
-            case 0: return checkDirection(upTile);
-            case 1: return checkDirection(downTile);
-            case 2: return checkDirection(leftTile);
-            case 3: return checkDirection(rightTile);
+            case 0: return checkDirection(upTile, wall);
+            case 1: return checkDirection(downTile, wall);
+            case 2: return checkDirection(leftTile, wall);
+            case 3: return checkDirection(rightTile, wall);
             
             default: return false;
         }
     }
 
-    bool checkDirection(Tile tile)
+    bool checkDirection(Tile tile, bool wall)
     {
         if(tile != null)
-            if(tile.name == "Wall" || tile.name == "Destructible")
-                return false;
+        {
+            if(wall)
+            {
+                if(tile.name == "Wall" || tile.name == "Destructible")
+                    return false;
+            }
+            else
+            {
+                if(tile.name == "Destructible")
+                    return false;
+            }
+        }
         return true;
+    }
+
+    public void GoRightOrLeft()
+    {
+        bool a = false, b = false;
+        int num = Random.Range(0, 1);
+
+        if(direction == 0 || direction == 1)
+        {
+            if(LookDirection(2, true)) a = true;
+            if(LookDirection(3, true)) b = true;
+
+            if(a && b) direction = (num == 0) ? 2 : 3;
+            if(a) direction = 2;
+            if(b) direction = 3;
+        }
+        else
+        {
+            if(LookDirection(0, true)) a = true;
+            if(LookDirection(1, true)) b = true;
+
+            if(a && b) direction = (num == 0) ? 0 : 1;
+            if(a) direction = 0;
+            if(b) direction = 1;
+        }
     }
     
 
@@ -325,7 +363,7 @@ public class EnemyController : MonoBehaviour
             }
             else if(!moveToPlayer && !lookForSecond)
             {
-                LookDirection(direction);
+                LookDirection(direction, true);
 
                 if(doOpposite)
                 {

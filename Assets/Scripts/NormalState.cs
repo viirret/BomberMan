@@ -30,7 +30,7 @@ public class NormalState : IEnemyState
         if(enemy.BombVision() != -1)
         {
             // if there is space on the opposite direction of the bomb
-            if(enemy.LookDirection(enemy.OppositeDirection(enemy.BombVision())))
+            if(enemy.LookDirection(enemy.OppositeDirection(enemy.BombVision()), true))
             {
                 Debug.Log("Space on the opposite direction");
                 // go to opposite of the bomb

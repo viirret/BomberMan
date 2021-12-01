@@ -48,8 +48,8 @@ public class CharacterSpawner : MonoBehaviour
             {
                 case 1:
                 CreateBird(owl, spawnPoints[0], true);
-                CreateBird(chicken, spawnPoints[1], true);
-                CreateBird(eagle, spawnPoints[2], true);
+                //CreateBird(chicken, spawnPoints[1], true);
+                //CreateBird(eagle, spawnPoints[2], true);
                 level1.Play();
                 break;
                 case 2:
