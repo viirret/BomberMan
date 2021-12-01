@@ -12,8 +12,19 @@ public class ChaseState : IEnemyState
     }
 
     public void UpdateState()
+    { 
+        
+    }
+
+
+    void Primary()
     {
-        Debug.Log("in chase state");
+        enemy.GoPrimaryDirection();
+    }
+
+    void Secondary()
+    {
+        enemy.GoSecondaryDirection();
     }
 
     public void ToNormalState()

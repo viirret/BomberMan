@@ -40,6 +40,14 @@ public class EnemyController : MonoBehaviour
     int bombAmount = 0;
     Vector2 oldPosition;
 
+    // variables for enemy's position compared to the player
+    float dUp;
+    float dDown; 
+    float dLeft;
+    float dRight;
+
+
+
     void Awake()
     {
         initialState = new InitialState(this);
@@ -79,10 +87,6 @@ public class EnemyController : MonoBehaviour
     void MoveRight()
     {
         transform.position += new Vector3(1, 0) * speed * Time.deltaTime;
-    }
-    void Stop()
-    {
-        transform.position = new Vector3(0, 0);
     }
 
     public Vector2 getLookingPosition(int dir)
@@ -200,7 +204,7 @@ public class EnemyController : MonoBehaviour
             (leftTile != null && leftTile.name == "Destructible") ||
             (rightTile != null && rightTile.name == "Destructible"))
         {
-            return true;
+            return true; 
         }
         else
             return false;
@@ -211,10 +215,10 @@ public class EnemyController : MonoBehaviour
     {
         switch(dir)
         {
-            case 0: return checkDirection(upTile) ? true : false;
-            case 1: return checkDirection(downTile) ? true : false;
-            case 2: return checkDirection(leftTile) ? true : false;
-            case 3: return checkDirection(rightTile) ? true : false;
+            case 0: return checkDirection(upTile);
+            case 1: return checkDirection(downTile);
+            case 2: return checkDirection(leftTile);
+            case 3: return checkDirection(rightTile);
             
             default: return false;
         }
@@ -229,14 +233,12 @@ public class EnemyController : MonoBehaviour
     }
     
 
-    // true for larger distance, false for second largest (x, y)
-    // this could also be implemented in chasestate
-    public int GoTowardsPlayer(bool x)
+    int GoTowardsPlayer(bool x)
     {
-        float dUp = PlayerController.playerPos.y - playerPosition.y;
-        float dDown = -(PlayerController.playerPos.y - playerPosition.y); 
-        float dLeft =  -(PlayerController.playerPos.x - playerPosition.x);
-        float dRight =  PlayerController.playerPos.x - playerPosition.x;
+        dUp = PlayerController.playerPos.y - playerPosition.y;
+        dDown = -(PlayerController.playerPos.y - playerPosition.y); 
+        dLeft =  -(PlayerController.playerPos.x - playerPosition.x);
+        dRight =  PlayerController.playerPos.x - playerPosition.x;
 
         // find the largest value
         var largest = (dUp > dDown) ? (dUp > dLeft) ? (dUp > dRight) ? dUp 
@@ -262,31 +264,19 @@ public class EnemyController : MonoBehaviour
             // get the second largest distance
             if(largest == dUp)
             {
-                var sl = SecondLargest(dDown, dLeft, dRight);
-                if(sl == dDown) return 1;
-                else if(sl == dLeft) return 2;
-                else return 3;
+                return GetSecondLargest(dDown, dLeft, dRight);
             }
             else if(largest == dDown)
             {
-                var sl = SecondLargest(dUp, dLeft, dRight);
-                if(sl == dUp) return 0;
-                else if(sl == dLeft) return 2;
-                else return 3;
+                return GetSecondLargest(dUp, dLeft, dRight);
             }
             else if(largest == dLeft)
             {
-                var sl = SecondLargest(dUp, dDown, dRight);
-                if(sl == dUp) return 0;
-                else if(sl == dDown) return 1;
-                else return 3;
+                return GetSecondLargest(dUp, dDown, dRight);
             }
             else
             {
-                var sl = SecondLargest(dUp, dDown, dLeft);
-                if(sl == dUp) return 0;
-                else if(sl == dDown) return 1;
-                else return 2;
+                return GetSecondLargest(dUp, dDown, dLeft);
             }
         }
     }
@@ -294,6 +284,27 @@ public class EnemyController : MonoBehaviour
     {
         return (a > b && a > c) ? ((b > c) ? b : c) : ((b > c) ? ((a > c) ? a : c) : ((a > b) ? a : b));
     }
+
+    int GetSecondLargest(float a, float b, float c)
+    {
+        var sl = SecondLargest(a, b, c);
+        if(sl == dUp) return 0;
+        else if(sl == dDown) return 1;
+        else if(sl == dLeft) return 2;
+        else return 3;
+    }
+
+    public void GoPrimaryDirection()
+    {
+        direction = GoTowardsPlayer(true);
+    }
+
+    public void GoSecondaryDirection()
+    {
+        direction = GoTowardsPlayer(false);
+    }
+
+    
 
     // old logic for enemy, bad code
     void BirdMovement()
@@ -368,7 +379,6 @@ public class EnemyController : MonoBehaviour
             case 1: MoveDown(); break;
             case 2: MoveLeft(); break;
             case 3: MoveRight(); break;
-            default: Stop(); break;
         }
     }
 
