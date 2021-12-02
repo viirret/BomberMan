@@ -43,7 +43,7 @@ public class InitialState : IEnemyState
         if(enemy.currentSpeed == 0)
         {
             // There is odd edge-case where the spawn fails,
-            // and the bird thinks it has three directions insted of just two. 
+            // and the bird thinks it has three directions instead of just two. 
             // With this checker we make sure the bird actually leaves spawn.
     
             if(checker)
@@ -55,7 +55,7 @@ public class InitialState : IEnemyState
                         enemy.DropBomb();
                         drop = false;
                         checker = false;
-                        enemy.direction = enemy.OppositeDirection(enemy.direction);
+                        enemy.GoOpposite();
                         nextFunction = true;
                     }
                 }
