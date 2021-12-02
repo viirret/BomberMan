@@ -6,14 +6,21 @@ using UnityEngine.UI;
 public class GameTexts : MonoBehaviour
 {
     Text score;
+    Text time;
+    public System.DateTime startTime;
+    int totalTime = 0;
     void Start()
     {
         score = GameObject.Find("score").GetComponent<Text>();
+        time = GameObject.Find("time").GetComponent<Text>();
+        startTime = System.DateTime.UtcNow;
     }
 
-    // Update is called once per frame
     void Update()
     {
+        System.TimeSpan ts = System.DateTime.UtcNow - startTime;
+        totalTime = ts.Hours + ts.Minutes * 60 + ts.Seconds;
         score.text = "Score: " + Player.score;
+        time.text = "Time: " + totalTime;
     }
 }

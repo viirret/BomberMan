@@ -55,6 +55,7 @@ public class ChaseState : IEnemyState
                             // escape the bomb
                             enemy.GoRightOrLeft();
                             rightleft = false;
+                            Debug.Log("enemy is going right or left");
                         }
                     }
                 }
@@ -62,7 +63,7 @@ public class ChaseState : IEnemyState
 
 
             // if there is destructible tile in enemy's direction
-            else if(!enemy.LookDirection(enemy.direction, false) && dropper)
+            else if(!enemy.LookDirection(enemy.direction, false))
             {
                 dropper = false;
                 enemy.DropBomb();
@@ -73,47 +74,26 @@ public class ChaseState : IEnemyState
             // if there is nothing in front of enemy's primary direction
             else if(enemy.PlayerDirectionEmpty())
             {
-                Debug.Log("going primary direction");
-                primary = true;
+                // if enemy is already going opposite direction
+                if(enemy.currentSpeed == 0)
+                {
+                    Debug.Log("going primary direction");
+                    primary = true;
+                    secondary = false;
+                }
             }
 
             else if(enemy.PlayerSecondaryDirectionEmpty() && !primary)
             {
-                Debug.Log("going secondary direction");
-                secondary = true;
-            }
-
-            else
-            {
-                dropper = true;
-            }
-            
-            
-            /*
-            else 
-            {
-                primary = true;
-                Debug.Log("going primary direction");
-                
-                // if enemy hits a destructible tile
-                if(enemy.currentSpeed == 0 && !enemy.LookDirection(enemy.direction, false))
+                // if enemy is already going opposite direction
+                if(enemy.currentSpeed == 0)
                 {
-                    primary = false;
-                    dropper = true;
-                }
-
-                
-                else if(enemy.currentSpeed == 0 && !enemy.LookDirection(enemy.direction, true))
-                {
-                    primary = false;
-                    secondary = true;
                     Debug.Log("going secondary direction");
+                    secondary = true;
                 }
             }
-            */
         }
     }
-
 
     void Primary()
     {

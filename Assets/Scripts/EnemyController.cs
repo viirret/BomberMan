@@ -353,15 +353,13 @@ public class EnemyController : MonoBehaviour
     // see if there is space on the primary direction of the player
     public bool PlayerDirectionEmpty()
     {
-        int dir = GoTowardsPlayer(true);
-        return LookDirection(dir, true);
+        return LookDirection(GoTowardsPlayer(true), true);
     }
 
     // see if there is space in the secondary direction of the player
     public bool PlayerSecondaryDirectionEmpty()
     {
-        int dir = GoTowardsPlayer(false);
-        return LookDirection(dir, true);
+        return LookDirection(GoTowardsPlayer(false), true);
     }
 
 

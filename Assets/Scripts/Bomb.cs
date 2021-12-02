@@ -41,7 +41,6 @@ public class Bomb : MonoBehaviour
     {
         bombsound.Play();
         mapdes.Explode(pos);
-        Debug.Log("Explosion!");
         Destroy(bomb);
     }
 }
