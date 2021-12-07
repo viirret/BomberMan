@@ -5,33 +5,33 @@ using UnityEngine.Tilemaps;
 
 public class EnemyController : MonoBehaviour 
 {
-    // all the states
-    public IEnemyState currentState;
-    public InitialState initialState;
-    public NormalState normalState;
-    public ChaseState chaseState;
-
-    // this gameobject used in another classes
+    // this gameobject used in CreateBird in CharacterSpawner
     public GameObject obj;
     
     // attributes to the enemy
-    public int direction = -1;
+    public int direction;
     public float speed;
     public int blastRadius;
     public int bombsAtOnce;
     public int lives;
     public int killReward;
-    public Vector3 playerPosition;
+    public Vector3 position;
     public float currentSpeed;
     public GameObject bomb;
     
-    // tiles next to player
+    // tiles next to enemy
     public Tile upTile;
     public Tile downTile;
     public Tile leftTile;
     public Tile rightTile;
 
-    
+     // all the states
+    public IEnemyState currentState;
+    public InitialState initialState;
+    public NormalState normalState;
+    public ChaseState chaseState;
+
+   
     bool moveToPlayer = true;
 
     bool doOpposite = false;
@@ -63,25 +63,6 @@ public class EnemyController : MonoBehaviour
             Destroy(obj);
     }
 
-
-    // enemy's moving
-    void MoveUp()
-    {
-        transform.position += new Vector3(0, 1) * speed * Time.deltaTime;
-    }
-    void MoveDown()
-    {
-        transform.position += new Vector3(0, -1) * speed * Time.deltaTime;
-    }
-    void MoveLeft()
-    {
-        transform.position += new Vector3(-1, 0) * speed * Time.deltaTime;
-    }
-    void MoveRight()
-    {
-        transform.position += new Vector3(1, 0) * speed * Time.deltaTime;
-    }
-
     public Vector2 getLookingPosition(int dir)
     {
         switch(dir)
@@ -107,6 +88,26 @@ public class EnemyController : MonoBehaviour
             StartCoroutine(WaitBomb(1));
         }
     }
+    public bool BombAlive() => bomb ? true : false;
+
+    // enemy's movement
+    void MoveUp()
+    {
+        transform.position += new Vector3(0, 1) * speed * Time.deltaTime;
+    }
+    void MoveDown()
+    {
+        transform.position += new Vector3(0, -1) * speed * Time.deltaTime;
+    }
+    void MoveLeft()
+    {
+        transform.position += new Vector3(-1, 0) * speed * Time.deltaTime;
+    }
+    void MoveRight()
+    {
+        transform.position += new Vector3(1, 0) * speed * Time.deltaTime;
+    }
+
 
     // look into this later
     IEnumerator WaitBomb(int action)
@@ -121,7 +122,6 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    public bool BombAlive() => bomb ? true : false;
     
     // return opposite direction from lastDirection
     public int OppositeDirection(int last) => last = (last == 0 || last == 2) ? ++last : --last;
@@ -264,12 +264,12 @@ public class EnemyController : MonoBehaviour
     }
     
 
-    public int GoTowardsPlayer(bool x)
+    int GoTowardsPlayer(bool x)
     {
-        float dUp = PlayerController.playerPos.y - playerPosition.y;
-        float dDown = -(PlayerController.playerPos.y - playerPosition.y); 
-        float dLeft =  -(PlayerController.playerPos.x - playerPosition.x);
-        float dRight =  PlayerController.playerPos.x - playerPosition.x;
+        float dUp = PlayerController.playerPos.y - position.y;
+        float dDown = -(PlayerController.playerPos.y - position.y); 
+        float dLeft =  -(PlayerController.playerPos.x - position.x);
+        float dRight =  PlayerController.playerPos.x - position.x;
 
         // find the largest value
         var largest = (dUp > dDown) ? (dUp > dLeft) ? (dUp > dRight) ? dUp 
@@ -323,6 +323,8 @@ public class EnemyController : MonoBehaviour
             }
         }
     }
+    
+    // return largest of three
     float SecondLargest(float a, float b, float c)
     {
         return a > b ? (a > c ? a : c) : (b > c ? b : c);
@@ -422,10 +424,10 @@ public class EnemyController : MonoBehaviour
 
     void FixedUpdate()
     {
-        playerPosition = transform.position;
+        position = transform.position;
         currentSpeed = Vector3.Distance(oldPosition, transform.position) * 100f;
         oldPosition = transform.position;
-        playerPosition2 = playerPosition;
+        playerPosition2 = position;
 
         Tiles();
 

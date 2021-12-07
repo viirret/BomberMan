@@ -26,7 +26,7 @@ public class MapDestroyer : MonoBehaviour
 
     public void Explode(Vector2 worldPos)
     {
-        Vector3Int origincell = GameMap.TilemapTop.WorldToCell(worldPos);
+        var origincell = GameMap.TilemapTop.WorldToCell(worldPos);
 
         ExplodeCell(origincell);
 
@@ -64,7 +64,7 @@ public class MapDestroyer : MonoBehaviour
     bool ExplodeCell(Vector3Int cell)
     {
         // getting the tile in position
-        Tile tile = GameMap.TilemapTop.GetTile<Tile>(cell);
+        var tile = GameMap.TilemapTop.GetTile<Tile>(cell);
 
         // if hit player
         if(cell == PlayerController.playerPosition)
@@ -73,7 +73,7 @@ public class MapDestroyer : MonoBehaviour
         // if hit any of the enemies
         for(int i = 0; i < enemyControllers.Count; i++)
             if(enemyControllers[i] != null)
-                if(enemyControllers[i].GetComponent<EnemyController>().playerPosition == cell)
+                if(enemyControllers[i].GetComponent<EnemyController>().position == cell)
                     enemyControllers[i].GetComponent<EnemyController>().HitEnemy();
 
         // destoying a destructible tile
@@ -86,7 +86,7 @@ public class MapDestroyer : MonoBehaviour
         
 
         // create the explosion effect
-        Vector3 pos = GameMap.TilemapTop.GetCellCenterWorld(cell);
+        var pos = GameMap.TilemapTop.GetCellCenterWorld(cell);
         tempBomb = Instantiate(explosionPrefab, pos, Quaternion.identity);
         Destroy(tempBomb, 1);
         return true;        

@@ -289,7 +289,7 @@ GameObject:
   - component: {fileID: 1026355118}
   - component: {fileID: 1026355117}
   m_Layer: 0
-  m_Name: CharacterSpawner
+  m_Name: Game
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -304,7 +304,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1026355116}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e8550adf995767dba258e47a5b2fcb3, type: 3}
+  m_Script: {fileID: 11500000, guid: 970d60047ef686a79a4611ab2a6508f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &1026355118
@@ -355,7 +355,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 250, y: 470}
+  m_AnchoredPosition: {x: 250, y: 250}
   m_SizeDelta: {x: 200, y: 69}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1510993632
@@ -434,7 +434,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 470}
+  m_AnchoredPosition: {x: 0, y: 250}
   m_SizeDelta: {x: 200, y: 69}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1514961541

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class CharacterSpawner : MonoBehaviour
+public class Game : MonoBehaviour
 {
     // all the prefabs
     GameObject blueBird;
@@ -88,10 +88,9 @@ public class CharacterSpawner : MonoBehaviour
             // hitting characters happens in Mapdestroyer
             MapDestroyer.AddMe(obj);
             // adding controller and values
-            EnemyController ec = obj.AddComponent<EnemyController>();
-            EnemyController EC = obj.GetComponent<EnemyController>();
-            // for identifying
+            var EC = obj.AddComponent<EnemyController>().GetComponent<EnemyController>(); 
             EC.obj = obj;
+
             switch(bird.name)
             {
                 case "Yellow Bird":
@@ -127,7 +126,7 @@ public class CharacterSpawner : MonoBehaviour
         }
         else
         {
-            PlayerController pc = obj.AddComponent<PlayerController>();
+            obj.AddComponent<PlayerController>();
         }
     }
     

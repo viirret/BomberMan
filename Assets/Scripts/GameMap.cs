@@ -42,7 +42,7 @@ public class GameMap : MonoBehaviour
         go1.transform.SetParent(grid.transform);
         go2.transform.SetParent(grid.transform);
 
-        // making one map for now
+        // make the map
         SetBottonLayer(tm1);
         SetTopLayer(tm2);
     }
@@ -108,12 +108,5 @@ public class GameMap : MonoBehaviour
                 t.SetTile(new Vector3Int(i, -3, 0), Destructible);
             }
         }
-    }
-
-    // here for now, but will be changed 
-    void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Escape))
-            Application.Quit();
     }
 }

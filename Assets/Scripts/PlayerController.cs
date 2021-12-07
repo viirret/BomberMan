@@ -85,13 +85,14 @@ public class PlayerController : MonoBehaviour
         // for some reason the destructible tiles show wrong
         if(tile == GameMap.Destructible)
         {
+            Debug.Log("works");
         }
     }
 
     Vector3 ReverseVector(Vector2 vector)
     {
-        int x = (vector.x == 0) ? 0 : -(int)(vector.x);
-        int y = (vector.y == 0) ? 0 : -(int)(vector.y);
+        int x =  -(int)(vector.x);
+        int y =  -(int)(vector.y);
         return new Vector3(x, y);
     }
 
