@@ -16,10 +16,12 @@ public class GameMap : MonoBehaviour
         Dirt = Resources.Load<Tile>("GameTiles/Dirt");
         Destructible = Resources.Load<Tile>("GameTiles/Destructible");
 
-        // creating grid and bottom tilemap
+        // creating grid
         var g = new GameObject("Grid");
+        g.AddComponent<MapDestroyer>();
         var grid = g.AddComponent<Grid>();
-        var mapdes = g.AddComponent<MapDestroyer>();
+
+        // creating bottom tilemap
         var go1 = new GameObject("TilemapBase");
         var tm1 = go1.AddComponent<Tilemap>();
         tm1.transform.position = new Vector3(0.5f, 0, 0);
@@ -31,8 +33,8 @@ public class GameMap : MonoBehaviour
         var go2 = new GameObject("TilemapTop");
         var tm2 = go2.AddComponent<Tilemap>();
         tm2.transform.position = new Vector3(0.5f, 0, 0);
-        var tc2D = go2.AddComponent<TilemapCollider2D>();
-        var cc2D = go2.AddComponent<CompositeCollider2D>();
+        go2.AddComponent<TilemapCollider2D>();
+        go2.AddComponent<CompositeCollider2D>();
         Rigidbody2D body = go2.GetComponent<Rigidbody2D>();
         body.bodyType = RigidbodyType2D.Static;
         var tr2 = go2.AddComponent<TilemapRenderer>();

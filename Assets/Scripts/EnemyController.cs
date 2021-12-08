@@ -40,7 +40,6 @@ public class EnemyController : MonoBehaviour
     int bombAmount = 0;
     Vector2 oldPosition;
 
-
     void Awake()
     {
         initialState = new InitialState(this);
@@ -85,74 +84,15 @@ public class EnemyController : MonoBehaviour
             b.pos = transform.position;
             b.blastRadius = blastRadius;
             Destroy(bomb, 3);
-            StartCoroutine(WaitBomb(1));
+            StartCoroutine(WaitBomb());
         }
     }
     public bool BombAlive() => bomb ? true : false;
-
-    // enemy's movement
-    void MoveUp()
-    {
-        transform.position += new Vector3(0, 1) * speed * Time.deltaTime;
-    }
-    void MoveDown()
-    {
-        transform.position += new Vector3(0, -1) * speed * Time.deltaTime;
-    }
-    void MoveLeft()
-    {
-        transform.position += new Vector3(-1, 0) * speed * Time.deltaTime;
-    }
-    void MoveRight()
-    {
-        transform.position += new Vector3(1, 0) * speed * Time.deltaTime;
-    }
-
-
-    // look into this later
-    IEnumerator WaitBomb(int action)
-    {
-        yield return new WaitForSeconds(2);
-        switch(action)
-        {
-            case 1: bombAmount--; break;
-            case 2: if(currentSpeed == 0){moveToPlayer = true;} break;
-            case 3: if(currentSpeed == 0){lookForSecond = true;} break;
-            default: break;
-        }
-    }
-
     
     // return opposite direction from lastDirection
     public int OppositeDirection(int last) => last = (last == 0 || last == 2) ? ++last : --last;
 
     public void GoOpposite() => direction = OppositeDirection(direction);
-    
-
-
-   // update closest tiles
-    void Tiles()
-    {
-        upTile = TargetTile(new Vector2(0, 0.5f), new Vector2(0, 1));
-        downTile = TargetTile(new Vector2(0, -0.5f), new Vector2(0, -1));
-        leftTile = TargetTile(new Vector2(-0.7f, 0), new Vector2(-1, 0));
-        rightTile = TargetTile(new Vector2(0.7f, 0), new Vector2(1, 0));
-    } 
-    
-    Tile TargetTile(Vector2 ownPosition, Vector2 lookingPosition)
-    {
-        RaycastHit2D hit = Physics2D.Raycast((playerPosition2 + ownPosition), lookingPosition, 0.5f);
-            
-        if(hit.collider != null)
-        {
-            // getting the tile
-            Vector3Int target = GameMap.TilemapTop.WorldToCell(hit.point);
-            Tile tile = GameMap.TilemapTop.GetTile<Tile>(target);
-
-            return tile;
-        }
-        return null;
-    }
 
     // see if there is any bombs in the vision
     public int BombVision()
@@ -182,16 +122,7 @@ public class EnemyController : MonoBehaviour
 
         return Choose(routes);
     }
-    
-    // choose random number from list
-    int Choose(List<int?> list)
-    {
-        int rnd = Random.Range(0, 4);
-        if(list[rnd] != null)
-            return rnd;
-        else
-            return Choose(list);
-    }
+
 
     public bool DestructibleNear()
     {
@@ -205,37 +136,26 @@ public class EnemyController : MonoBehaviour
         else
             return false;
     }
-
-
-    public bool LookDirection(int dir, bool wall)
+    public void GoPrimaryDirection()
     {
-        switch(dir)
-        {
-            case 0: return checkDirection(upTile, wall);
-            case 1: return checkDirection(downTile, wall);
-            case 2: return checkDirection(leftTile, wall);
-            case 3: return checkDirection(rightTile, wall);
-            
-            default: return false;
-        }
+        direction = GoTowardsPlayer(true);
     }
 
-    bool checkDirection(Tile tile, bool wall)
+    public void GoSecondaryDirection()
     {
-        if(tile != null)
-        {
-            if(wall)
-            {
-                if(tile.name == "Wall" || tile.name == "Destructible")
-                    return false;
-            }
-            else
-            {
-                if(tile.name == "Destructible")
-                    return false;
-            }
-        }
-        return true;
+        direction = GoTowardsPlayer(false);
+    }
+
+    // see if there is space on the primary direction of the player
+    public bool PlayerDirectionEmpty()
+    {
+        return LookDirection(GoTowardsPlayer(true), true);
+    }
+
+    // see if there is space in the secondary direction of the player
+    public bool PlayerSecondaryDirectionEmpty()
+    {
+        return LookDirection(GoTowardsPlayer(false), true);
     }
 
     public void GoRightOrLeft()
@@ -262,7 +182,37 @@ public class EnemyController : MonoBehaviour
             if(b) direction = 1;
         }
     }
+
+    public bool LookDirection(int dir, bool wall)
+    {
+        switch(dir)
+        {
+            case 0: return checkDirection(upTile, wall);
+            case 1: return checkDirection(downTile, wall);
+            case 2: return checkDirection(leftTile, wall);
+            case 3: return checkDirection(rightTile, wall);
+            
+            default: return false;
+        }
+    }
     
+    bool checkDirection(Tile tile, bool wall)
+    {
+        if(tile != null)
+        {
+            if(wall)
+            {
+                if(tile.name == "Wall" || tile.name == "Destructible")
+                    return false;
+            }
+            else
+            {
+                if(tile.name == "Destructible")
+                    return false;
+            }
+        }
+        return true;
+    }   
 
     int GoTowardsPlayer(bool x)
     {
@@ -342,85 +292,65 @@ public class EnemyController : MonoBehaviour
     }
     */
 
-    public void GoPrimaryDirection()
+
+    // choose random number from list
+    int Choose(List<int?> list)
     {
-        direction = GoTowardsPlayer(true);
+        int rnd = Random.Range(0, 4);
+        if(list[rnd] != null)
+            return rnd;
+        else
+            return Choose(list);
     }
 
-    public void GoSecondaryDirection()
+    Tile TargetTile(Vector2 ownPosition, Vector2 lookingPosition)
     {
-        direction = GoTowardsPlayer(false);
+        RaycastHit2D hit = Physics2D.Raycast((playerPosition2 + ownPosition), lookingPosition, 0.5f);
+            
+        if(hit.collider != null)
+        {
+            // getting the tile
+            Vector3Int target = GameMap.TilemapTop.WorldToCell(hit.point);
+            Tile tile = GameMap.TilemapTop.GetTile<Tile>(target);
+
+            return tile;
+        }
+        return null;
     }
 
-    // see if there is space on the primary direction of the player
-    public bool PlayerDirectionEmpty()
+    IEnumerator WaitBomb()
     {
-        return LookDirection(GoTowardsPlayer(true), true);
+        yield return new WaitForSeconds(2);
+        bombAmount--;
     }
-
-    // see if there is space in the secondary direction of the player
-    public bool PlayerSecondaryDirectionEmpty()
+    
+    // enemy's movement functions
+    void MoveUp()
     {
-        return LookDirection(GoTowardsPlayer(false), true);
+        transform.position += new Vector3(0, 1) * speed * Time.deltaTime;
     }
-
+    void MoveDown()
+    {
+        transform.position += new Vector3(0, -1) * speed * Time.deltaTime;
+    }
+    void MoveLeft()
+    {
+        transform.position += new Vector3(-1, 0) * speed * Time.deltaTime;
+    }
+    void MoveRight()
+    {
+        transform.position += new Vector3(1, 0) * speed * Time.deltaTime;
+    }
 
     
-
-    // old logic for enemy, bad code
-    void BirdMovement()
+    // update closest tiles
+    void Tiles()
     {
-        // testing only for one bird
-        if(obj.name == "Eagle(Clone)")
-        {
-            if(moveToPlayer && !lookForSecond)
-            {
-                direction = GoTowardsPlayer(true);
-            
-                if(currentSpeed == 0)
-                {
-                    moveToPlayer = false;
-                    if(currentSpeed == 0)
-                        StartCoroutine(WaitBomb(3));
-                }
-            }
-            else if(!moveToPlayer && !lookForSecond)
-            {
-                LookDirection(direction, true);
-
-                if(doOpposite)
-                {
-                    direction = OppositeDirection(direction);
-                    doOpposite = false;
-                }
-                // if enemy stands still for two seconds start loop again
-                if(currentSpeed == 0)
-                {
-                    StartCoroutine(WaitBomb(2));
-                }
-                
-            }
-            
-            else if(lookForSecond)
-            {
-                direction = GoTowardsPlayer(false);
-                if(currentSpeed == 0)
-                {
-                    lookForSecond = false;
-                }
-            }
-            else
-            {
-                direction = RandomRoute();
-                if(currentSpeed == 0)
-                {
-                    moveToPlayer = true;
-                }
-            }
-            
-        }
-
-    }
+        upTile = TargetTile(new Vector2(0, 0.5f), new Vector2(0, 1));
+        downTile = TargetTile(new Vector2(0, -0.5f), new Vector2(0, -1));
+        leftTile = TargetTile(new Vector2(-0.7f, 0), new Vector2(-1, 0));
+        rightTile = TargetTile(new Vector2(0.7f, 0), new Vector2(1, 0));
+    } 
 
     void FixedUpdate()
     {

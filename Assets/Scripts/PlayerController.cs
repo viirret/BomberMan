@@ -85,7 +85,6 @@ public class PlayerController : MonoBehaviour
         // for some reason the destructible tiles show wrong
         if(tile == GameMap.Destructible)
         {
-            Debug.Log("works");
         }
     }
 
