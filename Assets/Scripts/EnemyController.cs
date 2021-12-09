@@ -25,17 +25,13 @@ public class EnemyController : MonoBehaviour
     public Tile leftTile;
     public Tile rightTile;
 
-     // all the states
+    // all the states
     public IEnemyState currentState;
     public InitialState initialState;
     public NormalState normalState;
     public ChaseState chaseState;
 
    
-    bool moveToPlayer = true;
-
-    bool doOpposite = false;
-    bool lookForSecond = false;
     Vector2 playerPosition2;
     int bombAmount = 0;
     Vector2 oldPosition;
@@ -80,7 +76,7 @@ public class EnemyController : MonoBehaviour
         {
             bombAmount++;
             bomb = new GameObject();
-            Bomb b = bomb.AddComponent<Bomb>();
+            var b = bomb.AddComponent<Bomb>();
             b.pos = transform.position;
             b.blastRadius = blastRadius;
             Destroy(bomb, 3);

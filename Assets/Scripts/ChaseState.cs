@@ -11,8 +11,6 @@ public class ChaseState : IEnemyState
 
     bool rightleft = true;
 
-    bool dropper = true;
-    
     public ChaseState(EnemyController enemy)
     {
         this.enemy = enemy;
@@ -25,7 +23,7 @@ public class ChaseState : IEnemyState
 
     void HuntPlayer()
     {
-        Debug.Log(enemy.direction);
+        //Debug.Log(enemy.direction);
 
         if(primary)
         {
@@ -44,20 +42,20 @@ public class ChaseState : IEnemyState
             {
                 rightleft = true;
 
-                // otherwise the enemy is already moving backwards from the bomb
-                if(enemy.currentSpeed == 0)
+                // if not space on the opposite direction of the bomb
+                if(!enemy.LookDirection(enemy.OppositeDirection(enemy.BombVision()), true))
                 {
-                    // if not space on the opposite direction of the bomb
-                    if(!enemy.LookDirection(enemy.OppositeDirection(enemy.BombVision()), true))
+                    if(rightleft)
                     {
-                        if(rightleft)
-                        {
-                            // escape the bomb
-                            enemy.GoRightOrLeft();
-                            rightleft = false;
-                            Debug.Log("enemy is going right or left");
-                        }
+                        // escape the bomb
+                        enemy.GoRightOrLeft();
+                        rightleft = false;
+                        Debug.Log("enemy is going right or left");
                     }
+                }
+                else
+                {
+                    Debug.Log("xxx");
                 }
             }
 
@@ -65,14 +63,20 @@ public class ChaseState : IEnemyState
             // if there is destructible tile in enemy's direction
             else if(!enemy.LookDirection(enemy.direction, false))
             {
-                dropper = false;
                 enemy.DropBomb();
                 enemy.GoOpposite();
                 Debug.Log("going opposite direction");
             }
 
+            // if there is any other tile in enemy's direction
+            else if(!enemy.LookDirection(enemy.direction, true))
+            {
+                Debug.Log("going going left or right direction");
+                enemy.GoRightOrLeft();
+            }
+
             // if there is nothing in front of enemy's primary direction
-            else if(enemy.PlayerDirectionEmpty())
+            else
             {
                 // if enemy is already going opposite direction
                 if(enemy.currentSpeed == 0)
@@ -83,6 +87,8 @@ public class ChaseState : IEnemyState
                 }
             }
 
+
+            /*
             else if(enemy.PlayerSecondaryDirectionEmpty() && !primary)
             {
                 // if enemy is already going opposite direction
@@ -92,6 +98,7 @@ public class ChaseState : IEnemyState
                     secondary = true;
                 }
             }
+            */
         }
     }
 

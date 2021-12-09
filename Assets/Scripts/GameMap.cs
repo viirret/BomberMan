@@ -73,7 +73,7 @@ public class GameMap : MonoBehaviour
             t.SetTile(new Vector3Int(8, i, 0), Wall);
         }
         
-        // single wall tiles in bottom layer
+        // single wall tiles
         for(int i = -9; i < 7; i++)
             if(i % 2 == 0)
                 for(int j = -5; j < 4; j++)

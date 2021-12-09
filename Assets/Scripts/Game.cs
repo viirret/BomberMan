@@ -25,10 +25,10 @@ public class Game : MonoBehaviour
         level1.loop = true;
         audios.Add(level1);
         
-        blueBird = Resources.Load<GameObject>("Blue bird");
-        chicken = Resources.Load<GameObject>("Chicken");
-        eagle = Resources.Load<GameObject>("Eagle");
         owl = Resources.Load<GameObject>("Owl");
+        eagle = Resources.Load<GameObject>("Eagle");
+        chicken = Resources.Load<GameObject>("Chicken");
+        blueBird = Resources.Load<GameObject>("Blue bird");
         yellowBird = Resources.Load<GameObject>("Yellow Bird");
          
         // create the player first in random spawnpoint
