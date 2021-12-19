@@ -73,7 +73,7 @@ public class MapDestroyer : MonoBehaviour
         // if hit any of the enemies
         for(int i = 0; i < enemyControllers.Count; i++)
             if(enemyControllers[i] != null)
-                if(enemyControllers[i].GetComponent<EnemyController>().position == cell)
+                if(Vector3Int.FloorToInt(enemyControllers[i].GetComponent<EnemyController>().position) == cell)
                     enemyControllers[i].GetComponent<EnemyController>().HitEnemy();
 
         // destoying a destructible tile

@@ -51,11 +51,13 @@ public class EnemyController : MonoBehaviour
 
     public void HitEnemy()
     {
-        Debug.Log("Hit enemy");
         Player.AddScore(killReward);
         lives--;
         if(lives == 0)
+        {
+            Game.enemyCount--;
             Destroy(obj);
+        }
     }
 
     public Vector2 getLookingPosition(int dir)

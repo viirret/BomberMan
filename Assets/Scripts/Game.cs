@@ -15,6 +15,7 @@ public class Game : MonoBehaviour
     List<Vector3> spawnPoints = new List<Vector3>(4);
     AudioSource level1;
     AudioSource currentSong;
+    public static int enemyCount;
 
     void Start()
     {
@@ -40,6 +41,8 @@ public class Game : MonoBehaviour
         if(Levels.StartNewLevel)
         {
             Levels.StartNewLevel = false;
+            
+            // settings for current level
             switch(Levels.GetCurrentLevel())
             {
                 case 1:
@@ -59,28 +62,25 @@ public class Game : MonoBehaviour
             }   
         }
 
+        // handle music
         if(PauseMenu.gameIsPaused)
             currentSong.Pause();
         else
            currentSong.UnPause(); 
 
+        // player dies
         if(Player.lives < 1)
             DeadCanvas.PlayWhenDead();
+        
+        // if all enemies are dead
+        if(enemyCount < 1)
+            Levels.NewLevel();
     }
 
     void LoadMedia()
     {
         level1 = Audio.LoadSound("sounds/game", "game", gameObject);
         level1.loop = true;
-        /*
-        if(!mediaLoaded)
-        {
-            DontDestroyOnLoad(level1);
-            mediaLoaded = true;
-        }
-        else
-            Destroy(level1);
-        */
     }
 
     // making the bird
@@ -99,6 +99,7 @@ public class Game : MonoBehaviour
         BoxCollider2D bc = obj.AddComponent<BoxCollider2D>();
         if(enemy)
         {
+            enemyCount++;
             // hitting characters happens in Mapdestroyer
             MapDestroyer.AddMe(obj);
             // adding controller and values

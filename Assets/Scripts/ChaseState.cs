@@ -50,7 +50,7 @@ public class ChaseState : IEnemyState
                         // escape the bomb
                         enemy.GoRightOrLeft();
                         rightleft = false;
-                        Debug.Log("enemy is going right or left");
+                        //Debug.Log("enemy is going right or left");
                     }
                 }
             }
@@ -60,13 +60,13 @@ public class ChaseState : IEnemyState
             {
                 enemy.DropBomb();
                 enemy.GoOpposite();
-                Debug.Log("going opposite direction");
+                //Debug.Log("going opposite direction");
             }
 
             // if there is any other tile in enemy's direction
             else if(!enemy.LookDirection(enemy.direction, true))
             {
-                Debug.Log("going going left or right direction");
+                //Debug.Log("going going left or right direction");
                 // just testing value
                 enemy.GoRightOrLeft();
             }
@@ -74,7 +74,7 @@ public class ChaseState : IEnemyState
             // if there is nothing in front of enemy's primary direction
             else
             {
-                Debug.Log("going primary direction");
+                //Debug.Log("going primary direction");
                 primary = true;
                 secondary = false;
                 if(enemy.currentSpeed == 0)
