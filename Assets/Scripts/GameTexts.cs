@@ -8,6 +8,7 @@ public class GameTexts : MonoBehaviour
     Text score;
     Text time;
     Text lives;
+    Text level;
     public System.DateTime startTime;
     int totalTime = 0;
     void Start()
@@ -15,6 +16,7 @@ public class GameTexts : MonoBehaviour
         score = GameObject.Find("score").GetComponent<Text>();
         time = GameObject.Find("time").GetComponent<Text>();
         lives = GameObject.Find("lives").GetComponent<Text>();
+        level = GameObject.Find("level").GetComponent<Text>();
         startTime = System.DateTime.UtcNow;
     }
 
@@ -26,5 +28,6 @@ public class GameTexts : MonoBehaviour
         score.text = "Score: " + Player.score;
         time.text = "Time: " + totalTime;
         lives.text = "Lives: " + Player.lives;
+        level.text = "Level: " + Levels.GetCurrentLevel();
     }
 }
