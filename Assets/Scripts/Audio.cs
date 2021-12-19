@@ -9,7 +9,7 @@ public class Audio : MonoBehaviour
     public static AudioMixer mixer;
     static GameObject audioObj;
     // list of already loaded clips
-    static Dictionary<string, AudioClip> clips = new Dictionary<string, AudioClip>();
+    public static Dictionary<string, AudioClip> clips = new Dictionary<string, AudioClip>();
     static bool created = false;
 
     void Awake()

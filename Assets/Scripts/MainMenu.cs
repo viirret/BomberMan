@@ -25,14 +25,15 @@ public class MainMenu : MonoBehaviour
 
         OptionsButton.onClick.AddListener(() => { PauseMenu.PauseGame(); });
         ExtraButton.onClick.AddListener(ExtrasButton);
-        QuitButton.onClick.AddListener(QuitGame);
+        QuitButton.onClick.AddListener(Func.Quit);
 
         // play theme
         AudioSource s = Audio.LoadSound("sounds/theme", "theme", gameObject);
         s.Play();
         s.loop = true;
 
-        clickSound = Audio.LoadSound("sounds/clicksound", "effects");
+        clickSound = Audio.LoadSound("sounds/clicksound", "effects", gameObject);
+        Levels.StartNewLevel = true;
     }
 
     void StartGame()
@@ -44,11 +45,5 @@ public class MainMenu : MonoBehaviour
     void ExtrasButton()
     {
         clickSound.Play();
-    }
-
-    void QuitGame()
-    {
-        Debug.Log("Quit from game");
-        Application.Quit();
     }
 }

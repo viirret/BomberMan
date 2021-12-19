@@ -53,12 +53,7 @@ public class ChaseState : IEnemyState
                         Debug.Log("enemy is going right or left");
                     }
                 }
-                else
-                {
-                    Debug.Log("xxx");
-                }
             }
-
 
             // if there is destructible tile in enemy's direction
             else if(!enemy.LookDirection(enemy.direction, false))
@@ -72,18 +67,20 @@ public class ChaseState : IEnemyState
             else if(!enemy.LookDirection(enemy.direction, true))
             {
                 Debug.Log("going going left or right direction");
+                // just testing value
                 enemy.GoRightOrLeft();
             }
 
             // if there is nothing in front of enemy's primary direction
             else
             {
-                // if enemy is already going opposite direction
+                Debug.Log("going primary direction");
+                primary = true;
+                secondary = false;
                 if(enemy.currentSpeed == 0)
                 {
-                    Debug.Log("going primary direction");
-                    primary = true;
-                    secondary = false;
+                    secondary = true;
+                    primary = false;
                 }
             }
 

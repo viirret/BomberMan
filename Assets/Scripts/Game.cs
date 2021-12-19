@@ -13,17 +13,13 @@ public class Game : MonoBehaviour
     GameObject yellowBird;
 
     List<Vector3> spawnPoints = new List<Vector3>(4);
-    
-
-    public static List<AudioSource> audios = new List<AudioSource>();
     AudioSource level1;
+    AudioSource currentSong;
 
     void Start()
     {
         CreateSpawnPoints(spawnPoints);
-        level1 = Audio.LoadSound("sounds/game", "game", gameObject);
-        level1.loop = true;
-        audios.Add(level1);
+        LoadMedia();
         
         owl = Resources.Load<GameObject>("Owl");
         eagle = Resources.Load<GameObject>("Eagle");
@@ -35,22 +31,26 @@ public class Game : MonoBehaviour
         int spawn1 = Random.Range(0, 4);
         CreateBird(blueBird, spawnPoints[spawn1], false);
         spawnPoints.RemoveAt(spawn1);
-        
+
+        PauseMenu.gameIsPaused = false;
     }
 
     void Update()
     {
-        // called from Levels.NewLevel()
         if(Levels.StartNewLevel)
         {
             Levels.StartNewLevel = false;
             switch(Levels.GetCurrentLevel())
             {
                 case 1:
+                Debug.Log("Level 1");
+                Player.lives = 1;
                 CreateBird(owl, spawnPoints[0], true);
                 //CreateBird(chicken, spawnPoints[1], true);
                 //CreateBird(eagle, spawnPoints[2], true);
-                level1.Play();
+                currentSong = level1;
+                currentSong.Play();
+                Powerups.CreatePowerUps();
                 break;
                 case 2:
                 CreateBird(eagle, spawnPoints[0], true);
@@ -59,14 +59,28 @@ public class Game : MonoBehaviour
             }   
         }
 
-        // handle audio with pausemenu
-        for(int i = 0; i < audios.Count; i++)
+        if(PauseMenu.gameIsPaused)
+            currentSong.Pause();
+        else
+           currentSong.UnPause(); 
+
+        if(Player.lives < 1)
+            DeadCanvas.PlayWhenDead();
+    }
+
+    void LoadMedia()
+    {
+        level1 = Audio.LoadSound("sounds/game", "game", gameObject);
+        level1.loop = true;
+        /*
+        if(!mediaLoaded)
         {
-            if(PauseMenu.gameIsPaused)
-                audios[i].Pause();
-            else
-                audios[i].UnPause();
+            DontDestroyOnLoad(level1);
+            mediaLoaded = true;
         }
+        else
+            Destroy(level1);
+        */
     }
 
     // making the bird

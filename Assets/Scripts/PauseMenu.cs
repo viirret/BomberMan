@@ -24,7 +24,7 @@ public class PauseMenu : MonoBehaviour
             Main = GameObject.Find("ToMain").GetComponent<Button>();
             // listeners
             Resume.onClick.AddListener(ResumeGame);
-            Quit.onClick.AddListener(QuitGame);
+            Quit.onClick.AddListener(Func.Quit);
             Main.onClick.AddListener(MainMenu);
             
             gameIsPaused = false;
@@ -69,11 +69,6 @@ public class PauseMenu : MonoBehaviour
             Time.timeScale = 0f;
             Main.gameObject.SetActive(true);
         }
-    }
-
-    void QuitGame()
-    {
-        Application.Quit();
     }
 
     void MainMenu()

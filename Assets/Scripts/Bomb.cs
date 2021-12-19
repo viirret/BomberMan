@@ -15,8 +15,7 @@ public class Bomb : MonoBehaviour
     // create the bomb
     void Start()
     {
-        bombsound = Audio.LoadSound("sounds/bomb", "game");
-        Game.audios.Add(bombsound);
+        bombsound = Audio.LoadSound("sounds/bomb", "game", GameObject.Find("Game"));
         bombPrefab = Resources.Load<GameObject>("bomb");
         bomb = Instantiate(bombPrefab, pos, Quaternion.identity);
         gm = GameObject.Find("Grid");
