@@ -49,6 +49,14 @@ public class GameMap : MonoBehaviour
         SetTopLayer(tm2);
     }
 
+    public static void RefreshMap(Tilemap t)
+    {
+        for(int i = -9; i < 8; i++)
+            for(int j = -6; j < 5; j++)
+                t.SetTile(new Vector3Int(i, j, 0), null);
+        SetTopLayer(t);
+    }
+
     void SetBottonLayer(Tilemap t)
     {
         for(int i = -9; i < 8; i++)
@@ -56,7 +64,7 @@ public class GameMap : MonoBehaviour
                 t.SetTile(new Vector3Int(i, j, 0), Dirt);
     }
 
-    void SetTopLayer(Tilemap t)
+    static void SetTopLayer(Tilemap t)
     {
         // WALL TILES
         // up and down row

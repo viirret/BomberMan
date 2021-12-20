@@ -33,6 +33,7 @@ public class DeadCanvas : MonoBehaviour
         Time.timeScale = 0f;
         PauseMenu.gameIsPaused = true;
         Levels.level = 1;
+        Player.score = 0;
     }
 
     void Main()

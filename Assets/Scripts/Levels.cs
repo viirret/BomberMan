@@ -9,6 +9,7 @@ public static class Levels
     public static void NewLevel() 
     {
         StartNewLevel = true;
+        GameMap.RefreshMap(GameMap.TilemapTop);
         level++;
     }
 }
