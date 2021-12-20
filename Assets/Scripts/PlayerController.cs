@@ -88,6 +88,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void MoveToSpawn(Vector3 vec) => transform.position = vec;
+
     Vector3 ReverseVector(Vector2 vector)
     {
         int x =  -(int)(vector.x);

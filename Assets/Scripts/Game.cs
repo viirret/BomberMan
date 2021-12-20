@@ -5,6 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class Game : MonoBehaviour
 {
+    public static int enemyCount;
     // all the prefabs
     GameObject blueBird;
     GameObject chicken;
@@ -13,27 +14,24 @@ public class Game : MonoBehaviour
     GameObject yellowBird;
 
     List<Vector3> spawnPoints = new List<Vector3>(4);
+    List<AudioSource> gameSounds = new List<AudioSource>();
+    PlayerController pc;
+    
     AudioSource level1;
+    AudioSource level2;
+    AudioSource level3;
     AudioSource currentSong;
-    public static int enemyCount;
-
+    Vector3 playerpos;
     void Start()
     {
         CreateSpawnPoints(spawnPoints);
         LoadMedia();
-        
-        owl = Resources.Load<GameObject>("Owl");
-        eagle = Resources.Load<GameObject>("Eagle");
-        chicken = Resources.Load<GameObject>("Chicken");
-        blueBird = Resources.Load<GameObject>("Blue bird");
-        yellowBird = Resources.Load<GameObject>("Yellow Bird");
-         
-        // create the player first in random spawnpoint
-        int spawn1 = Random.Range(0, 4);
-        CreateBird(blueBird, spawnPoints[spawn1], false);
-        spawnPoints.RemoveAt(spawn1);
+        PauseMenu.gameIsPaused = false; 
 
-        PauseMenu.gameIsPaused = false;
+        // create player in random place
+        int spwn = Random.Range(0, 3);
+        CreateBird(blueBird, spawnPoints[spwn], false);
+        spawnPoints.RemoveAt(spwn);
     }
 
     void Update()
@@ -42,24 +40,53 @@ public class Game : MonoBehaviour
         {
             Levels.StartNewLevel = false;
             
+            // move player to new spawn
+            if(Levels.level != 1)
+            {
+                CreateSpawnPoints(spawnPoints);
+                int spwn = Random.Range(0, 3);
+                Vector3 moveTo = spawnPoints[spwn];
+                pc.MoveToSpawn(moveTo);
+                spawnPoints.RemoveAt(spwn);
+            }
+            
             // settings for current level
-            switch(Levels.GetCurrentLevel())
+            switch(Levels.level)
             {
                 case 1:
                 Debug.Log("Level 1");
                 Player.lives = 1;
                 CreateBird(owl, spawnPoints[0], true);
-                //CreateBird(chicken, spawnPoints[1], true);
-                //CreateBird(eagle, spawnPoints[2], true);
+                CreateBird(owl, spawnPoints[1], true);
+                CreateBird(owl, spawnPoints[2], true);
                 currentSong = level1;
-                currentSong.Play();
                 Powerups.CreatePowerUps();
                 break;
+                
                 case 2:
-                CreateBird(eagle, spawnPoints[0], true);
+                Debug.Log("Level 2");
+                Player.lives = 1;
+                CreateBird(owl, spawnPoints[0], true);
+                CreateBird(owl, spawnPoints[1], true);
+                CreateBird(owl, spawnPoints[2], true);
+                level1.Stop();
+                currentSong = level2;
                 break;
+                
+                case 3:
+                Debug.Log("Level 3");
+                Player.lives = 1;
+                CreateBird(eagle, spawnPoints[0], true);
+                //CreateBird(eagle, spawnPoints[1], true);
+                //CreateBird(eagle, spawnPoints[2], true);
+                level2.Stop();
+                currentSong = level3;
+                break;
+                
+
                 default: break;
-            }   
+            }
+            currentSong.Play();
         }
 
         // handle music
@@ -75,12 +102,6 @@ public class Game : MonoBehaviour
         // if all enemies are dead
         if(enemyCount < 1)
             Levels.NewLevel();
-    }
-
-    void LoadMedia()
-    {
-        level1 = Audio.LoadSound("sounds/game", "game", gameObject);
-        level1.loop = true;
     }
 
     // making the bird
@@ -126,7 +147,7 @@ public class Game : MonoBehaviour
                     EC.speed = 3;
                     EC.blastRadius = 3;
                     EC.bombsAtOnce = 1;
-                    EC.lives = 5;
+                    EC.lives = 1;
                     EC.killReward = 500;
                 break;
                 case "Chicken":
@@ -142,13 +163,33 @@ public class Game : MonoBehaviour
         else
         {
             obj.AddComponent<PlayerController>();
+            pc = obj.GetComponent<PlayerController>();
         }
     }
-    
+
+    void LoadMedia()
+    {
+        // load game music
+        // could make list and loop through it later
+        level1 = Audio.LoadSound("sounds/game0", "game", gameObject);
+        level2 = Audio.LoadSound("sounds/game1", "game", gameObject);
+        level3 = Audio.LoadSound("sounds/game2", "game", gameObject);
+        level3.loop = true;
+        level1.loop = true;
+        level2.loop = true;
+
+        // load bird prefabs
+        owl = Resources.Load<GameObject>("Owl");
+        eagle = Resources.Load<GameObject>("Eagle");
+        chicken = Resources.Load<GameObject>("Chicken");
+        blueBird = Resources.Load<GameObject>("Blue bird");
+        yellowBird = Resources.Load<GameObject>("Yellow Bird");
+    }
     
     // all the spawnpoints in the corners of the map
     void CreateSpawnPoints(List<Vector3> spawnPoints)
     {
+        spawnPoints.Clear();
         spawnPoints.Add(new Vector3(-8, -5.5f, 0));
         spawnPoints.Add(new Vector3(-8, 4.5f, 0));
         spawnPoints.Add(new Vector3(8, -5.5f, 0));

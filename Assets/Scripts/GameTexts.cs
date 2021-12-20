@@ -28,6 +28,6 @@ public class GameTexts : MonoBehaviour
         score.text = "Score: " + Player.score;
         time.text = "Time: " + totalTime;
         lives.text = "Lives: " + Player.lives;
-        level.text = "Level: " + Levels.GetCurrentLevel();
+        level.text = "Level: " + Levels.level;
     }
 }

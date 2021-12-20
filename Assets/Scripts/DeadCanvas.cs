@@ -32,6 +32,7 @@ public class DeadCanvas : MonoBehaviour
         obj.SetActive(true);
         Time.timeScale = 0f;
         PauseMenu.gameIsPaused = true;
+        Levels.level = 1;
     }
 
     void Main()
