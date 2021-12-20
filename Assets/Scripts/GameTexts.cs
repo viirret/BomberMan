@@ -10,7 +10,7 @@ public class GameTexts : MonoBehaviour
     Text lives;
     Text level;
     public System.DateTime startTime;
-    int totalTime = 0;
+    public static int totalTime = 0;
     void Start()
     {
         score = GameObject.Find("score").GetComponent<Text>();

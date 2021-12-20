@@ -67,8 +67,8 @@ public class Game : MonoBehaviour
                 Debug.Log("Level 2");
                 Player.lives = 1;
                 CreateBird(owl, spawnPoints[0], true);
-                CreateBird(owl, spawnPoints[1], true);
-                CreateBird(owl, spawnPoints[2], true);
+                //CreateBird(owl, spawnPoints[1], true);
+                //CreateBird(owl, spawnPoints[2], true);
                 level1.Stop();
                 currentSong = level2;
                 break;
@@ -76,7 +76,7 @@ public class Game : MonoBehaviour
                 case 3:
                 Debug.Log("Level 3");
                 Player.lives = 1;
-                CreateBird(eagle, spawnPoints[0], true);
+                CreateBird(owl, spawnPoints[0], true);
                 //CreateBird(eagle, spawnPoints[1], true);
                 //CreateBird(eagle, spawnPoints[2], true);
                 level2.Stop();
@@ -101,7 +101,12 @@ public class Game : MonoBehaviour
         
         // if all enemies are dead
         if(enemyCount < 1)
-            Levels.NewLevel();
+        {
+            if(Levels.level == 3)
+                Winner.Win();
+            else   
+                Levels.NewLevel();
+        }
     }
 
     // making the bird
