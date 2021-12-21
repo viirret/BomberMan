@@ -18,6 +18,7 @@ public class Bomb : MonoBehaviour
         bombsound = Audio.LoadSound("sounds/bomb", "game", GameObject.Find("Game"));
         bombPrefab = Resources.Load<GameObject>("bomb");
         bomb = Instantiate(bombPrefab, pos, Quaternion.identity);
+        bomb.tag = "bomb";
         gm = GameObject.Find("Grid");
         mapdes = gm.GetComponent<MapDestroyer>();
         mapdes.blastRadius = blastRadius;

@@ -32,16 +32,12 @@ public class DeadCanvas : MonoBehaviour
         obj.SetActive(true);
         Time.timeScale = 0f;
         PauseMenu.gameIsPaused = true;
-        Levels.level = 1;
-        Player.score = 0;
     }
 
     void Main()
     {
         clickSound.Play();
-        Time.timeScale = 1f;
         obj.SetActive(false);
         SceneManager.LoadScene("MainMenu");
-        Levels.StartNewLevel = true;
     }
 }

@@ -19,6 +19,7 @@ public class InitialState : IEnemyState
     public InitialState(EnemyController enemy)
     {
         this.enemy = enemy;
+        Debug.Log("enemy in initial state");
     }
 
     public void UpdateState()

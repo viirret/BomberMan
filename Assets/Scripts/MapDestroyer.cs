@@ -88,6 +88,7 @@ public class MapDestroyer : MonoBehaviour
         // create the explosion effect
         var pos = GameMap.TilemapTop.GetCellCenterWorld(cell);
         tempBomb = Instantiate(explosionPrefab, pos, Quaternion.identity);
+        tempBomb.tag = "explosion";
         Destroy(tempBomb, 1);
         return true;        
     }   

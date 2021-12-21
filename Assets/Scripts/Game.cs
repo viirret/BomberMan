@@ -14,19 +14,24 @@ public class Game : MonoBehaviour
     GameObject yellowBird;
 
     List<Vector3> spawnPoints = new List<Vector3>(4);
-    List<AudioSource> gameSounds = new List<AudioSource>();
     PlayerController pc;
     
     AudioSource level1;
     AudioSource level2;
     AudioSource level3;
     AudioSource currentSong;
-    Vector3 playerpos;
     void Start()
     {
         CreateSpawnPoints(spawnPoints);
         LoadMedia();
-        PauseMenu.gameIsPaused = false; 
+
+        // initial settings
+        PauseMenu.gameIsPaused = false;
+        Time.timeScale = 1f;
+        GameTexts.totalTime = 0;
+        Levels.level = 1;
+        Levels.StartNewLevel = true;
+        Player.score = 0;
 
         // create player in random place
         int spwn = Random.Range(0, 3);
@@ -39,6 +44,7 @@ public class Game : MonoBehaviour
         if(Levels.StartNewLevel)
         {
             Levels.StartNewLevel = false;
+            ClearLevel();
             
             // move player to new spawn
             if(Levels.level != 1)
@@ -172,16 +178,25 @@ public class Game : MonoBehaviour
         }
     }
 
+    // destroy remaining prefabs from level
+    void ClearLevel()
+    {
+        foreach(GameObject bomb in GameObject.FindGameObjectsWithTag("bomb"))
+            if(bomb)
+                Destroy(bomb);
+        foreach(GameObject explosion in GameObject.FindGameObjectsWithTag("explosion"))
+            if(explosion)
+                Destroy(explosion);
+    }
     void LoadMedia()
     {
         // load game music
-        // could make list and loop through it later
         level1 = Audio.LoadSound("sounds/game0", "game", gameObject);
         level2 = Audio.LoadSound("sounds/game1", "game", gameObject);
         level3 = Audio.LoadSound("sounds/game2", "game", gameObject);
-        level3.loop = true;
         level1.loop = true;
         level2.loop = true;
+        level3.loop = true;
 
         // load bird prefabs
         owl = Resources.Load<GameObject>("Owl");
@@ -190,14 +205,14 @@ public class Game : MonoBehaviour
         blueBird = Resources.Load<GameObject>("Blue bird");
         yellowBird = Resources.Load<GameObject>("Yellow Bird");
     }
-    
+
     // all the spawnpoints in the corners of the map
     void CreateSpawnPoints(List<Vector3> spawnPoints)
     {
         spawnPoints.Clear();
-        spawnPoints.Add(new Vector3(-8, -5.5f, 0));
+        spawnPoints.Add(new Vector3(8, 4.5f, 0));
         spawnPoints.Add(new Vector3(-8, 4.5f, 0));
         spawnPoints.Add(new Vector3(8, -5.5f, 0));
-        spawnPoints.Add(new Vector3(8, 4.5f, 0));
+        spawnPoints.Add(new Vector3(-8, -5.5f, 0));
     }
 }

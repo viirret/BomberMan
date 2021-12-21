@@ -9,7 +9,6 @@ public class GameTexts : MonoBehaviour
     Text time;
     Text lives;
     Text level;
-    public System.DateTime startTime;
     public static int totalTime = 0;
     void Start()
     {
@@ -17,16 +16,24 @@ public class GameTexts : MonoBehaviour
         time = GameObject.Find("time").GetComponent<Text>();
         lives = GameObject.Find("lives").GetComponent<Text>();
         level = GameObject.Find("level").GetComponent<Text>();
-        startTime = System.DateTime.UtcNow;
+        StartCoroutine(AddTime());
+    }
+
+    // add to time every second game is not paused
+    IEnumerator AddTime()
+    {
+        for(;;)
+        {
+            if(!PauseMenu.gameIsPaused)
+                totalTime++;
+            yield return new WaitForSeconds(1);
+        }
     }
 
     void Update()
     {
-        System.TimeSpan ts = System.DateTime.UtcNow - startTime;
-        totalTime = ts.Hours + ts.Minutes * 60 + ts.Seconds;
-        
-        score.text = "Score: " + Player.score;
         time.text = "Time: " + totalTime;
+        score.text = "Score: " + Player.score;
         lives.text = "Lives: " + Player.lives;
         level.text = "Level: " + Levels.level;
     }

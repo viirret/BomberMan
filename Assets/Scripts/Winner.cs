@@ -19,7 +19,6 @@ public class Winner : MonoBehaviour
         obj = GameObject.Find("winObj");
         main = GameObject.Find("ToMain").GetComponent<Button>();
         score = GameObject.Find("GameScore").GetComponent<TMP_Text>();
-        Debug.Log(score);
 
         main.onClick.AddListener(Main);
         obj.SetActive(false);
@@ -28,12 +27,14 @@ public class Winner : MonoBehaviour
     public static void Win()
     {
         obj.SetActive(true);
+        PauseMenu.gameIsPaused = true;
+        Time.timeScale = 0f;
         
         // give final score
         double multiplier = 5.0;
         multiplier -= GameTexts.totalTime / 100;
         int FinalScore = (int)multiplier * Player.score + GameTexts.totalTime;
-        score.text = "Your score: " + FinalScore;
+        score.text = "Final score: " + FinalScore;
     }
 
     void Main()
