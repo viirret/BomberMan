@@ -35,6 +35,7 @@ public class ChaseState : IEnemyState
             Secondary();
         }
            
+        // every time enemy "stops"
         if(enemy.currentSpeed == 0)
         {
             // see if there is bomb near by
@@ -43,6 +44,7 @@ public class ChaseState : IEnemyState
                 rightleft = true;
 
                 // if not space on the opposite direction of the bomb
+                // meaning enemy already going back
                 if(!enemy.LookDirection(enemy.OppositeDirection(enemy.BombVision()), true))
                 {
                     if(rightleft)
@@ -56,7 +58,7 @@ public class ChaseState : IEnemyState
             }
 
             // if there is destructible tile in enemy's direction
-            else if(!enemy.LookDirection(enemy.direction, false))
+            if(!enemy.LookDirection(enemy.direction, false))
             {
                 enemy.DropBomb();
                 enemy.GoOpposite();
@@ -64,38 +66,43 @@ public class ChaseState : IEnemyState
             }
 
             // if there is any other tile in enemy's direction
-            else if(!enemy.LookDirection(enemy.direction, true))
+            if(!enemy.LookDirection(enemy.direction, true))
             {
                 Debug.Log("going going left or right direction");
-                // just testing value
                 enemy.GoRightOrLeft();
             }
 
-            // if there is nothing in front of enemy's primary direction
-            else
+            // if enemy sees other enemy
+            if(enemy.SeeOtherEnemy() == enemy.direction)
             {
-                Debug.Log("going primary direction");
-                primary = true;
-                secondary = false;
-                if(enemy.currentSpeed == 0)
-                {
-                    secondary = true;
-                    primary = false;
-                }
+                Debug.Log("I see other enemy"); 
+                enemy.GoOpposite();
             }
 
-
-            /*
-            else if(enemy.PlayerSecondaryDirectionEmpty() && !primary)
+        }
+        
+        // if bomb straigh ahead
+        else if(enemy.BombVision() == enemy.direction)
+        {
+            Debug.Log("I see bomb");
+            enemy.GoOpposite();
+        }
+ 
+        // player straight ahead of player
+        else if(enemy.SeePlayer() == enemy.direction && enemy.BombVision() != enemy.OppositeDirection(enemy.direction))
+        {
+            Debug.Log("I see the player");
+            enemy.GoOpposite();
+        }
+        
+        // the player is free
+        else
+        {
+            Debug.Log("I am free");
+            if(enemy.DestructibleLeftOrRight(enemy.direction))
             {
-                // if enemy is already going opposite direction
-                if(enemy.currentSpeed == 0)
-                {
-                    Debug.Log("going secondary direction");
-                    secondary = true;
-                }
+                enemy.DropBomb();
             }
-            */
         }
     }
 

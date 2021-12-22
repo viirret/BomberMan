@@ -60,18 +60,6 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    public Vector2 getLookingPosition(int dir)
-    {
-        switch(dir)
-        {
-            case 0: return new Vector2(0, 1);
-            case 1: return new Vector2(0, -1);
-            case 2: return new Vector2(-1, 0);
-            case 3: return new Vector2(1, 0);
-            default: return new Vector2(0, 0);
-        }
-    }
-
     public void DropBomb()
     {
         if(bombAmount < bombsAtOnce)
@@ -96,19 +84,67 @@ public class EnemyController : MonoBehaviour
     public int BombVision()
     {
         var hits = new List<RaycastHit2D>(); 
-        hits.Add(Physics2D.Raycast((playerPosition2 + new Vector2(0, 0.5f)), new Vector2(0, 1), 5f));
-        hits.Add(Physics2D.Raycast((playerPosition2 + new Vector2(0, -0.5f)), new Vector2(0, -1), 5f));
-        hits.Add(Physics2D.Raycast((playerPosition2 + new Vector2(-0.7f, 0)), new Vector2(-1, 0), 5f));
-        hits.Add(Physics2D.Raycast((playerPosition2 + new Vector2(0.7f, 0)), new Vector2(1, 0), 5f));
+        AddHits(hits);
 
-        for(int i = 0; i < 4; i++)
+        for(int i = 0; i < hits.Count; i++)
             if(hits[i].collider != null)
                 if(hits[i].collider.name == "bomb(Clone)")
                     return i;
         return -1;
     }
 
-    
+    // if other enemies in the vision
+    public int SeeOtherEnemy()
+    {
+        var hits = new List<RaycastHit2D>();
+        AddHits(hits);
+
+        for(int i = 0; i < hits.Count; i++)
+            if(hits[i].collider != null)
+                if(hits[i].collider.tag == "Enemy")
+                    return i;
+        return -1;
+    }
+
+    // player in the vision
+    public int SeePlayer()
+    {
+        var hits = new List<RaycastHit2D>();
+        AddHits(hits);
+
+        for(int i = 0; i < hits.Count; i++)
+            if(hits[i].collider != null)
+                if(hits[i].collider.name == "Blue Bird(Clone)")
+                    return i;
+        return -1;
+    }
+
+    // destructible tile left or right from the player
+    public bool DestructibleLeftOrRight(int dir)
+    {
+        string s = "Destructible";
+        switch(dir)
+        {
+            case 0: return (
+            (leftTile != null && leftTile.name == s) || 
+            (rightTile != null && rightTile.name == s));
+            
+            case 1: return (
+            (leftTile != null && leftTile.name == s) || 
+            (rightTile != null && rightTile.name == s));
+
+            case 2: return (
+            (upTile != null && upTile.name == s) || 
+            (downTile != null && downTile.name == s));
+
+            case 3: return (
+            (upTile != null && upTile.name == s) ||
+            (downTile != null && downTile.name == s));
+
+            default: return false;
+        }
+    }
+
     // random free direction
     public int RandomRoute()
     {
@@ -278,18 +314,6 @@ public class EnemyController : MonoBehaviour
         return a > b ? (a > c ? a : c) : (b > c ? b : c);
     }
 
-    // DOES NOT WORK!
-    /*
-    int GetSecondLargest(float a, float b, float c)
-    {
-        var sl = SecondLargest(a, b, c);
-        if(sl == dUp) return 0;
-        else if(sl == dDown) return 1;
-        else if(sl == dLeft) return 2;
-        else return 3;
-    }
-    */
-
 
     // choose random number from list
     int Choose(List<int?> list)
@@ -299,6 +323,14 @@ public class EnemyController : MonoBehaviour
             return rnd;
         else
             return Choose(list);
+    }
+    
+    void AddHits(List<RaycastHit2D> list)
+    {
+        list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(0, 0.5f)), new Vector2(0, 1), 5f));
+        list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(0, -0.5f)), new Vector2(0, -1), 5f));
+        list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(-0.7f, 0)), new Vector2(-1, 0), 5f));
+        list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(0.7f, 0)), new Vector2(1, 0), 5f));
     }
 
     Tile TargetTile(Vector2 ownPosition, Vector2 lookingPosition)
