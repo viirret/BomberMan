@@ -33,7 +33,7 @@ public class Winner : MonoBehaviour
         // give final score
         double multiplier = 5.0;
         multiplier -= GameTexts.totalTime / 100;
-        int FinalScore = (int)multiplier * Player.score + GameTexts.totalTime;
+        int FinalScore = (int)multiplier * Player.score;
         score.text = "Final score: " + FinalScore;
     }
 

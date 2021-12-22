@@ -27,8 +27,8 @@ public class Bomb : MonoBehaviour
 
     IEnumerator WaitTwo()
     {
+        // adding BoxCollider after 0.5s so bird won't get stuck
         yield return new WaitForSeconds(0.5f);
-        // adding box collider to the bomb
         bomb.AddComponent<BoxCollider2D>();
         BoxCollider2D x = bomb.GetComponent<BoxCollider2D>();
         x.size = new Vector3(0.5f, 0.5f, 0.5f);

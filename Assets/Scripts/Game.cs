@@ -32,6 +32,7 @@ public class Game : MonoBehaviour
         Levels.level = 1;
         Levels.StartNewLevel = true;
         Player.score = 0;
+        enemyCount = 0;
 
         // create player in random place
         int spwn = Random.Range(0, 3);
@@ -46,7 +47,7 @@ public class Game : MonoBehaviour
             Levels.StartNewLevel = false;
             ClearLevel();
             
-            // move player to new spawn
+            // move player to random spawn point
             if(Levels.level != 1)
             {
                 CreateSpawnPoints(spawnPoints);
@@ -173,8 +174,7 @@ public class Game : MonoBehaviour
         }
         else
         {
-            obj.AddComponent<PlayerController>();
-            pc = obj.GetComponent<PlayerController>();
+            pc = obj.AddComponent<PlayerController>().GetComponent<PlayerController>();
         }
     }
 

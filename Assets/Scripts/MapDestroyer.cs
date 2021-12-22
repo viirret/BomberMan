@@ -11,7 +11,7 @@ public class MapDestroyer : MonoBehaviour
     Tile destructibleTile;
     GameObject explosionPrefab;
     
-    // Unity doesn't allow to destroy Prefab
+    // placeholder for prefab
     GameObject tempBomb;
 
     void Start()

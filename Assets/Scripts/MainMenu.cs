@@ -15,17 +15,16 @@ public class MainMenu : MonoBehaviour
     void Start()
     {
         // define buttons
-        PlayButton = GameObject.Find("PlayButton").GetComponent<Button>(); 
-        OptionsButton = GameObject.Find("OptionsButton").GetComponent<Button>();
-        ExtraButton = GameObject.Find("ExtrasButton").GetComponent<Button>();
         QuitButton = GameObject.Find("QuitButton").GetComponent<Button>();
+        PlayButton = GameObject.Find("PlayButton").GetComponent<Button>(); 
+        ExtraButton = GameObject.Find("ExtrasButton").GetComponent<Button>();
+        OptionsButton = GameObject.Find("OptionsButton").GetComponent<Button>();
 
         // listeners for buttons
-        PlayButton.onClick.AddListener(StartGame);
-
-        OptionsButton.onClick.AddListener(() => { PauseMenu.PauseGame(); });
-        ExtraButton.onClick.AddListener(ExtrasButton);
         QuitButton.onClick.AddListener(Func.Quit);
+        PlayButton.onClick.AddListener(StartGame);
+        ExtraButton.onClick.AddListener(ExtrasButton);
+        OptionsButton.onClick.AddListener(PauseMenu.PauseGame);
 
         // play theme
         AudioSource s = Audio.LoadSound("sounds/theme", "theme", gameObject);
@@ -33,7 +32,6 @@ public class MainMenu : MonoBehaviour
         s.loop = true;
 
         clickSound = Audio.LoadSound("sounds/clicksound", "effects", gameObject);
-        Levels.StartNewLevel = true;
     }
 
     void StartGame()
