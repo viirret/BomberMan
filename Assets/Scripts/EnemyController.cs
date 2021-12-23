@@ -84,7 +84,7 @@ public class EnemyController : MonoBehaviour
     public int BombVision()
     {
         var hits = new List<RaycastHit2D>(); 
-        AddHits(hits);
+        AddHits(hits, 5f);
 
         for(int i = 0; i < hits.Count; i++)
             if(hits[i].collider != null)
@@ -97,7 +97,7 @@ public class EnemyController : MonoBehaviour
     public int SeeOtherEnemy()
     {
         var hits = new List<RaycastHit2D>();
-        AddHits(hits);
+        AddHits(hits, 5f);
 
         for(int i = 0; i < hits.Count; i++)
             if(hits[i].collider != null)
@@ -110,7 +110,7 @@ public class EnemyController : MonoBehaviour
     public int SeePlayer()
     {
         var hits = new List<RaycastHit2D>();
-        AddHits(hits);
+        AddHits(hits, 5f);
 
         for(int i = 0; i < hits.Count; i++)
             if(hits[i].collider != null)
@@ -118,6 +118,30 @@ public class EnemyController : MonoBehaviour
                     return i;
         return -1;
     }
+
+    public bool TileInDirection(int dir)
+    {
+        var hits = new List<RaycastHit2D>();
+
+        switch(dir)
+        {
+            case 0: AddHit(hits, 0, 5f); break;
+            case 1: AddHit(hits, 1, 5f); break;
+            case 2: AddHit(hits, 2, 5f); break;
+            case 3: AddHit(hits, 3, 5f); break;
+            default: return false;
+        }
+
+        var n = GameMap.TilemapTop.GetTile<Tile>(Vector3Int.FloorToInt
+        (hits[0].collider.transform.position)).name;
+        
+        if(n != null)
+            if(n == "Wall" || n == "Destructible")
+                return false;
+
+        return true;
+    }
+
 
     // destructible tile left or right from the player
     public bool DestructibleLeftOrRight(int dir)
@@ -229,7 +253,7 @@ public class EnemyController : MonoBehaviour
             default: return false;
         }
     }
-    
+
     bool checkDirection(Tile tile, bool wall)
     {
         if(tile != null)
@@ -325,17 +349,42 @@ public class EnemyController : MonoBehaviour
             return Choose(list);
     }
     
-    void AddHits(List<RaycastHit2D> list)
+    void AddHits(List<RaycastHit2D> list, float distance)
     {
-        list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(0, 0.5f)), new Vector2(0, 1), 5f));
-        list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(0, -0.5f)), new Vector2(0, -1), 5f));
-        list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(-0.7f, 0)), new Vector2(-1, 0), 5f));
-        list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(0.7f, 0)), new Vector2(1, 0), 5f));
+        list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(0, 0.5f)), new Vector2(0, 1), distance));
+        list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(0, -0.5f)), new Vector2(0, -1), distance));
+        list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(-0.7f, 0)), new Vector2(-1, 0), distance));
+        list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(0.7f, 0)), new Vector2(1, 0), distance));
     }
 
-    Tile TargetTile(Vector2 ownPosition, Vector2 lookingPosition)
+    void AddHit(List <RaycastHit2D> list, int dir, float distance)
     {
-        RaycastHit2D hit = Physics2D.Raycast((playerPosition2 + ownPosition), lookingPosition, 0.5f);
+        list.Clear();
+        switch(dir)
+        {
+            case 0: 
+            list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(0, 0.5f)), new Vector2(0, 1), distance));
+            break;
+            
+            case 1:
+            list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(0, -0.5f)), new Vector2(0, -1), distance));
+            break;
+            
+            case 2:
+            list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(-0.7f, 0)), new Vector2(-1, 0), distance));
+            break;
+
+            case 3:
+            list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(0.7f, 0)), new Vector2(1, 0), distance));
+            break;
+            
+            default: break;
+        }
+    }
+
+    Tile TargetTile(Vector2 ownPosition, Vector2 lookingPosition, float distance)
+    {
+        RaycastHit2D hit = Physics2D.Raycast((playerPosition2 + ownPosition), lookingPosition, distance);
             
         if(hit.collider != null)
         {
@@ -376,11 +425,11 @@ public class EnemyController : MonoBehaviour
     // update closest tiles
     void Tiles()
     {
-        upTile = TargetTile(new Vector2(0, 0.5f), new Vector2(0, 1));
-        downTile = TargetTile(new Vector2(0, -0.5f), new Vector2(0, -1));
-        leftTile = TargetTile(new Vector2(-0.7f, 0), new Vector2(-1, 0));
-        rightTile = TargetTile(new Vector2(0.7f, 0), new Vector2(1, 0));
-    } 
+        upTile = TargetTile(new Vector2(0, 0.5f), new Vector2(0, 1), 0.5f);
+        downTile = TargetTile(new Vector2(0, -0.5f), new Vector2(0, -1), 0.5f);
+        leftTile = TargetTile(new Vector2(-0.7f, 0), new Vector2(-1, 0), 0.5f);
+        rightTile = TargetTile(new Vector2(0.7f, 0), new Vector2(1, 0), 0.5f);
+    }
 
     void FixedUpdate()
     {
@@ -389,6 +438,7 @@ public class EnemyController : MonoBehaviour
         oldPosition = transform.position;
         playerPosition2 = position;
 
+        // update tiles
         Tiles();
 
         currentState.UpdateState();

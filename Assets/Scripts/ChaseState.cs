@@ -23,8 +23,6 @@ public class ChaseState : IEnemyState
 
     void HuntPlayer()
     {
-        //Debug.Log(enemy.direction);
-
         if(primary)
         {
             Primary();
@@ -98,10 +96,14 @@ public class ChaseState : IEnemyState
         // the player is free
         else
         {
-            Debug.Log("I am free");
-            if(enemy.DestructibleLeftOrRight(enemy.direction))
+            if(enemy.TileInDirection(enemy.direction))
             {
-                enemy.DropBomb();
+                Debug.Log("there is nothing in front of me");
+                if(enemy.DestructibleLeftOrRight(enemy.direction))
+                {
+                    Debug.Log("I should plant right now");
+                    enemy.DropBomb();
+                }
             }
         }
     }

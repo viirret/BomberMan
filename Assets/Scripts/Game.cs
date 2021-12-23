@@ -64,8 +64,8 @@ public class Game : MonoBehaviour
                 Debug.Log("Level 1");
                 Player.lives = 1;
                 CreateBird(owl, spawnPoints[0], true);
-                CreateBird(owl, spawnPoints[1], true);
-                CreateBird(owl, spawnPoints[2], true);
+                //CreateBird(owl, spawnPoints[1], true);
+                //CreateBird(owl, spawnPoints[2], true);
                 currentSong = level1;
                 Powerups.CreatePowerUps();
                 break;
@@ -182,10 +182,10 @@ public class Game : MonoBehaviour
     void ClearLevel()
     {
         foreach(GameObject bomb in GameObject.FindGameObjectsWithTag("bomb"))
-            if(bomb)
+            if(bomb != null)
                 Destroy(bomb);
         foreach(GameObject explosion in GameObject.FindGameObjectsWithTag("explosion"))
-            if(explosion)
+            if(explosion != null)
                 Destroy(explosion);
     }
     void LoadMedia()
