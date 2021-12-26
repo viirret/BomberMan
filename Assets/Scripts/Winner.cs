@@ -11,6 +11,7 @@ public class Winner : MonoBehaviour
     Button main;
     static TMP_Text score;
     AudioSource clickSound;
+    static double multiplier = 5.0f;
     void Start()
     {
         clickSound = Audio.LoadSound("souds/clicksound", "effect", gameObject);
@@ -29,12 +30,17 @@ public class Winner : MonoBehaviour
         obj.SetActive(true);
         PauseMenu.gameIsPaused = true;
         Time.timeScale = 0f;
+
+        Debug.Log(GameTexts.totalTime);
         
         // give final score
-        double multiplier = 5.0;
-        multiplier -= GameTexts.totalTime / 100;
-        int FinalScore = (int)multiplier * Player.score;
-        score.text = "Final score: " + FinalScore;
+        multiplier -= GameTexts.totalTime / 30;
+        int FinalScore = (int)(multiplier * Player.score);
+        
+        score.text = 
+        "Bomber score: " + Player.score + 
+        "\n\nTime bonus: " + multiplier +
+        "\n\nFinal score: " + FinalScore; 
     }
 
     void Main()

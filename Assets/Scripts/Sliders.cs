@@ -60,7 +60,7 @@ public class Sliders : MonoBehaviour
         slider.value = PlayerPrefs.GetFloat(sliderValue, 0.75f);
         percentageText.text = PlayerPrefs.GetString(percentage, "75%");
         
-        // problems with myMixer.GetFloat so this a little workaround
+        // problems with myMixer.GetFloat so this is a little workaround
         float vol = PlayerPrefs.GetFloat(actualValue, -10.5f);
         myMixer.SetFloat(mixerName, vol);
     }

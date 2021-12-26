@@ -78,6 +78,7 @@ public class Game : MonoBehaviour
                 //CreateBird(owl, spawnPoints[2], true);
                 level1.Stop();
                 currentSong = level2;
+                Winner.Win();
                 break;
                 
                 case 3:
