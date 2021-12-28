@@ -5,9 +5,7 @@ using UnityEngine;
 public class NormalState : IEnemyState
 {
     EnemyController enemy;
-    bool initialMovement = true;
-    bool start = false;
-    int dir;
+    bool rightleft = true;
 
     public NormalState(EnemyController enemy)
     {
@@ -16,51 +14,76 @@ public class NormalState : IEnemyState
 
     public void UpdateState()
     {
-        StartNormal();
-        
-        if(start)
-        {
-            NormalGame();
-        }
+        Play();   
     }
 
-    void NormalGame()
+    void Play()
     {
-        // if there is bomb near by
-        if(enemy.BombVision() != -1)
+        // every time enemy "stops"
+        if(enemy.currentSpeed == 0)
         {
-            // if there is space on the opposite direction of the bomb
-            if(enemy.LookDirection(enemy.OppositeDirection(enemy.BombVision()), true))
+            // see if there is bomb near by
+            if(enemy.BombVision() != -1)
             {
-                Debug.Log("Space on the opposite direction");
-                // go to opposite of the bomb
-                enemy.direction = enemy.OppositeDirection(enemy.BombVision());
+                rightleft = true;
+
+                // if not space on the opposite direction of the bomb
+                // meaning enemy already going back
+                if(!enemy.LookDirection(enemy.OppositeDirection(enemy.BombVision()), true))
+                {
+                    if(rightleft)
+                    {
+                        // escape the bomb
+                        enemy.GoRightOrLeft();
+                        rightleft = false;
+                    }
+                }
             }
-            else
-                enemy.direction = enemy.RandomRoute();
-        }
-        else
-        {
-            if(enemy.DestructibleNear())
+
+            // if there is destructible tile in enemy's direction
+            if(!enemy.LookDirection(enemy.direction, false))
             {
                 enemy.DropBomb();
+                enemy.GoOpposite();
             }
-            else
+
+            // if there is any other tile in enemy's direction
+            if(!enemy.LookDirection(enemy.direction, true))
             {
-                //ToChaseState();
+                enemy.GoRightOrLeft();
+            }
+
+            // if enemy sees other enemy
+            if(enemy.SeeOtherEnemy() == enemy.direction)
+            {
+                enemy.GoOpposite();
+            }
+
+        }
+        
+        // if bomb straigh ahead
+        else if(enemy.BombVision() == enemy.direction)
+        {
+            enemy.GoOpposite();
+        }
+ 
+        // player straight ahead of player
+        else if(enemy.SeePlayer() == enemy.direction && enemy.BombVision() != enemy.OppositeDirection(enemy.direction))
+        {
+            enemy.GoOpposite();
+        }
+        
+        // the player is free
+        else
+        {
+            if(enemy.TileInDirection(enemy.direction))
+            {
+                if(enemy.DestructibleLeftOrRight(enemy.direction))
+                {
+                    enemy.DropBomb();
+                }
             }
         }
-    }
-
-    // start doing the normal mode after the first bomb is exploded
-    void StartNormal()
-    {
-        if(initialMovement)
-            if(!enemy.BombAlive())
-            {
-                initialMovement = false;
-                start = true;
-            }
     }
 
     public void ToChaseState()
@@ -69,5 +92,4 @@ public class NormalState : IEnemyState
     }
     public void ToInitialState() {}
     public void ToNormalState() {}
-    
 }

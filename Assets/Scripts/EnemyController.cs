@@ -24,6 +24,7 @@ public class EnemyController : MonoBehaviour
     public Tile downTile;
     public Tile leftTile;
     public Tile rightTile;
+    public Tile extraDownTile;
 
     // all the states
     public IEnemyState currentState;
@@ -125,25 +126,29 @@ public class EnemyController : MonoBehaviour
 
         switch(dir)
         {
-            case 0: AddHit(hits, 0, 5f); break;
-            case 1: AddHit(hits, 1, 5f); break;
-            case 2: AddHit(hits, 2, 5f); break;
-            case 3: AddHit(hits, 3, 5f); break;
+            case 0: AddHit(hits, 0, 3f); break;
+            case 1: AddHit(hits, 1, 3f); break;
+            case 2: AddHit(hits, 2, 3f); break;
+            case 3: AddHit(hits, 3, 3f); break;
             default: return false;
         }
 
-        var n = GameMap.TilemapTop.GetTile<Tile>(Vector3Int.FloorToInt
-        (hits[0].collider.transform.position)).name;
+        string x = "";
+        if(hits[0].collider != null)
+        {
+            x = GameMap.TilemapTop.GetTile<Tile>(Vector3Int.FloorToInt
+            (hits[0].collider.transform.position)).name;
+        }
         
-        if(n != null)
-            if(n == "Wall" || n == "Destructible")
-                return false;
+        if(x == "Wall" || x == "Destructible")
+            return false;
 
         return true;
     }
 
 
     // destructible tile left or right from the player
+    // something odd with this
     public bool DestructibleLeftOrRight(int dir)
     {
         string s = "Destructible";
@@ -159,11 +164,11 @@ public class EnemyController : MonoBehaviour
 
             case 2: return (
             (upTile != null && upTile.name == s) || 
-            (downTile != null && downTile.name == s));
+            (extraDownTile != null && extraDownTile.name == s));
 
             case 3: return (
             (upTile != null && upTile.name == s) ||
-            (downTile != null && downTile.name == s));
+            (extraDownTile != null && extraDownTile.name == s));
 
             default: return false;
         }
@@ -425,10 +430,12 @@ public class EnemyController : MonoBehaviour
     // update closest tiles
     void Tiles()
     {
-        upTile = TargetTile(new Vector2(0, 0.5f), new Vector2(0, 1), 0.5f);
-        downTile = TargetTile(new Vector2(0, -0.5f), new Vector2(0, -1), 0.5f);
+        upTile = TargetTile(new Vector2(0, 0.7f), new Vector2(0, 1), 0.5f);
+        downTile = TargetTile(new Vector2(0, -0.7f), new Vector2(0, -1), 0.5f);
         leftTile = TargetTile(new Vector2(-0.7f, 0), new Vector2(-1, 0), 0.5f);
         rightTile = TargetTile(new Vector2(0.7f, 0), new Vector2(1, 0), 0.5f);
+        // enemy bird moves so close to the wall
+        extraDownTile = TargetTile(new Vector2(0, -1.7f), new Vector2(0, -1), 0.5f);
     }
 
     void FixedUpdate()
