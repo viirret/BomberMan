@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+// This script handles the very first movements of the enemy once it's spawned.
+// Bad code but it works with 100% accuracy so I won't change a thing
 
 public class InitialState : IEnemyState
 {   
@@ -28,7 +27,7 @@ public class InitialState : IEnemyState
             NextMovement(dir);
         
         if(ready)
-            ToNormalState();
+            ToChaseState();
     }
 
 

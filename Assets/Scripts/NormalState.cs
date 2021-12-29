@@ -68,7 +68,7 @@ public class NormalState : IEnemyState
         }
  
         // player straight ahead of player
-        else if(enemy.SeePlayer() == enemy.direction && enemy.BombVision() != enemy.OppositeDirection(enemy.direction))
+        else if(enemy.SeePlayer(5f) == enemy.direction && enemy.BombVision() != enemy.OppositeDirection(enemy.direction))
         {
             enemy.GoOpposite();
         }

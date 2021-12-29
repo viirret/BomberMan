@@ -10,6 +10,7 @@ public class ChaseState : IEnemyState
     bool secondary = false;
 
     bool rightleft = true;
+    bool goPrimary = true;
 
     public ChaseState(EnemyController enemy)
     {
@@ -55,49 +56,74 @@ public class ChaseState : IEnemyState
             }
 
             // if there is destructible tile in enemy's direction
-            if(!enemy.LookDirection(enemy.direction, false))
+            else if(!enemy.LookDirection(enemy.direction, false))
             {
                 enemy.DropBomb();
                 enemy.GoOpposite();
             }
 
             // if there is any other tile in enemy's direction
-            if(!enemy.LookDirection(enemy.direction, true))
+            else if(!enemy.LookDirection(enemy.direction, true))
             {
                 enemy.GoRightOrLeft();
             }
 
             // if enemy sees other enemy
-            if(enemy.SeeOtherEnemy() == enemy.direction)
+            else if(enemy.SeeOtherEnemy() == enemy.direction)
             {
                 enemy.GoOpposite();
             }
 
+            // the enemy is free now
+            else
+            {
+                goPrimary = true;
+                Debug.Log("enemy going primary");
+                primary = true;
+                if(enemy.currentSpeed == 0)
+                {
+                    if(goPrimary)
+                    {
+                        enemy.GoOpposite();
+                        primary = false;
+                        goPrimary = false;
+                    }
+                }
+            }
+
         }
         
-        // if bomb straigh ahead
+        // if bomb straight ahead
         else if(enemy.BombVision() == enemy.direction)
         {
             enemy.GoOpposite();
         }
- 
-        // player straight ahead of player
-        else if(enemy.SeePlayer() == enemy.direction && enemy.BombVision() != enemy.OppositeDirection(enemy.direction))
+
+        // enemy sees the player
+        else if(enemy.SeePlayer(0.25f) == enemy.direction)
         {
+            enemy.DropBomb();
             enemy.GoOpposite();
         }
-        
+ 
         // the player is free
+        /*
         else
         {
-            if(enemy.TileInDirection(enemy.direction))
+            // if tile in enemy's direction
+            if(!enemy.TileInDirection(enemy.direction))
             {
-                if(enemy.DestructibleLeftOrRight(enemy.direction))
+                Debug.Log("going primary");
+                primary = true;
+                if(enemy.currentSpeed == 0)
                 {
-                    enemy.DropBomb();
+                    
+                    primary = false;
+                    enemy.GoOpposite();
                 }
             }
         }
+        */
     }
 
     void Primary()

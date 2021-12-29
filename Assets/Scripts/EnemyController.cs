@@ -108,10 +108,10 @@ public class EnemyController : MonoBehaviour
     }
 
     // player in the vision
-    public int SeePlayer()
+    public int SeePlayer(float distance)
     {
         var hits = new List<RaycastHit2D>();
-        AddHits(hits, 5f);
+        AddHits(hits, distance);
 
         for(int i = 0; i < hits.Count; i++)
             if(hits[i].collider != null)
