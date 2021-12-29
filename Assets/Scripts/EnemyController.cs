@@ -148,7 +148,6 @@ public class EnemyController : MonoBehaviour
 
 
     // destructible tile left or right from the player
-    // something odd with this
     public bool DestructibleLeftOrRight(int dir)
     {
         string s = "Destructible";
