@@ -82,10 +82,10 @@ public class EnemyController : MonoBehaviour
     public void GoOpposite() => direction = OppositeDirection(direction);
 
     // see if there is any bombs in the vision
-    public int BombVision()
+    public int BombVision(float distance)
     {
         var hits = new List<RaycastHit2D>(); 
-        AddHits(hits, 5f);
+        AddHits(hits, distance);
 
         for(int i = 0; i < hits.Count; i++)
             if(hits[i].collider != null)
@@ -95,7 +95,7 @@ public class EnemyController : MonoBehaviour
     }
 
     // if other enemies in the vision
-    public int SeeOtherEnemy()
+    public int SeeOtherEnemy(float distance)
     {
         var hits = new List<RaycastHit2D>();
         AddHits(hits, 5f);
@@ -119,33 +119,6 @@ public class EnemyController : MonoBehaviour
                     return i;
         return -1;
     }
-
-    public bool TileInDirection(int dir)
-    {
-        var hits = new List<RaycastHit2D>();
-
-        switch(dir)
-        {
-            case 0: AddHit(hits, 0, 3f); break;
-            case 1: AddHit(hits, 1, 3f); break;
-            case 2: AddHit(hits, 2, 3f); break;
-            case 3: AddHit(hits, 3, 3f); break;
-            default: return false;
-        }
-
-        string x = "";
-        if(hits[0].collider != null)
-        {
-            x = GameMap.TilemapTop.GetTile<Tile>(Vector3Int.FloorToInt
-            (hits[0].collider.transform.position)).name;
-        }
-        
-        if(x == "Wall" || x == "Destructible")
-            return false;
-
-        return true;
-    }
-
 
     // destructible tile left or right from the player
     public bool DestructibleLeftOrRight(int dir)
@@ -198,27 +171,10 @@ public class EnemyController : MonoBehaviour
         else
             return false;
     }
-    public void GoPrimaryDirection()
-    {
-        direction = GoTowardsPlayer(true);
-    }
 
-    public void GoSecondaryDirection()
-    {
-        direction = GoTowardsPlayer(false);
-    }
+    public void GoPrimaryDirection() => direction = GoTowardsPlayer(true);
+    public void GoSecondaryDirection() =>  direction = GoTowardsPlayer(false);
 
-    // see if there is space on the primary direction of the player
-    public bool PlayerDirectionEmpty()
-    {
-        return LookDirection(GoTowardsPlayer(true), true);
-    }
-
-    // see if there is space in the secondary direction of the player
-    public bool PlayerSecondaryDirectionEmpty()
-    {
-        return LookDirection(GoTowardsPlayer(false), true);
-    }
 
     public void GoRightOrLeft()
     {

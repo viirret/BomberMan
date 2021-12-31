@@ -64,8 +64,8 @@ public class Game : MonoBehaviour
                 Debug.Log("Level 1");
                 Player.lives = 1;
                 CreateBird(owl, spawnPoints[0], true);
-                //CreateBird(owl, spawnPoints[1], true);
-                //CreateBird(owl, spawnPoints[2], true);
+                CreateBird(owl, spawnPoints[1], true);
+                CreateBird(owl, spawnPoints[2], true);
                 currentSong = level1;
                 Powerups.CreatePowerUps();
                 break;
@@ -78,7 +78,6 @@ public class Game : MonoBehaviour
                 //CreateBird(owl, spawnPoints[2], true);
                 level1.Stop();
                 currentSong = level2;
-                Winner.Win();
                 break;
                 
                 case 3:

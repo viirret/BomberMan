@@ -5,7 +5,6 @@ using UnityEngine;
 public class NormalState : IEnemyState
 {
     EnemyController enemy;
-    bool rightleft = true;
 
     public NormalState(EnemyController enemy)
     {
@@ -23,20 +22,14 @@ public class NormalState : IEnemyState
         if(enemy.currentSpeed == 0)
         {
             // see if there is bomb near by
-            if(enemy.BombVision() != -1)
+            if(enemy.BombVision(5f) != -1)
             {
-                rightleft = true;
-
                 // if not space on the opposite direction of the bomb
                 // meaning enemy already going back
-                if(!enemy.LookDirection(enemy.OppositeDirection(enemy.BombVision()), true))
+                if(!enemy.LookDirection(enemy.OppositeDirection(enemy.BombVision(5f)), true))
                 {
-                    if(rightleft)
-                    {
-                        // escape the bomb
-                        enemy.GoRightOrLeft();
-                        rightleft = false;
-                    }
+                    // escape the bomb
+                    enemy.GoRightOrLeft();
                 }
             }
 
@@ -54,29 +47,34 @@ public class NormalState : IEnemyState
             }
 
             // if enemy sees other enemy
-            if(enemy.SeeOtherEnemy() == enemy.direction)
+            if(enemy.SeeOtherEnemy(5f) == enemy.direction)
             {
                 enemy.GoOpposite();
             }
 
         }
         
-        // if bomb straigh ahead
-        else if(enemy.BombVision() == enemy.direction)
+        // if bomb straight ahead
+        if(enemy.BombVision(5f) == enemy.direction)
+        {
+            enemy.GoOpposite();
+        }
+
+        if(enemy.SeeOtherEnemy(2f) == enemy.direction)
         {
             enemy.GoOpposite();
         }
  
         // player straight ahead of player
-        else if(enemy.SeePlayer(5f) == enemy.direction && enemy.BombVision() != enemy.OppositeDirection(enemy.direction))
+        if(enemy.SeePlayer(5f) == enemy.direction)
         {
             enemy.GoOpposite();
         }
         
-        // the player is free
-        else
+        // no tiles in front 
+        if(enemy.LookDirection(enemy.direction, true))
         {
-            if(enemy.TileInDirection(enemy.direction))
+            if(enemy.LookDirection(enemy.direction, false))
             {
                 if(enemy.DestructibleLeftOrRight(enemy.direction))
                 {
