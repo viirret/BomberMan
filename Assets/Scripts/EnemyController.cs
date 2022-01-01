@@ -26,6 +26,13 @@ public class EnemyController : MonoBehaviour
     public Tile rightTile;
     public Tile extraDownTile;
 
+    // tiles with some direction from the player
+    public Tile dupTile;
+    public Tile ddownTile;
+    public Tile dleftTile;
+    public Tile drightTile;
+
+
     // all the states
     public IEnemyState currentState;
     public InitialState initialState;
@@ -98,7 +105,7 @@ public class EnemyController : MonoBehaviour
     public int SeeOtherEnemy(float distance)
     {
         var hits = new List<RaycastHit2D>();
-        AddHits(hits, 5f);
+        AddHits(hits, distance);
 
         for(int i = 0; i < hits.Count; i++)
             if(hits[i].collider != null)
@@ -174,6 +181,9 @@ public class EnemyController : MonoBehaviour
 
     public void GoPrimaryDirection() => direction = GoTowardsPlayer(true);
     public void GoSecondaryDirection() =>  direction = GoTowardsPlayer(false);
+    public int LargestDirection() => GoTowardsPlayer(true);
+    public int SecondLargestDirection() => GoTowardsPlayer(false);
+
 
 
     public void GoRightOrLeft()
@@ -183,8 +193,8 @@ public class EnemyController : MonoBehaviour
 
         if(direction == 0 || direction == 1)
         {
-            if(LookDirection(2, true)) a = true;
-            if(LookDirection(3, true)) b = true;
+            if(LookDirection(2, true, true)) a = true;
+            if(LookDirection(3, true, true)) b = true;
 
             if(a && b) direction = (num == 0) ? 2 : 3;
             if(a) direction = 2;
@@ -192,8 +202,8 @@ public class EnemyController : MonoBehaviour
         }
         else
         {
-            if(LookDirection(0, true)) a = true;
-            if(LookDirection(1, true)) b = true;
+            if(LookDirection(0, true, true)) a = true;
+            if(LookDirection(1, true, true)) b = true;
 
             if(a && b) direction = (num == 0) ? 0 : 1;
             if(a) direction = 0;
@@ -201,16 +211,30 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    public bool LookDirection(int dir, bool wall)
+    public bool LookDirection(int dir, bool wall, bool close)
     {
-        switch(dir)
+        if(close) 
         {
-            case 0: return checkDirection(upTile, wall);
-            case 1: return checkDirection(downTile, wall);
-            case 2: return checkDirection(leftTile, wall);
-            case 3: return checkDirection(rightTile, wall);
-            
-            default: return false;
+            switch(dir)
+            {
+                case 0: return checkDirection(upTile, wall);
+                case 1: return checkDirection(downTile, wall);
+                case 2: return checkDirection(leftTile, wall);
+                case 3: return checkDirection(rightTile, wall);
+                
+                default: return false;
+            }
+        }
+        else
+        {
+            switch(dir)
+            {
+                case 0: return checkDirection(dupTile, wall);
+                case 1: return checkDirection(ddownTile, wall);
+                case 2: return checkDirection(dleftTile, wall);
+                case 3: return checkDirection(drightTile, wall);
+                default: return false;
+           }           
         }
     }
 
@@ -220,7 +244,8 @@ public class EnemyController : MonoBehaviour
         {
             if(wall)
             {
-                if(tile.name == "Wall" || tile.name == "Destructible")
+                // if something breaks with checkDirection this next line is probably the reason
+                if(tile.name == "Wall")
                     return false;
             }
             else
@@ -230,7 +255,7 @@ public class EnemyController : MonoBehaviour
             }
         }
         return true;
-    }   
+    } 
 
     int GoTowardsPlayer(bool x)
     {
@@ -391,6 +416,12 @@ public class EnemyController : MonoBehaviour
         rightTile = TargetTile(new Vector2(0.7f, 0), new Vector2(1, 0), 0.5f);
         // enemy bird moves so close to the wall
         extraDownTile = TargetTile(new Vector2(0, -1.7f), new Vector2(0, -1), 0.5f);
+
+        // this is retarded stuff but Raycaster for Tiles is just not working
+        dupTile = TargetTile(new Vector2(0, 0.7f), new Vector2(0, 1), 2f);
+        ddownTile = TargetTile(new Vector2(0, -0.7f), new Vector2(0, -1), 2f);
+        dleftTile = TargetTile(new Vector2(-0.7f, 0), new Vector2(-1, 0), 2f);
+        drightTile = TargetTile(new Vector2(0.7f, 0), new Vector2(1, 0), 2f);
     }
 
     void FixedUpdate()

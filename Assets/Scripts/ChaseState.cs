@@ -26,7 +26,7 @@ public class ChaseState : IEnemyState
             {
                 // if not space on the opposite direction of the bomb
                 // meaning the enemy cannot go back from the bomb
-                if(!enemy.LookDirection(enemy.OppositeDirection(enemy.BombVision(0.25f)), true))
+                if(!enemy.LookDirection(enemy.OppositeDirection(enemy.BombVision(0.25f)), true, true))
                 {
                     // escape the bomb
                     enemy.GoRightOrLeft();
@@ -35,7 +35,7 @@ public class ChaseState : IEnemyState
             }
 
             // if there is destructible tile in enemy's direction
-            if(!enemy.LookDirection(enemy.direction, false))
+            if(!enemy.LookDirection(enemy.direction, false, true))
             {
                 enemy.DropBomb();
                 enemy.GoOpposite();
@@ -43,7 +43,7 @@ public class ChaseState : IEnemyState
             }
 
             // if there is any other tile in enemy's direction
-            if(!enemy.LookDirection(enemy.direction, true))
+            if(!enemy.LookDirection(enemy.direction, true, true))
             {
                 enemy.GoRightOrLeft();
                 Debug.Log("any other tile in enemy's way");
@@ -74,14 +74,38 @@ public class ChaseState : IEnemyState
         // if enemy straight ahead
         if(enemy.SeeOtherEnemy(0.25f) == enemy.direction)
         {
+            Debug.Log("enemy straight ahead");
             enemy.GoOpposite();
         }
         
         // if player straight ahead
         if(enemy.SeePlayer(0.25f) == enemy.direction)
         {
+            Debug.Log("player straight ahead");
             enemy.DropBomb();
             enemy.GoOpposite();
+        }
+
+        // following player
+        /*
+        if(!enemy.LookDirection(enemy.LargestDirection(), false))
+        {
+            enemy.GoPrimaryDirection();
+        }
+        */
+        
+        // no bombs in the main direction of the player
+        if(!(enemy.BombVision(5f) == enemy.LargestDirection()))
+        {
+           // if not wall tiles in the way
+           if(enemy.LookDirection(enemy.LargestDirection(), true, true))
+           {
+               // if there is destructible tiles on the way
+               if(enemy.LookDirection(enemy.LargestDirection(), false, true))
+               {
+                   enemy.GoPrimaryDirection();
+               }
+           } 
         }
 
     }

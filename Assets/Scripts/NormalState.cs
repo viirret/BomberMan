@@ -26,7 +26,7 @@ public class NormalState : IEnemyState
             {
                 // if not space on the opposite direction of the bomb
                 // meaning enemy already going back
-                if(!enemy.LookDirection(enemy.OppositeDirection(enemy.BombVision(5f)), true))
+                if(!enemy.LookDirection(enemy.OppositeDirection(enemy.BombVision(5f)), true, true))
                 {
                     // escape the bomb
                     enemy.GoRightOrLeft();
@@ -34,14 +34,14 @@ public class NormalState : IEnemyState
             }
 
             // if there is destructible tile in enemy's direction
-            if(!enemy.LookDirection(enemy.direction, false))
+            if(!enemy.LookDirection(enemy.direction, false, true))
             {
                 enemy.DropBomb();
                 enemy.GoOpposite();
             }
 
             // if there is any other tile in enemy's direction
-            if(!enemy.LookDirection(enemy.direction, true))
+            if(!enemy.LookDirection(enemy.direction, true, true))
             {
                 enemy.GoRightOrLeft();
             }
@@ -51,7 +51,6 @@ public class NormalState : IEnemyState
             {
                 enemy.GoOpposite();
             }
-
         }
         
         // if bomb straight ahead
@@ -71,10 +70,10 @@ public class NormalState : IEnemyState
             enemy.GoOpposite();
         }
         
-        // no tiles in front 
-        if(enemy.LookDirection(enemy.direction, true))
+        // no tiles in front (with distance) 
+        if(enemy.LookDirection(enemy.direction, true, false))
         {
-            if(enemy.LookDirection(enemy.direction, false))
+            if(enemy.LookDirection(enemy.direction, false, false))
             {
                 if(enemy.DestructibleLeftOrRight(enemy.direction))
                 {
