@@ -5,6 +5,10 @@ using UnityEngine;
 public class ChaseState : IEnemyState
 {
     EnemyController enemy;
+    bool wallInDirection = false;
+    bool destructibleInDirection = false;
+    bool bombInDirection = false;
+    bool enemyInDirection = false;
 
     public ChaseState(EnemyController enemy)
     {
@@ -21,18 +25,22 @@ public class ChaseState : IEnemyState
         // every time enemy "stops"
         if(enemy.currentSpeed == 0)
         {
+            /*
             // see if there is bomb near by
             if(enemy.BombVision(0.5f) != -1)
             {
                 // if not space on the opposite direction of the bomb
                 // meaning the enemy cannot go back from the bomb
+                
                 if(!enemy.LookDirection(enemy.OppositeDirection(enemy.BombVision(0.25f)), true, true))
                 {
                     // escape the bomb
                     enemy.GoRightOrLeft();
                     Debug.Log("enemy escaping the bomb");
                 }
+                
             }
+            */
 
             // if there is destructible tile in enemy's direction
             if(!enemy.LookDirection(enemy.direction, false, true))
@@ -63,13 +71,8 @@ public class ChaseState : IEnemyState
                 enemy.GoOpposite();
             }
         }
-        
-        // if bomb straight ahead
-        if(enemy.BombVision(0.5f) == enemy.direction)
-        {
-            enemy.GoOpposite();
-            Debug.Log("Bomb straight ahead");
-        }
+
+
 
         // if enemy straight ahead
         if(enemy.SeeOtherEnemy(0.25f) == enemy.direction)
@@ -86,39 +89,62 @@ public class ChaseState : IEnemyState
             enemy.GoOpposite();
         }
 
-        // following player
-        /*
-        if(!enemy.LookDirection(enemy.LargestDirection(), false))
+        
+        // things in the main direction
+        
+        // if main direction is covered by wall, works!
+        if(!enemy.LookDirection(enemy.LargestDirection(), true, false))
+        {   
+            wallInDirection = true;
+        }
+        else
+        {
+            wallInDirection = false;
+        }
+
+        // if main direction is covered by destructible
+        if(!enemy.LookDirection(enemy.LargestDirection(), false, false))
+        {
+            destructibleInDirection = true;
+        }
+        else
+        {
+            destructibleInDirection = false;
+        }
+
+        // no bomb in the main direction, this only works for little distance
+        if((enemy.BombVision(5f) == enemy.LargestDirection()))
+        {
+            bombInDirection = true;
+        }
+        else
+        {
+            bombInDirection = false;
+        }
+
+        if(enemy.SeePlayer(5f) == enemy.LargestDirection())
+        {
+            enemyInDirection = true;
+        }
+        else
+        {
+            enemyInDirection = false;
+        }
+        
+        //Debug.Log("Wall in direction: " + wallInDirection);
+        //Debug.Log("Destructible in direction: " + destructibleInDirection);
+        //Debug.Log("Bomb in direction: " + bombInDirection);
+
+        
+        // if nothing in front of the enemy towards the largest distance of the player
+        if((!bombInDirection) && (!wallInDirection) && (!destructibleInDirection) && (!enemyInDirection))
         {
             enemy.GoPrimaryDirection();
         }
-        */
+    }
         
-        // no bombs in the main direction of the player
-        if(!(enemy.BombVision(5f) == enemy.LargestDirection()))
-        {
-           // if not wall tiles in the way
-           if(enemy.LookDirection(enemy.LargestDirection(), true, true))
-           {
-               // if there is destructible tiles on the way
-               if(enemy.LookDirection(enemy.LargestDirection(), false, true))
-               {
-                   enemy.GoPrimaryDirection();
-               }
-           } 
-        }
 
-    }
 
-    void Primary()
-    {
-        enemy.GoPrimaryDirection();
-    }
-
-    void Secondary()
-    {
-        enemy.GoSecondaryDirection();
-    }
 
     public void ToNormalState()
     {
