@@ -142,17 +142,8 @@ public class ChaseState : IEnemyState
         if((!bombInDirection) && (!wallInDirection) && (!destructibleInDirection)
         && (!enemyInDirection))
         {
-            // if the enemy makes a turn
-            if(enemy.LargestDirection() != enemy.direction)
-            {
-                Debug.Log("enemy should make a turn"); 
-                // if there is tile in front of the enemy
-                if((!enemy.LookDirection(enemy.direction, true, false)) && (!enemy.LookDirection(enemy.direction, false, false)))
-                {
-                    enemy.direction = enemy.LargestDirection();
-                    Debug.Log("going to largest direction");
-                }
-            }
+            enemy.direction = enemy.LargestDirection();
+            Debug.Log("going to largest direction");
         }
         
         

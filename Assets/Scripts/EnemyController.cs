@@ -101,7 +101,7 @@ public class EnemyController : MonoBehaviour
         AddHits(hits, distance);
 
         for(int i = 0; i < hits.Count; i++)
-            if(hits[i].collider != null)
+            if(hits[i].collider)
                 if(hits[i].collider.name == "bomb(Clone)")
                     return i;
         return -1;
@@ -114,7 +114,7 @@ public class EnemyController : MonoBehaviour
         AddHits(hits, distance);
 
         for(int i = 0; i < hits.Count; i++)
-            if(hits[i].collider != null)
+            if(hits[i].collider)
                 if(hits[i].collider.tag == "Enemy")
                     return i;
         return -1;
@@ -127,7 +127,7 @@ public class EnemyController : MonoBehaviour
         AddHits(hits, distance);
 
         for(int i = 0; i < hits.Count; i++)
-            if(hits[i].collider != null)
+            if(hits[i].collider)
                 if(hits[i].collider.tag == "powerup")
                     return i;
         return -1;
@@ -140,7 +140,7 @@ public class EnemyController : MonoBehaviour
         AddHits(hits, distance);
 
         for(int i = 0; i < hits.Count; i++)
-            if(hits[i].collider != null)
+            if(hits[i].collider)
                 if(hits[i].collider.name == "Blue Bird(Clone)")
                     return i;
         return -1;
@@ -199,7 +199,7 @@ public class EnemyController : MonoBehaviour
     }
 
     public void GoPrimaryDirection() => direction = GoTowardsPlayer(true);
-    public void GoSecondaryDirection() =>  direction = GoTowardsPlayer(false);
+    public void GoSecondaryDirection() => direction = GoTowardsPlayer(false);
     public int LargestDirection() => GoTowardsPlayer(true);
     public int SecondLargestDirection() => GoTowardsPlayer(false);
 
@@ -355,36 +355,12 @@ public class EnemyController : MonoBehaviour
     
     void AddHits(List<RaycastHit2D> list, float distance)
     {
-        list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(0, 0.5f)), new Vector2(0, 1), distance));
-        list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(0, -0.5f)), new Vector2(0, -1), distance));
-        list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(-0.7f, 0)), new Vector2(-1, 0), distance));
-        list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(0.7f, 0)), new Vector2(1, 0), distance));
+        list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(0.5f, 0)), new Vector2(0, 1), distance));
+        list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(-0.5f, 0)), new Vector2(0, -1), distance));
+        list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(0, 0.5f)), new Vector2(-1, 0), distance));
+        list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(0, -0.5f)), new Vector2(1, 0), distance));
     }
 
-    void AddHit(List <RaycastHit2D> list, int dir, float distance)
-    {
-        list.Clear();
-        switch(dir)
-        {
-            case 0: 
-            list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(0, 0.5f)), new Vector2(0, 1), distance));
-            break;
-            
-            case 1:
-            list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(0, -0.5f)), new Vector2(0, -1), distance));
-            break;
-            
-            case 2:
-            list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(-0.7f, 0)), new Vector2(-1, 0), distance));
-            break;
-
-            case 3:
-            list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(0.7f, 0)), new Vector2(1, 0), distance));
-            break;
-            
-            default: break;
-        }
-    }
 
     Tile TargetTile(Vector2 ownPosition, Vector2 lookingPosition, float distance)
     {
@@ -400,7 +376,7 @@ public class EnemyController : MonoBehaviour
         }
         return null;
     }
-
+ 
     IEnumerator WaitBomb()
     {
         yield return new WaitForSeconds(2);
@@ -436,7 +412,6 @@ public class EnemyController : MonoBehaviour
         // enemy bird moves so close to the wall
         extraDownTile = TargetTile(new Vector2(0, -1.7f), new Vector2(0, -1), 0.5f);
 
-        // this is retarded stuff but Raycaster for Tiles is just not working
         dupTile = TargetTile(new Vector2(0, 0.7f), new Vector2(0, 1), 2f);
         ddownTile = TargetTile(new Vector2(0, -0.7f), new Vector2(0, -1), 2f);
         dleftTile = TargetTile(new Vector2(-0.7f, 0), new Vector2(-1, 0), 2f);
