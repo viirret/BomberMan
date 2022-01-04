@@ -81,6 +81,11 @@ public class NormalState : IEnemyState
                 enemy.DropBomb();
             }
         }
+
+        if(enemy.SeePowerUp(5f) != -1)
+        {
+            enemy.direction = enemy.SeePowerUp(5f);
+        }
     }
 
     public void ToChaseState()

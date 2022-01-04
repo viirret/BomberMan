@@ -20,13 +20,13 @@ public class Powerups : MonoBehaviour
         foreach(GameObject powerup in GameObject.FindGameObjectsWithTag("powerup"))
             if(powerup)
                 Destroy(powerup);
-                
+
         // create spawnpoints for powerups
         
 
         // create powerups
-        Powerup(extraLife, new Vector3(2, 3, 0));
-        Powerup(lightning, new Vector3(5, 3, 0));
+        Powerup(extraLife, new Vector3(1, 1, 0));
+        Powerup(lightning, new Vector3(2, 3, 0));
 
     }
 
@@ -48,3 +48,4 @@ public class Powerups : MonoBehaviour
             obj.transform.localScale = new Vector3(0.9f, 0.9f, 1f);
     }
 }
+ 

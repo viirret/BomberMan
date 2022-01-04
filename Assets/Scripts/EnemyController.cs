@@ -57,13 +57,17 @@ public class EnemyController : MonoBehaviour
         currentState = initialState;
     }
 
+    public void AddLife() => lives++;
+    public void AddSpeed(int amount) => speed += amount;
+    
+
     public void HitEnemy()
     {
         Player.AddScore(killReward);
         lives--;
         if(lives == 0)
         {
-            Game.enemyCount--;
+            Game.enemies.Remove(obj);
             Destroy(obj);
         }
     }
@@ -110,6 +114,19 @@ public class EnemyController : MonoBehaviour
         for(int i = 0; i < hits.Count; i++)
             if(hits[i].collider != null)
                 if(hits[i].collider.tag == "Enemy")
+                    return i;
+        return -1;
+    }
+
+    // if powerup in the vision
+    public int SeePowerUp(float distance)
+    {
+        var hits = new List<RaycastHit2D>();
+        AddHits(hits, distance);
+
+        for(int i = 0; i < hits.Count; i++)
+            if(hits[i].collider != null)
+                if(hits[i].collider.tag == "powerup")
                     return i;
         return -1;
     }

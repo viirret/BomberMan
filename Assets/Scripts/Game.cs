@@ -6,6 +6,7 @@ using UnityEngine.Tilemaps;
 public class Game : MonoBehaviour
 {
     public static int enemyCount;
+    public static List<GameObject> enemies = new List<GameObject>();
     // all the prefabs
     GameObject blueBird;
     GameObject chicken;
@@ -33,7 +34,6 @@ public class Game : MonoBehaviour
         Levels.level = 1;
         Levels.StartNewLevel = true;
         Player.score = 0;
-        enemyCount = 0;
 
         // create player in random place
         int spwn = Random.Range(0, 3);
@@ -49,6 +49,7 @@ public class Game : MonoBehaviour
         {
             Levels.StartNewLevel = false;
             ClearLevel();
+            enemies.Clear();
             
             // move player to random spawn point
             if(Levels.level != 1)
@@ -110,7 +111,7 @@ public class Game : MonoBehaviour
             DeadCanvas.PlayWhenDead();
         
         // if all enemies are dead
-        if(enemyCount < 1)
+        if(enemies.Count < 1)
         {
             if(Levels.level == 3)
                 Winner.Win();
@@ -119,12 +120,8 @@ public class Game : MonoBehaviour
         }
 
         // handling powerups
-        /*
-        if(GameObject.Find("healthUp(Clone)").GetComponent<BoxCollider2D>().IsTouching(player))
-        {
-            Debug.Log("touched player");
-        }
-        */
+        HandlePowerUps();
+        
     }
 
     // making the bird
@@ -142,7 +139,7 @@ public class Game : MonoBehaviour
         b.freezeRotation = true;
         if(enemy)
         {
-            enemyCount++;
+            enemies.Add(obj);
             // hitting characters happens in Mapdestroyer
             MapDestroyer.AddMe(obj);
             // adding controller and values
@@ -216,6 +213,55 @@ public class Game : MonoBehaviour
         blueBird = Resources.Load<GameObject>("Blue bird");
         yellowBird = Resources.Load<GameObject>("Yellow Bird");
     }
+    
+    void HandlePowerUps()
+    {
+        GameObject oneUp = GameObject.Find("oneUp(Clone)");
+        GameObject lightning = GameObject.Find("lightning(Clone)");
+
+        if(oneUp)
+        {
+            BoxCollider2D bc = oneUp.GetComponent<BoxCollider2D>();
+
+            // if player gets the powerup
+            if(bc.IsTouching(player))
+            {
+                Player.AddLife();
+                Destroy(oneUp);
+            }
+
+            // if eneny gets the powerup
+            for(int i = 0; i < enemies.Count; i++)
+            {
+                if(bc.IsTouching(enemies[i].gameObject.GetComponent<BoxCollider2D>()))
+                {
+                    enemies[i].GetComponent<EnemyController>().AddLife();
+                    Destroy(oneUp);
+                }
+            }
+        }
+        
+        if(lightning)
+        {
+            BoxCollider2D bc = lightning.GetComponent<BoxCollider2D>();
+            if(bc.IsTouching(player))
+            {
+                Player.AddSpeed(5);
+                Destroy(lightning);
+            }
+
+            for(int i = 0; i < enemies.Count; i++)
+            {
+                if(bc.IsTouching(enemies[i].gameObject.GetComponent<BoxCollider2D>()))
+                {
+                    enemies[i].GetComponent<EnemyController>().AddSpeed(5);
+                    Destroy(lightning);
+                }
+            }
+        }
+    }
+
+
 
     // all the spawnpoints in the corners of the map
     void CreateSpawnPoints(List<Vector3> spawnPoints)
