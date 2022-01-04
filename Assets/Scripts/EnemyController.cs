@@ -98,7 +98,7 @@ public class EnemyController : MonoBehaviour
     public int BombVision(float distance)
     {
         var hits = new List<RaycastHit2D>(); 
-        AddHits(hits, distance);
+        AddStraightHits(hits, distance);
 
         for(int i = 0; i < hits.Count; i++)
             if(hits[i].collider)
@@ -111,7 +111,7 @@ public class EnemyController : MonoBehaviour
     public int SeeOtherEnemy(float distance)
     {
         var hits = new List<RaycastHit2D>();
-        AddHits(hits, distance);
+        AddStraightHits(hits, distance);
 
         for(int i = 0; i < hits.Count; i++)
             if(hits[i].collider)
@@ -124,7 +124,7 @@ public class EnemyController : MonoBehaviour
     public int SeePowerUp(float distance)
     {
         var hits = new List<RaycastHit2D>();
-        AddHits(hits, distance);
+        AddHitsWithSpace(hits, distance);
 
         for(int i = 0; i < hits.Count; i++)
             if(hits[i].collider)
@@ -137,7 +137,7 @@ public class EnemyController : MonoBehaviour
     public int SeePlayer(float distance)
     {
         var hits = new List<RaycastHit2D>();
-        AddHits(hits, distance);
+        AddStraightHits(hits, distance);
 
         for(int i = 0; i < hits.Count; i++)
             if(hits[i].collider)
@@ -353,12 +353,45 @@ public class EnemyController : MonoBehaviour
             return Choose(list);
     }
     
-    void AddHits(List<RaycastHit2D> list, float distance)
+    void AddHitsWithSpace(List<RaycastHit2D> list, float distance)
     {
-        list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(0.5f, 0)), new Vector2(0, 1), distance));
-        list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(-0.5f, 0)), new Vector2(0, -1), distance));
-        list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(0, 0.5f)), new Vector2(-1, 0), distance));
-        list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(0, -0.5f)), new Vector2(1, 0), distance));
+        list.Clear();
+        switch(direction)
+        {
+            case 0:
+                list.Add(Physics2D.Raycast(playerPosition2, new Vector2(0, 1), distance));
+                list.Add(Physics2D.Raycast(playerPosition2, new Vector2(0, -1), distance));
+                list.Add(Physics2D.Raycast(playerPosition2 + new Vector2(0, 0.5f), new Vector2(-1, 0), distance));
+                list.Add(Physics2D.Raycast(playerPosition2 + new Vector2(0, 0.5f), new Vector2(1, 0), distance));
+            break;
+            case 1:
+                list.Add(Physics2D.Raycast(playerPosition2, new Vector2(0, 1), distance));
+                list.Add(Physics2D.Raycast(playerPosition2, new Vector2(0, -1), distance));
+                list.Add(Physics2D.Raycast(playerPosition2 + new Vector2(0, -0.5f), new Vector2(-1, 0), distance));
+                list.Add(Physics2D.Raycast(playerPosition2 + new Vector2(0, -0.5f), new Vector2(1, 0), distance));
+            break;
+            case 2:
+                list.Add(Physics2D.Raycast(playerPosition2 + new Vector2(0.5f, 0), new Vector2(0, 1), distance));
+                list.Add(Physics2D.Raycast(playerPosition2 + new Vector2(0.5f, 0), new Vector2(0, -1), distance));
+                list.Add(Physics2D.Raycast(playerPosition2, new Vector2(-1, 0), distance));
+                list.Add(Physics2D.Raycast(playerPosition2, new Vector2(1, 0), distance));
+            break;
+            case 3:
+                list.Add(Physics2D.Raycast(playerPosition2 + new Vector2(-0.5f, 0), new Vector2(0, 1), distance));
+                list.Add(Physics2D.Raycast(playerPosition2 + new Vector2(-0.5f, 0), new Vector2(0, -1), distance));
+                list.Add(Physics2D.Raycast(playerPosition2, new Vector2(-1, 0), distance));
+                list.Add(Physics2D.Raycast(playerPosition2, new Vector2(1, 0), distance));
+            break;
+        }
+    }
+    
+    
+    void AddStraightHits(List<RaycastHit2D> list, float distance)
+    {
+        list.Add(Physics2D.Raycast((playerPosition2), new Vector2(0, 1), distance));
+        list.Add(Physics2D.Raycast((playerPosition2), new Vector2(0, -1), distance));
+        list.Add(Physics2D.Raycast((playerPosition2), new Vector2(-1, 0), distance));
+        list.Add(Physics2D.Raycast((playerPosition2), new Vector2(1, 0), distance));
     }
 
 

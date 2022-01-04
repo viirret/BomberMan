@@ -26,8 +26,8 @@ public class Powerups : MonoBehaviour
         
 
         // create powerups
-        Powerup(extraLife, new Vector3(1, 1, 0));
-        Powerup(lightning, new Vector3(5, 1, 0));
+        Powerup(extraLife, new Vector3(-2, -4, 0));
+        Powerup(lightning, new Vector3(2, -4, 0));
         Powerup(fire, new Vector3(2, 3, 0));
 
     }

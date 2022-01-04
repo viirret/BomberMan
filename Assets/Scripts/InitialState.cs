@@ -27,7 +27,7 @@ public class InitialState : IEnemyState
             NextMovement(dir);
         
         if(ready)
-            ToChaseState();
+            ToNormalState();
     }
 
 
