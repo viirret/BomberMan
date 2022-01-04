@@ -8,6 +8,7 @@ public class Powerups : MonoBehaviour
     public static Powerups instance;
     public GameObject extraLife;
     public GameObject lightning;
+    public GameObject fire;
     
     void Start()
     {
@@ -26,7 +27,8 @@ public class Powerups : MonoBehaviour
 
         // create powerups
         Powerup(extraLife, new Vector3(1, 1, 0));
-        Powerup(lightning, new Vector3(2, 3, 0));
+        Powerup(lightning, new Vector3(5, 1, 0));
+        Powerup(fire, new Vector3(2, 3, 0));
 
     }
 
@@ -46,6 +48,8 @@ public class Powerups : MonoBehaviour
             obj.transform.localScale = new Vector3(0.1f, 0.08f, 1f);
         if(prefab == extraLife)
             obj.transform.localScale = new Vector3(0.9f, 0.9f, 1f);
+        if(prefab == fire)
+            obj.transform.localScale = new Vector3(0.2f, 0.2f, 1f);
     }
 }
  

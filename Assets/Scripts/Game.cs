@@ -218,6 +218,7 @@ public class Game : MonoBehaviour
     {
         GameObject oneUp = GameObject.Find("oneUp(Clone)");
         GameObject lightning = GameObject.Find("lightning(Clone)");
+        GameObject fire = GameObject.Find("fire1(Clone)");
 
         if(oneUp)
         {
@@ -259,6 +260,27 @@ public class Game : MonoBehaviour
                 }
             }
         }
+
+        if(fire)
+        {
+            BoxCollider2D bc = fire.GetComponent<BoxCollider2D>();
+            if(bc.IsTouching(player))
+            {
+                Player.AddBlastRadius();
+                Destroy(fire);
+            }
+
+            for(int i = 0; i < enemies.Count; i++)
+            {
+                if(bc.IsTouching(enemies[i].gameObject.GetComponent<BoxCollider2D>()))
+                {
+                    enemies[i].GetComponent<EnemyController>().AddBlastRadius();
+                    Destroy(fire);
+                }
+            }
+        }
+
+       
     }
 
 

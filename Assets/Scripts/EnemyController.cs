@@ -57,8 +57,10 @@ public class EnemyController : MonoBehaviour
         currentState = initialState;
     }
 
-    public void AddLife() => lives++;
+    // functions for powerups
+    public void AddLife() => ++lives;
     public void AddSpeed(int amount) => speed += amount;
+    public void AddBlastRadius() => ++blastRadius;
     
 
     public void HitEnemy()
