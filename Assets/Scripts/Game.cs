@@ -118,10 +118,13 @@ public class Game : MonoBehaviour
                 Levels.NewLevel();
         }
 
+        // handling powerups
+        /*
         if(GameObject.Find("healthUp(Clone)").GetComponent<BoxCollider2D>().IsTouching(player))
         {
             Debug.Log("touched player");
         }
+        */
     }
 
     // making the bird
@@ -130,14 +133,13 @@ public class Game : MonoBehaviour
         GameObject obj;
         bird.transform.localScale = new Vector3(0.06f, 0.04f, 1f);
         obj = Instantiate(bird, spawn, Quaternion.identity);
+        obj.AddComponent<BoxCollider2D>();
         SpriteRenderer sr = obj.GetComponent<SpriteRenderer>();
         sr.sortingOrder = 1;
-        Tilemap tm = obj.AddComponent<Tilemap>();
         Rigidbody2D b = obj.AddComponent<Rigidbody2D>();
         b.angularDrag = 0;
         b.gravityScale = 0;
         b.freezeRotation = true;
-        BoxCollider2D bc = obj.AddComponent<BoxCollider2D>();
         if(enemy)
         {
             enemyCount++;
@@ -191,10 +193,10 @@ public class Game : MonoBehaviour
     void ClearLevel()
     {
         foreach(GameObject bomb in GameObject.FindGameObjectsWithTag("bomb"))
-            if(bomb != null)
+            if(bomb)
                 Destroy(bomb);
         foreach(GameObject explosion in GameObject.FindGameObjectsWithTag("explosion"))
-            if(explosion != null)
+            if(explosion)
                 Destroy(explosion);
     }
     void LoadMedia()

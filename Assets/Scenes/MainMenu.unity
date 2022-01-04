@@ -4207,7 +4207,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1708a1baa442261afaf019fc58f2a8b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  extraLife: {fileID: 253825708535607865, guid: d9bcf6bd8486b2033a4d75ed3b9285b2, type: 3}
+  extraLife: {fileID: 7415962422790872651, guid: c8060b31f5c132bc2a1218f260796d67, type: 3}
+  lightning: {fileID: 6683487827779924221, guid: e1fd88c56f1f6984abfc78413047b43a, type: 3}
 --- !u!4 &1586385324
 Transform:
   m_ObjectHideFlags: 0
