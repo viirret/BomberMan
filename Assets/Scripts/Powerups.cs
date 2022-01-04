@@ -5,21 +5,17 @@ using UnityEngine.Tilemaps;
 
 public class Powerups : MonoBehaviour 
 {
-    static GameObject extraLife;
-    Tilemap tilemap;
-
+    public static Powerups instance;
+    public GameObject extraLife;
+    GameObject obj;
+    
     void Start()
     {
-        extraLife = Resources.Load("1-up-powerup") as GameObject;
-        tilemap = GameMap.TilemapTop;
+        instance = this;
     }
 
-    public static void CreatePowerUps()
+    public void CreatePowerUps()
     {
-
-        //extraLife = Instantiate(extraLife, new Vector3(2, 3, 0), Quaternion.identity);
-        
-        int num = Random.Range(10,50);
-        //Debug.Log(num); 
+        obj = Instantiate(extraLife, new Vector3(2, 3, 0), Quaternion.identity);
     }    
 }

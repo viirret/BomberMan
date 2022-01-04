@@ -20,7 +20,8 @@ public class Game : MonoBehaviour
     AudioSource level2;
     AudioSource level3;
     AudioSource currentSong;
-    void Start()
+    BoxCollider2D player;
+    void Awake()
     {
         CreateSpawnPoints(spawnPoints);
         LoadMedia();
@@ -38,6 +39,8 @@ public class Game : MonoBehaviour
         int spwn = Random.Range(0, 3);
         CreateBird(blueBird, spawnPoints[spwn], false);
         spawnPoints.RemoveAt(spwn);
+
+        player = GameObject.FindWithTag("Player").GetComponent<BoxCollider2D>();
     }
 
     void Update()
@@ -56,7 +59,7 @@ public class Game : MonoBehaviour
                 pc.MoveToSpawn(moveTo);
                 spawnPoints.RemoveAt(spwn);
             }
-            
+
             // settings for current level
             switch(Levels.level)
             {
@@ -64,10 +67,10 @@ public class Game : MonoBehaviour
                 Debug.Log("Level 1");
                 Player.lives = 1;
                 CreateBird(owl, spawnPoints[0], true);
-                //CreateBird(owl, spawnPoints[1], true);
-                //CreateBird(owl, spawnPoints[2], true);
+                CreateBird(owl, spawnPoints[1], true);
+                CreateBird(owl, spawnPoints[2], true);
+                Powerups.instance.CreatePowerUps();
                 currentSong = level1;
-                Powerups.CreatePowerUps();
                 break;
                 
                 case 2:
@@ -113,6 +116,11 @@ public class Game : MonoBehaviour
                 Winner.Win();
             else   
                 Levels.NewLevel();
+        }
+
+        if(GameObject.Find("healthUp(Clone)").GetComponent<BoxCollider2D>().IsTouching(player))
+        {
+            Debug.Log("touched player");
         }
     }
 
@@ -175,6 +183,7 @@ public class Game : MonoBehaviour
         else
         {
             pc = obj.AddComponent<PlayerController>().GetComponent<PlayerController>();
+            obj.tag = "Player";
         }
     }
 

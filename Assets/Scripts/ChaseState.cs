@@ -93,7 +93,7 @@ public class ChaseState : IEnemyState
         // things in the main direction
         
         // if main direction is covered by wall, works!
-        if(!enemy.LookDirection(enemy.LargestDirection(), true, false))
+        if(!enemy.LookDirection(enemy.LargestDirection(), true, true))
         {   
             wallInDirection = true;
         }
@@ -103,7 +103,7 @@ public class ChaseState : IEnemyState
         }
 
         // if main direction is covered by destructible
-        if(!enemy.LookDirection(enemy.LargestDirection(), false, false))
+        if(!enemy.LookDirection(enemy.LargestDirection(), false, true))
         {
             destructibleInDirection = true;
         }
@@ -137,14 +137,32 @@ public class ChaseState : IEnemyState
 
         
         // if nothing in front of the enemy towards the largest distance of the player
-        if((!bombInDirection) && (!wallInDirection) && (!destructibleInDirection) && (!enemyInDirection))
-        {
-            enemy.GoPrimaryDirection();
-        }
-    }
         
+        
+        if((!bombInDirection) && (!wallInDirection) && (!destructibleInDirection)
+        && (!enemyInDirection))
+        {
+            // if the enemy makes a turn
+            if(enemy.LargestDirection() != enemy.direction)
+            {
+                Debug.Log("enemy should make a turn"); 
+                // if there is tile in front of the enemy
+                if((!enemy.LookDirection(enemy.direction, true, false)) && (!enemy.LookDirection(enemy.direction, false, false)))
+                {
+                    enemy.direction = enemy.LargestDirection();
+                    Debug.Log("going to largest direction");
+                }
+            }
+        }
+        
+        
+    }
 
 
+    void goPrimaryOrSecondary()
+    {
+
+    }    
 
     public void ToNormalState()
     {
