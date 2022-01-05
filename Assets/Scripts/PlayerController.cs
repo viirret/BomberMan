@@ -17,13 +17,10 @@ public class PlayerController : MonoBehaviour
     Vector2 lookingPosition = new Vector2(0, 0);
     Vector2 extraPosition = new Vector2(0, 0);
 
-    void Start() 
-    {
-        speed = Player.speed;
-    }
-
     void Update() 
     {
+        speed = Player.speed;
+
         // z value is -6 by default so changing to match to map
         Vector3Int playerPositionorig = GameMap.TilemapTop.WorldToCell(transform.position);
         playerPosition = playerPositionorig;

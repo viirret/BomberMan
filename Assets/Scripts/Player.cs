@@ -12,9 +12,9 @@ public static class Player
 
     // functions for player
     public static void AddScore(int amount) => score += amount;
-    public static void RemoveScore(int amount) => score -= amount;
     public static void AddSpeed(int amount) => speed += amount;
     public static void AddBlastRadius() => blastRadius++;
+    public static void AddBombsAtOnce() => bombsAtOnce++;
     public static void RemoveLife() => lives--;
     public static void AddLife() => ++lives;
 }

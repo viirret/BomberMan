@@ -7,9 +7,7 @@ public class MainMenu : MonoBehaviour
 {
     Button PlayButton;
     Button OptionsButton;
-    Button ExtraButton;
     Button QuitButton;
-    Button BackButtonOptions;
     AudioSource clickSound;
 
     void Start()

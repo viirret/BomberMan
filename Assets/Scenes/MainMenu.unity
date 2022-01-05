@@ -4075,6 +4075,7 @@ MonoBehaviour:
   extraLife: {fileID: 7415962422790872651, guid: c8060b31f5c132bc2a1218f260796d67, type: 3}
   lightning: {fileID: 6683487827779924221, guid: e1fd88c56f1f6984abfc78413047b43a, type: 3}
   fire: {fileID: 6472585561313324796, guid: fe0695c912fda6d5eabd07176264ace3, type: 3}
+  bomb: {fileID: 3604959216229183724, guid: 9f72cfb16ad7589d784a3a6dc58a2120, type: 3}
 --- !u!4 &1586385324
 Transform:
   m_ObjectHideFlags: 0

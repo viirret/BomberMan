@@ -34,6 +34,9 @@ public class Game : MonoBehaviour
         Levels.level = 1;
         Levels.StartNewLevel = true;
         Player.score = 0;
+        Player.lives = 1;
+        PlayerSettingsNormal();
+
 
         // create player in random place
         int spwn = Random.Range(0, 3);
@@ -66,7 +69,6 @@ public class Game : MonoBehaviour
             {
                 case 1:
                 Debug.Log("Level 1");
-                Player.lives = 1;
                 CreateBird(owl, spawnPoints[0], true);
                 CreateBird(owl, spawnPoints[1], true);
                 CreateBird(owl, spawnPoints[2], true);
@@ -76,7 +78,8 @@ public class Game : MonoBehaviour
                 
                 case 2:
                 Debug.Log("Level 2");
-                Player.lives = 1;
+                PlayerSettingsNormal();
+                Powerups.instance.CreatePowerUps();
                 CreateBird(owl, spawnPoints[0], true);
                 //CreateBird(owl, spawnPoints[1], true);
                 //CreateBird(owl, spawnPoints[2], true);
@@ -86,7 +89,8 @@ public class Game : MonoBehaviour
                 
                 case 3:
                 Debug.Log("Level 3");
-                Player.lives = 1;
+                PlayerSettingsNormal();
+                Powerups.instance.CreatePowerUps();
                 CreateBird(owl, spawnPoints[0], true);
                 //CreateBird(eagle, spawnPoints[1], true);
                 //CreateBird(eagle, spawnPoints[2], true);
@@ -214,11 +218,14 @@ public class Game : MonoBehaviour
         yellowBird = Resources.Load<GameObject>("Yellow Bird");
     }
     
+
+    // maybe refactor this later
     void HandlePowerUps()
     {
         GameObject oneUp = GameObject.Find("oneUp(Clone)");
         GameObject lightning = GameObject.Find("lightning(Clone)");
         GameObject fire = GameObject.Find("fire1(Clone)");
+        GameObject bomb = GameObject.Find("bombimage(Clone)");
 
         if(oneUp)
         {
@@ -280,7 +287,33 @@ public class Game : MonoBehaviour
             }
         }
 
-       
+        if(bomb)
+        {
+            BoxCollider2D bc = bomb.GetComponent<BoxCollider2D>();
+            if(bc.IsTouching(player))
+            {
+                Player.AddBombsAtOnce();
+                Destroy(bomb);
+            }
+
+            for(int i = 0; i < enemies.Count; i++)
+            {
+                if(bc.IsTouching(enemies[i].gameObject.GetComponent<BoxCollider2D>()))
+                {
+                    enemies[i].GetComponent<EnemyController>().AddBombsAtOnce();
+                    Destroy(bomb);
+                }
+            }
+        }
+    }
+
+    // normal settings for player before every round
+    void PlayerSettingsNormal()
+    {
+        Player.speed = 5f;
+        Player.blastRadius = 3;
+        Player.lives = 1;
+        Player.bombsAtOnce = 1;
     }
 
 

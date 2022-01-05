@@ -61,6 +61,7 @@ public class EnemyController : MonoBehaviour
     public void AddLife() => ++lives;
     public void AddSpeed(int amount) => speed += amount;
     public void AddBlastRadius() => ++blastRadius;
+    public void AddBombsAtOnce() => ++bombsAtOnce;
     
 
     public void HitEnemy()

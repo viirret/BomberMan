@@ -9,6 +9,7 @@ public class Powerups : MonoBehaviour
     public GameObject extraLife;
     public GameObject lightning;
     public GameObject fire;
+    public GameObject bomb;
     
     void Start()
     {
@@ -24,12 +25,13 @@ public class Powerups : MonoBehaviour
 
         // create spawnpoints for powerups
         
+        // new Vector(2, -4, 0)
 
         // create powerups
         Powerup(extraLife, new Vector3(-2, -4, 0));
         Powerup(lightning, new Vector3(2, -4, 0));
-        Powerup(fire, new Vector3(2, 3, 0));
-
+        Powerup(fire, new Vector3(1, 5, 0));
+        Powerup(bomb, new Vector3(2, 3, 0));
     }
 
     void Powerup(GameObject prefab, Vector3 position)
@@ -50,6 +52,8 @@ public class Powerups : MonoBehaviour
             obj.transform.localScale = new Vector3(0.9f, 0.9f, 1f);
         if(prefab == fire)
             obj.transform.localScale = new Vector3(0.2f, 0.2f, 1f);
+        if(prefab == bomb)
+            obj.transform.localScale = new Vector3(0.1f, 0.1f, 1f);
     }
 }
  
