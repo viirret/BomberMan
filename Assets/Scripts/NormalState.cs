@@ -41,7 +41,7 @@ public class NormalState : IEnemyState
             }
         }
         
-        /*
+        
         // if bomb straight ahead
         if(enemy.BombVision(5f) == enemy.direction)
         {
@@ -50,18 +50,17 @@ public class NormalState : IEnemyState
 
         if(enemy.SeeOtherEnemy(2f) == enemy.direction)
         {
-            Debug.Log("I see other player");
             enemy.GoOpposite();
         }
  
         // player straight ahead of player
         if(enemy.SeePlayer(5f) == enemy.direction)
         {
-            Debug.Log("I see player");
             enemy.GoOpposite();
         }
-        */
         
+        
+        // legacy
         if(enemy.DestructibleLeftOrRight(enemy.direction))
         {
             if(enemy.LookDirection(enemy.direction, false, false))
@@ -86,10 +85,10 @@ public class NormalState : IEnemyState
             }
         }
 
+        // this works!
         // if enemy sees powerup
         if(enemy.SeePowerUp(5f) != -1)
         {
-            Debug.Log("enemy sees powerup");
             enemy.direction = enemy.SeePowerUp(5f);
         }
     }

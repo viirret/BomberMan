@@ -17,13 +17,11 @@ public class MainMenu : MonoBehaviour
         // define buttons
         QuitButton = GameObject.Find("QuitButton").GetComponent<Button>();
         PlayButton = GameObject.Find("PlayButton").GetComponent<Button>(); 
-        ExtraButton = GameObject.Find("ExtrasButton").GetComponent<Button>();
         OptionsButton = GameObject.Find("OptionsButton").GetComponent<Button>();
 
         // listeners for buttons
         QuitButton.onClick.AddListener(Func.Quit);
         PlayButton.onClick.AddListener(StartGame);
-        ExtraButton.onClick.AddListener(ExtrasButton);
         OptionsButton.onClick.AddListener(PauseMenu.PauseGame);
 
         // play theme
@@ -37,11 +35,6 @@ public class MainMenu : MonoBehaviour
     void StartGame()
     {
         SceneManager.LoadScene("game");
-        clickSound.Play();
-    }
-
-    void ExtrasButton()
-    {
         clickSound.Play();
     }
 }

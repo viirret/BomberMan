@@ -342,7 +342,6 @@ public class EnemyController : MonoBehaviour
         return a > b ? (a > c ? a : c) : (b > c ? b : c);
     }
 
-
     // choose random number from list
     int Choose(List<int?> list)
     {
@@ -388,10 +387,10 @@ public class EnemyController : MonoBehaviour
     
     void AddStraightHits(List<RaycastHit2D> list, float distance)
     {
-        list.Add(Physics2D.Raycast((playerPosition2), new Vector2(0, 1), distance));
-        list.Add(Physics2D.Raycast((playerPosition2), new Vector2(0, -1), distance));
-        list.Add(Physics2D.Raycast((playerPosition2), new Vector2(-1, 0), distance));
-        list.Add(Physics2D.Raycast((playerPosition2), new Vector2(1, 0), distance));
+        list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(0, 0.5f)), new Vector2(0, 1), distance));
+        list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(0, -0.5f)), new Vector2(0, -1), distance));
+        list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(-0.5f, 0)), new Vector2(-1, 0), distance));
+        list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(0.5f, 0)), new Vector2(1, 0), distance));
     }
 
 
@@ -438,10 +437,10 @@ public class EnemyController : MonoBehaviour
     // update closest tiles
     void Tiles()
     {
-        upTile = TargetTile(new Vector2(0, 0.7f), new Vector2(0, 1), 0.5f);
-        downTile = TargetTile(new Vector2(0, -0.7f), new Vector2(0, -1), 0.5f);
-        leftTile = TargetTile(new Vector2(-0.7f, 0), new Vector2(-1, 0), 0.5f);
-        rightTile = TargetTile(new Vector2(0.7f, 0), new Vector2(1, 0), 0.5f);
+        upTile = TargetTile(new Vector2(0, 0.5f), new Vector2(0, 1), 0.5f);
+        downTile = TargetTile(new Vector2(0, -0.5f), new Vector2(0, -1), 0.5f);
+        leftTile = TargetTile(new Vector2(-0.5f, 0), new Vector2(-1, 0), 0.5f);
+        rightTile = TargetTile(new Vector2(0.5f, 0), new Vector2(1, 0), 0.5f);
         // enemy bird moves so close to the wall
         extraDownTile = TargetTile(new Vector2(0, -1.7f), new Vector2(0, -1), 0.5f);
 
@@ -458,7 +457,7 @@ public class EnemyController : MonoBehaviour
         oldPosition = transform.position;
         playerPosition2 = position;
 
-        // update tiles
+        // update tiles, only in initialstate
         Tiles();
 
         currentState.UpdateState();
