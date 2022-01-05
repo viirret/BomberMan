@@ -6,11 +6,8 @@ using UnityEngine.Tilemaps;
 public class PlayerController : MonoBehaviour
 {
     float speed;
-    GameObject bombPrefab;
-    public static Vector2 bombposition;
     public static Vector3Int playerPosition;
     public static Vector3 playerPos;
-
     public static int bombAmount = 0;
 
     // vectors used in raycasting
@@ -70,16 +67,19 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(WaitBomb());
         }
 
-        // check if wall in ongoing direction to stop vibrating
         RaycastHit2D vision = Physics2D.Raycast((playerPosition2 + extraPosition), lookingPosition, 0.1f);
         Vector3Int target = GameMap.TilemapTop.WorldToCell(vision.point);
         Tile tile = GameMap.TilemapTop.GetTile<Tile>(target);
+
+        // walltile pushes back the same amount that player pushes walltile,
+        // so the vibration stops
         if(tile == GameMap.Wall)
         {
             transform.position += ReverseVector(lookingPosition) * speed * Time.deltaTime;
         }
 
-        // for some reason the destructible tiles show wrong
+        // I have no idea why this doesn't work, it totally breaks the whole game.
+        // this is the reason player has some vibration with destructible tiles
         if(tile == GameMap.Destructible)
         {
         }

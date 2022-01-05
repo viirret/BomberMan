@@ -21,6 +21,7 @@ public class Game : MonoBehaviour
     AudioSource level3;
     AudioSource currentSong;
     BoxCollider2D player;
+
     void Awake()
     {
         CreateSpawnPoints(spawnPoints);
@@ -68,10 +69,10 @@ public class Game : MonoBehaviour
             {
                 case 1:
                 Debug.Log("Level 1");
+                Powerups.instance.CreatePowerUps();
                 CreateBird(owl, spawnPoints[0], true);
                 CreateBird(owl, spawnPoints[1], true);
                 CreateBird(owl, spawnPoints[2], true);
-                Powerups.instance.CreatePowerUps();
                 currentSong = level1;
                 break;
                 
@@ -237,7 +238,7 @@ public class Game : MonoBehaviour
                 Destroy(oneUp);
             }
 
-            // if eneny gets the powerup
+            // if enemy gets the powerup
             for(int i = 0; i < enemies.Count; i++)
             {
                 if(bc.IsTouching(enemies[i].gameObject.GetComponent<BoxCollider2D>()))

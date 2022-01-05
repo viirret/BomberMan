@@ -18,6 +18,9 @@ public class EnemyController : MonoBehaviour
     public Vector3 position;
     public float currentSpeed;
     public GameObject bomb;
+    int bombAmount = 0;
+    Vector2 playerPosition2;
+    Vector2 oldPosition;
     
     // tiles next to enemy
     public Tile upTile;
@@ -39,11 +42,8 @@ public class EnemyController : MonoBehaviour
     public NormalState normalState;
     public ChaseState chaseState;
 
-   
-    Vector2 playerPosition2;
-    int bombAmount = 0;
-    Vector2 oldPosition;
 
+    // initialize states
     void Awake()
     {
         initialState = new InitialState(this);
@@ -88,11 +88,9 @@ public class EnemyController : MonoBehaviour
             StartCoroutine(WaitBomb());
         }
     }
-    public bool BombAlive() => bomb ? true : false;
+    public bool BombAlive() => bomb;
     
     // return opposite direction from lastDirection
-    public int OppositeDirection(int last) => last = (last == 0 || last == 2) ? ++last : --last;
-
     public void GoOpposite() => direction = OppositeDirection(direction);
 
     // see if there is any bombs in the vision
@@ -206,6 +204,7 @@ public class EnemyController : MonoBehaviour
 
 
 
+    // go right or left or randomly if both possible
     public void GoRightOrLeft()
     {
         bool a = false, b = false;
@@ -231,6 +230,7 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    // llok tiles from the player
     public bool LookDirection(int dir, bool wall, bool close)
     {
         if(close) 
@@ -257,6 +257,8 @@ public class EnemyController : MonoBehaviour
            }           
         }
     }
+    
+    int OppositeDirection(int last) => last = (last == 0 || last == 2) ? ++last : --last;
 
     bool checkDirection(Tile tile, bool wall)
     {
@@ -278,6 +280,7 @@ public class EnemyController : MonoBehaviour
 
     int GoTowardsPlayer(bool x)
     {
+        // four distances from enemy to player
         float dUp = PlayerController.playerPos.y - position.y;
         float dDown = -(PlayerController.playerPos.y - position.y); 
         float dLeft =  -(PlayerController.playerPos.x - position.x);
@@ -290,7 +293,7 @@ public class EnemyController : MonoBehaviour
 
         if(x)
         {
-            // move towards largest distance
+            // return largest distance
             if (largest == dUp)
                 return 0;
             else if (largest == dDown)
@@ -352,6 +355,7 @@ public class EnemyController : MonoBehaviour
             return Choose(list);
     }
     
+    // raycast with space so that enemy won't hit wall while turning
     void AddHitsWithSpace(List<RaycastHit2D> list, float distance)
     {
         list.Clear();
@@ -385,6 +389,7 @@ public class EnemyController : MonoBehaviour
     }
     
     
+    // normal raycast from bird
     void AddStraightHits(List<RaycastHit2D> list, float distance)
     {
         list.Add(Physics2D.Raycast((playerPosition2 + new Vector2(0, 0.5f)), new Vector2(0, 1), distance));
@@ -394,6 +399,7 @@ public class EnemyController : MonoBehaviour
     }
 
 
+    // tile in raycast
     Tile TargetTile(Vector2 ownPosition, Vector2 lookingPosition, float distance)
     {
         RaycastHit2D hit = Physics2D.Raycast((playerPosition2 + ownPosition), lookingPosition, distance);
@@ -434,7 +440,7 @@ public class EnemyController : MonoBehaviour
     }
 
     
-    // update closest tiles
+    // update tiles
     void Tiles()
     {
         upTile = TargetTile(new Vector2(0, 0.5f), new Vector2(0, 1), 0.5f);
