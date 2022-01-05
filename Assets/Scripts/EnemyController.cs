@@ -257,6 +257,44 @@ public class EnemyController : MonoBehaviour
            }           
         }
     }
+
+    
+    public bool LookTile(int dir, float distance)
+    {
+        switch(dir)
+        {
+            case 0: if(TargetTile(new Vector2(0, 0.7f), new Vector2(0, 1), distance))
+                    {
+                        return
+                            TargetTile(new Vector2(0, 0.7f), new Vector2(0, 1), distance).name == "Wall" ||
+                            TargetTile(new Vector2(0, 0.7f), new Vector2(0, 1), distance).name == "Destructible";
+                    }
+                    break;
+            case 1: if(TargetTile(new Vector2(0, -0.7f), new Vector2(0, -1), distance))
+                    {
+                        return 
+                            TargetTile(new Vector2(0, -0.7f), new Vector2(0, -1), distance).name == "Wall" ||
+                            TargetTile(new Vector2(0, -0.7f), new Vector2(0, -1), distance).name == "Destructible";
+                    }
+                    break;
+            case 2: if(TargetTile(new Vector2(-0.7f, 0), new Vector2(-1, 0), distance))
+                    {
+                        return 
+                            TargetTile(new Vector2(-0.7f, 0), new Vector2(-1, 0), distance).name == "Wall" ||
+                            TargetTile(new Vector2(-0.7f, 0), new Vector2(-1, 0), distance).name == "Destructible";
+                    }
+                    break;
+            case 3: if(TargetTile(new Vector2(0.7f, 0), new Vector2(1, 0), distance))
+                    {
+                        return
+                            TargetTile(new Vector2(0.7f, 0), new Vector2(1, 0), distance).name == "Wall" ||
+                            TargetTile(new Vector2(0.7f, 0), new Vector2(1, 0), distance).name == "Destructible";
+                    }
+                    break;   
+            default: return false;
+        }
+        return false;
+    }
     
     int OppositeDirection(int last) => last = (last == 0 || last == 2) ? ++last : --last;
 
@@ -443,10 +481,10 @@ public class EnemyController : MonoBehaviour
     // update tiles
     void Tiles()
     {
-        upTile = TargetTile(new Vector2(0, 0.5f), new Vector2(0, 1), 0.5f);
-        downTile = TargetTile(new Vector2(0, -0.5f), new Vector2(0, -1), 0.5f);
-        leftTile = TargetTile(new Vector2(-0.5f, 0), new Vector2(-1, 0), 0.5f);
-        rightTile = TargetTile(new Vector2(0.5f, 0), new Vector2(1, 0), 0.5f);
+        upTile = TargetTile(new Vector2(0, 0.7f), new Vector2(0, 1), 0.5f);
+        downTile = TargetTile(new Vector2(0, -0.7f), new Vector2(0, -1), 0.5f);
+        leftTile = TargetTile(new Vector2(-0.7f, 0), new Vector2(-1, 0), 0.5f);
+        rightTile = TargetTile(new Vector2(0.7f, 0), new Vector2(1, 0), 0.5f);
         // enemy bird moves so close to the wall
         extraDownTile = TargetTile(new Vector2(0, -1.7f), new Vector2(0, -1), 0.5f);
 

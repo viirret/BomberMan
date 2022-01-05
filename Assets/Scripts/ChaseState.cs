@@ -88,6 +88,7 @@ public class ChaseState : IEnemyState
         // things in the main direction
         
         // if main direction is covered by wall, works!
+        /*
         if(!enemy.LookDirection(enemy.LargestDirection(), true, true))
         {   
             wallInDirection = true;
@@ -105,6 +106,16 @@ public class ChaseState : IEnemyState
         else
         {
             destructibleInDirection = false;
+        }
+        */
+
+        if(enemy.LookTile(enemy.LargestDirection(), 0.5f))
+        {
+            wallInDirection = true;
+        }
+        else
+        {
+            wallInDirection = false;
         }
 
         // no bomb in the main direction, this only works for little distance
@@ -129,16 +140,16 @@ public class ChaseState : IEnemyState
         //Debug.Log("Wall in direction: " + wallInDirection);
         //Debug.Log("Destructible in direction: " + destructibleInDirection);
         //Debug.Log("Bomb in direction: " + bombInDirection);
+        Debug.Log(enemy.LookTile(enemy.LargestDirection(), 0.5f));
 
         
         // if nothing in front of the enemy towards the largest distance of the player
         
         
-        if((!bombInDirection) && (!wallInDirection) && (!destructibleInDirection)
-        && (!enemyInDirection))
+        if((!bombInDirection) && (wallInDirection) && (!enemyInDirection))
         {
             enemy.direction = enemy.LargestDirection();
-            //Debug.Log("going to largest direction");
+            Debug.Log("going to largest direction");
         }
         
         

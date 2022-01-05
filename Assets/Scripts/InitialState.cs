@@ -26,6 +26,7 @@ public class InitialState : IEnemyState
         if(doNextFunction)
             NextMovement(dir);
         
+        // changed for development purposes
         if(ready)
             ToNormalState();
     }

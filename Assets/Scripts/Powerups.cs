@@ -10,6 +10,7 @@ public class Powerups : MonoBehaviour
     public GameObject lightning;
     public GameObject fire;
     public GameObject bomb;
+    public GameObject star;
     
     void Start()
     {
@@ -31,14 +32,16 @@ public class Powerups : MonoBehaviour
         Powerup(extraLife, new Vector3(-2, -4, 0));
         Powerup(lightning, new Vector3(2, -4, 0));
         Powerup(fire, new Vector3(1, 5, 0));
-        Powerup(bomb, new Vector3(2, 3, 0));
+        Powerup(bomb, new Vector3(1, 6, 0));
+        Powerup(star, new Vector3(2, 3, 0));
     }
 
     void Powerup(GameObject prefab, Vector3 position)
     {
         GameObject obj;
         obj = Instantiate(prefab, position, Quaternion.identity);
-        obj.tag = "powerup";
+        if(prefab != star)
+            obj.tag = "powerup";
         obj.AddComponent<BoxCollider2D>();
         SpriteRenderer SR = obj.GetComponent<SpriteRenderer>();
         SR.sortingOrder = 1;
@@ -52,7 +55,7 @@ public class Powerups : MonoBehaviour
             obj.transform.localScale = new Vector3(0.9f, 0.9f, 1f);
         if(prefab == fire)
             obj.transform.localScale = new Vector3(0.2f, 0.2f, 1f);
-        if(prefab == bomb)
+        if(prefab == bomb || prefab == star)
             obj.transform.localScale = new Vector3(0.1f, 0.1f, 1f);
     }
 }

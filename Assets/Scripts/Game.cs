@@ -219,14 +219,34 @@ public class Game : MonoBehaviour
         yellowBird = Resources.Load<GameObject>("Yellow Bird");
     }
     
+    // normal settings for player before every round
+    void PlayerSettingsNormal()
+    {
+        Player.speed = 5f;
+        Player.blastRadius = 3;
+        Player.lives = 1;
+        Player.bombsAtOnce = 1;
+    }
 
-    // maybe refactor this later
+    // all the spawnpoints in the corners of the map
+    void CreateSpawnPoints(List<Vector3> spawnPoints)
+    {
+        spawnPoints.Clear();
+        spawnPoints.Add(new Vector3(8, 4.5f, 0));
+        spawnPoints.Add(new Vector3(-8, 4.5f, 0));
+        spawnPoints.Add(new Vector3(8, -5.5f, 0));
+        spawnPoints.Add(new Vector3(-8, -5.5f, 0));
+    }
+
+
+    // there probably is nicer way to do this but I dont' have infinite time and this works
     void HandlePowerUps()
     {
         GameObject oneUp = GameObject.Find("oneUp(Clone)");
         GameObject lightning = GameObject.Find("lightning(Clone)");
         GameObject fire = GameObject.Find("fire1(Clone)");
         GameObject bomb = GameObject.Find("bombimage(Clone)");
+        GameObject star = GameObject.Find("star(Clone)");
 
         if(oneUp)
         {
@@ -306,26 +326,18 @@ public class Game : MonoBehaviour
                 }
             }
         }
-    }
 
-    // normal settings for player before every round
-    void PlayerSettingsNormal()
-    {
-        Player.speed = 5f;
-        Player.blastRadius = 3;
-        Player.lives = 1;
-        Player.bombsAtOnce = 1;
-    }
+        if(star)
+        {
+            BoxCollider2D bc = star.GetComponent<BoxCollider2D>();
+            if(bc.IsTouching(player))
+            {
+                Player.AddScore(1000);
+                Destroy(star);
+            }
 
-
-
-    // all the spawnpoints in the corners of the map
-    void CreateSpawnPoints(List<Vector3> spawnPoints)
-    {
-        spawnPoints.Clear();
-        spawnPoints.Add(new Vector3(8, 4.5f, 0));
-        spawnPoints.Add(new Vector3(-8, 4.5f, 0));
-        spawnPoints.Add(new Vector3(8, -5.5f, 0));
-        spawnPoints.Add(new Vector3(-8, -5.5f, 0));
+            for(int i = 0; i < enemies.Count; i++)
+                Destroy(star);
+        }
     }
 }
