@@ -18,6 +18,18 @@ public class ChaseState : IEnemyState
     public void UpdateState()
     { 
         HuntPlayer();
+
+        // if not the last player
+        if(!(Game.enemies.Count < 2))
+        {
+            // if all attributes are same or better
+            if( enemy.blastRadius >= Player.blastRadius &&
+                enemy.bombsAtOnce >= Player.bombsAtOnce &&
+                enemy.speed >= Player.speed )
+                {
+                    ToNormalState();
+                }
+        }
     }
 
     void HuntPlayer()
@@ -30,21 +42,21 @@ public class ChaseState : IEnemyState
             {
                 enemy.DropBomb();
                 enemy.GoOpposite();
-                Debug.Log("destructible in enemy's way");
+                //Debug.Log("destructible in enemy's way");
             }
 
             // if there is any other tile in enemy's direction
             if(!enemy.LookDirection(enemy.direction, true, true))
             {
                 enemy.GoRightOrLeft();
-                Debug.Log("any other tile in enemy's way");
+                //Debug.Log("any other tile in enemy's way");
             }
 
             // if enemy sees other enemy
             if(enemy.SeeOtherEnemy(0.25f) == enemy.direction)
             {
                 enemy.GoOpposite();
-                Debug.Log("enemy sees other enemy");
+                //Debug.Log("enemy sees other enemy");
             }
 
             // see the player
@@ -60,14 +72,14 @@ public class ChaseState : IEnemyState
         // if enemy straight ahead
         if(enemy.SeeOtherEnemy(0.25f) == enemy.direction)
         {
-            Debug.Log("enemy straight ahead");
+            //Debug.Log("enemy straight ahead");
             enemy.GoOpposite();
         }
         
         // if player straight ahead
         if(enemy.SeePlayer(0.25f) == enemy.direction)
         {
-            Debug.Log("player straight ahead");
+            //Debug.Log("player straight ahead");
             enemy.DropBomb();
             enemy.GoOpposite();
         }
@@ -126,22 +138,15 @@ public class ChaseState : IEnemyState
         && (!enemyInDirection))
         {
             enemy.direction = enemy.LargestDirection();
-            Debug.Log("going to largest direction");
+            //Debug.Log("going to largest direction");
         }
         
         
     }
 
 
-    void goPrimaryOrSecondary()
-    {
 
-    }    
-
-    public void ToNormalState()
-    {
-    }
-
+    public void ToNormalState() => enemy.currentState = enemy.normalState;
     public void ToInitialState() {}
     public void ToChaseState() {}
 }

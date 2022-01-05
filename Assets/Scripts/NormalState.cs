@@ -13,7 +13,19 @@ public class NormalState : IEnemyState
 
     public void UpdateState()
     {
-        Play();   
+        Play();
+
+        // go to chase state if this is the last enemy
+        if(Game.enemies.Count == 1)
+            ToChaseState();
+
+        // if any of the attributes is better
+        if(enemy.blastRadius > Player.blastRadius)
+            ToChaseState();
+        if(enemy.bombsAtOnce > Player.bombsAtOnce)
+            ToChaseState();
+        if(enemy.speed > Player.speed)
+            ToChaseState();
     }
 
     void Play()
@@ -98,10 +110,7 @@ public class NormalState : IEnemyState
         }
     }
 
-    public void ToChaseState()
-    {
-        enemy.currentState = enemy.chaseState;
-    }
+    public void ToChaseState() => enemy.currentState = enemy.chaseState;
     public void ToInitialState() {}
     public void ToNormalState() {}
 }

@@ -69,6 +69,7 @@ public class Game : MonoBehaviour
             {
                 case 1:
                 Debug.Log("Level 1");
+                PlayerSettingsNormal();
                 Powerups.instance.CreatePowerUps();
                 CreateBird(owl, spawnPoints[0], true);
                 CreateBird(owl, spawnPoints[1], true);
