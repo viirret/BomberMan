@@ -25,23 +25,6 @@ public class ChaseState : IEnemyState
         // every time enemy "stops"
         if(enemy.currentSpeed == 0)
         {
-            /*
-            // see if there is bomb near by
-            if(enemy.BombVision(0.5f) != -1)
-            {
-                // if not space on the opposite direction of the bomb
-                // meaning the enemy cannot go back from the bomb
-                
-                if(!enemy.LookDirection(enemy.OppositeDirection(enemy.BombVision(0.25f)), true, true))
-                {
-                    // escape the bomb
-                    enemy.GoRightOrLeft();
-                    Debug.Log("enemy escaping the bomb");
-                }
-                
-            }
-            */
-
             // if there is destructible tile in enemy's direction
             if(!enemy.LookDirection(enemy.direction, false, true))
             {

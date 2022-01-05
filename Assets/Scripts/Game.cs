@@ -5,7 +5,6 @@ using UnityEngine.Tilemaps;
 
 public class Game : MonoBehaviour
 {
-    public static int enemyCount;
     public static List<GameObject> enemies = new List<GameObject>();
     // all the prefabs
     GameObject blueBird;

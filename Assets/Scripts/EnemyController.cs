@@ -264,7 +264,6 @@ public class EnemyController : MonoBehaviour
         {
             if(wall)
             {
-                // if something breaks with checkDirection this next line is probably the reason
                 if(tile.name == "Wall")
                     return false;
             }
@@ -458,7 +457,7 @@ public class EnemyController : MonoBehaviour
         oldPosition = transform.position;
         playerPosition2 = position;
 
-        // update tiles, only in initialstate
+        // update tiles
         Tiles();
 
         currentState.UpdateState();
