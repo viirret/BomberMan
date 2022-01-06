@@ -31,8 +31,12 @@ public class Winner : MonoBehaviour
         Time.timeScale = 0f;
 
         // give final score
-        double multiplier = 5 - (double)GameTexts.totalTime / 30.0;
+        double multiplier = 10 - (double)GameTexts.totalTime / 30.0;
         double FinalScore = multiplier * Player.score;
+
+        // minimum
+        if(multiplier < 1.0)
+            multiplier = 1.0;
 
         score.text = 
         "Bomber score: " + Player.score + 

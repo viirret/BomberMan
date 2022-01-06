@@ -6,7 +6,7 @@ public class ChaseState : IEnemyState
 {
     EnemyController enemy;
     bool wallInDirection = false;
-    bool destructibleInDirection = false;
+    //bool destructibleInDirection = false;
     bool bombInDirection = false;
     bool enemyInDirection = false;
 

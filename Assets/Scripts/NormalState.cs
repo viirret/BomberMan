@@ -17,6 +17,7 @@ public class NormalState : IEnemyState
     {
         Play();
 
+        /*
         // go to chase state if this is the last enemy
         if(Game.enemies.Count == 1)
             ToChaseState();
@@ -37,6 +38,7 @@ public class NormalState : IEnemyState
             seePowerup = false;
             ToChaseState();
         }
+        */
     }
 
     void Play()

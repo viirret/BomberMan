@@ -67,35 +67,32 @@ public class Game : MonoBehaviour
             switch(Levels.level)
             {
                 case 1:
-                Debug.Log("Level 1");
                 PlayerSettingsNormal();
                 Powerups.instance.CreatePowerUps();
-                CreateBird(owl, spawnPoints[0], true);
-                CreateBird(owl, spawnPoints[1], true);
+                CreateBird(eagle, spawnPoints[0], true);
+                CreateBird(chicken, spawnPoints[1], true);
                 CreateBird(owl, spawnPoints[2], true);
                 currentSong = level1;
                 break;
                 
                 case 2:
-                Debug.Log("Level 2");
                 PlayerSettingsNormal();
                 Powerups.instance.CreatePowerUps();
                 ClearLevel();
                 CreateBird(owl, spawnPoints[0], true);
-                //CreateBird(owl, spawnPoints[1], true);
-                //CreateBird(owl, spawnPoints[2], true);
+                CreateBird(owl, spawnPoints[1], true);
+                CreateBird(owl, spawnPoints[2], true);
                 level1.Stop();
                 currentSong = level2;
                 break;
                 
                 case 3:
-                Debug.Log("Level 3");
                 PlayerSettingsNormal();
                 Powerups.instance.CreatePowerUps();
                 ClearLevel();
-                CreateBird(owl, spawnPoints[0], true);
-                //CreateBird(eagle, spawnPoints[1], true);
-                //CreateBird(eagle, spawnPoints[2], true);
+                CreateBird(chicken, spawnPoints[0], true);
+                CreateBird(chicken, spawnPoints[1], true);
+                CreateBird(chicken, spawnPoints[2], true);
                 level2.Stop();
                 currentSong = level3;
                 break;
@@ -165,7 +162,7 @@ public class Game : MonoBehaviour
                     EC.speed = 3;
                     EC.blastRadius = 2;
                     EC.bombsAtOnce = 1;
-                    EC.lives = 10;
+                    EC.lives = 1;
                     EC.killReward = 200;
                 break;
                 case "Owl":
@@ -179,7 +176,7 @@ public class Game : MonoBehaviour
                     EC.speed = 6;
                     EC.blastRadius = 3;
                     EC.bombsAtOnce = 1;
-                    EC.lives = 2;
+                    EC.lives = 1;
                     EC.killReward = 200;
                 break;
                 default: break;

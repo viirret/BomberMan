@@ -27,28 +27,28 @@ public class PlayerController : MonoBehaviour
         Vector2 playerPosition2 = playerPos;
 
         // movement
-        if(Input.GetKey(KeyCode.W) || Input.GetKey("up"))
+        if(Input.GetKey(KeyCode.W) || Input.GetKey("up") || Input.GetKey(KeyCode.K))
         {
             transform.position += new Vector3(0, 1) * speed * Time.deltaTime;
             lookingPosition = new Vector2(0, 1);
             extraPosition = new Vector2(0, 0.28f);
         }
 
-        if(Input.GetKey(KeyCode.S) || Input.GetKey("down"))
+        if(Input.GetKey(KeyCode.S) || Input.GetKey("down") || Input.GetKey(KeyCode.J))
         {
             transform.position += new Vector3(0, -1) * speed * Time.deltaTime;
             lookingPosition = new Vector2(0, -1);
             extraPosition = new Vector2(0, -0.3f);
         }
 
-        if(Input.GetKey(KeyCode.A) || Input.GetKey("left"))
+        if(Input.GetKey(KeyCode.A) || Input.GetKey("left") || Input.GetKey(KeyCode.H))
         {
             transform.position += new Vector3(-1, 0) * speed * Time.deltaTime;
             lookingPosition = new Vector2(-1, 0);
             extraPosition = new Vector2(-0.45f, 0);
         }
 
-        if(Input.GetKey(KeyCode.D) || Input.GetKey("right"))
+        if(Input.GetKey(KeyCode.D) || Input.GetKey("right") || Input.GetKey(KeyCode.L))
         {
             transform.position += new Vector3(1, 0) * speed * Time.deltaTime;
             lookingPosition = new Vector2(1, 0);

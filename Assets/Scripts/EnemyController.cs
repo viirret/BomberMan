@@ -66,10 +66,10 @@ public class EnemyController : MonoBehaviour
 
     public void HitEnemy()
     {
-        Player.AddScore(killReward);
         lives--;
         if(lives == 0)
         {
+            Player.AddScore(killReward);
             Game.enemies.Remove(obj);
             Destroy(obj);
         }
