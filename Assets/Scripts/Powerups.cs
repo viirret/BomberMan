@@ -5,6 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class Powerups : MonoBehaviour 
 {
+    List<Vector3> spawnPoints = new List<Vector3>();
     public static Powerups instance;
     public GameObject extraLife;
     public GameObject lightning;
@@ -25,15 +26,21 @@ public class Powerups : MonoBehaviour
                 Destroy(powerup);
 
         // create spawnpoints for powerups
-        
-        // new Vector(2, -4, 0)
+        AddAllSpawns();
 
-        // create powerups
-        Powerup(extraLife, new Vector3(-2, -4, 0));
-        Powerup(lightning, new Vector3(2, -4, 0));
-        Powerup(fire, new Vector3(1, 5, 0));
-        Powerup(bomb, new Vector3(1, 6, 0));
-        Powerup(star, new Vector3(2, 3, 0));
+        // make the powerups
+        MakePowerUp(extraLife);
+        MakePowerUp(lightning);
+        MakePowerUp(fire);
+        MakePowerUp(bomb);
+        MakePowerUp(star);        
+    }
+
+    void MakePowerUp(GameObject obj)
+    {
+        int rnd = Random.Range(0, spawnPoints.Count);
+        Powerup(obj, spawnPoints[rnd]);
+        spawnPoints.RemoveAt(rnd);
     }
 
     void Powerup(GameObject prefab, Vector3 position)
@@ -57,6 +64,35 @@ public class Powerups : MonoBehaviour
             obj.transform.localScale = new Vector3(0.2f, 0.2f, 1f);
         if(prefab == bomb || prefab == star)
             obj.transform.localScale = new Vector3(0.1f, 0.1f, 1f);
+    }
+
+    void AddAllSpawns()
+    {
+        spawnPoints.Clear();
+        
+        // up row
+        spawnPoints.Add(new Vector3(-6, 3, 0));
+        spawnPoints.Add(new Vector3(-4, 3, 0));
+        spawnPoints.Add(new Vector3(-2, 3, 0));
+        spawnPoints.Add(new Vector3(0, 3, 0));
+        spawnPoints.Add(new Vector3(2, 3, 0));
+        spawnPoints.Add(new Vector3(4, 3, 0));
+        spawnPoints.Add(new Vector3(6, 3, 0));
+
+        // down row
+        spawnPoints.Add(new Vector3(-6, -3, 0));
+        spawnPoints.Add(new Vector3(-4, -3, 0));
+        spawnPoints.Add(new Vector3(-2, -3, 0));
+        spawnPoints.Add(new Vector3(0, -3, 0));
+        spawnPoints.Add(new Vector3(2, -3, 0));
+        spawnPoints.Add(new Vector3(4, -3, 0));
+        spawnPoints.Add(new Vector3(6, -3, 0));
+
+        // sides
+        spawnPoints.Add(new Vector3(6, 1, 0));
+        spawnPoints.Add(new Vector3(6, -1, 0));
+        spawnPoints.Add(new Vector3(-6, 1, 0));
+        spawnPoints.Add(new Vector3(-6, -1, 0));
     }
 }
  

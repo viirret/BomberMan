@@ -337,7 +337,8 @@ public class Game : MonoBehaviour
             }
 
             for(int i = 0; i < enemies.Count; i++)
-                Destroy(star);
+                if(bc.IsTouching(enemies[i].gameObject.GetComponent<BoxCollider2D>()))
+                    Destroy(star);
         }
     }
 }
