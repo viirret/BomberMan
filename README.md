@@ -5,6 +5,8 @@ Bomberman game with Unity
 
 # Gameplay
 Movement with WASD-keys, arrow keys or VIM keys.
+
 Press SPACE to drop bomb.
+
 Press M to open menu.
 
