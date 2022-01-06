@@ -69,25 +69,15 @@ public class Powerups : MonoBehaviour
     void AddAllSpawns()
     {
         spawnPoints.Clear();
-        
+
         // up row
-        spawnPoints.Add(new Vector3(-6, 3, 0));
-        spawnPoints.Add(new Vector3(-4, 3, 0));
-        spawnPoints.Add(new Vector3(-2, 3, 0));
-        spawnPoints.Add(new Vector3(0, 3, 0));
-        spawnPoints.Add(new Vector3(2, 3, 0));
-        spawnPoints.Add(new Vector3(4, 3, 0));
-        spawnPoints.Add(new Vector3(6, 3, 0));
-
+        for(int i = -6; i < 6; i+=2)
+            spawnPoints.Add(new Vector3(i, 3, 0));
+        
         // down row
-        spawnPoints.Add(new Vector3(-6, -3, 0));
-        spawnPoints.Add(new Vector3(-4, -3, 0));
-        spawnPoints.Add(new Vector3(-2, -3, 0));
-        spawnPoints.Add(new Vector3(0, -3, 0));
-        spawnPoints.Add(new Vector3(2, -3, 0));
-        spawnPoints.Add(new Vector3(4, -3, 0));
-        spawnPoints.Add(new Vector3(6, -3, 0));
-
+        for(int i = -6; i < 6; i+=2)
+            spawnPoints.Add(new Vector3(i, -3, 0));
+        
         // sides
         spawnPoints.Add(new Vector3(6, 1, 0));
         spawnPoints.Add(new Vector3(6, -1, 0));
