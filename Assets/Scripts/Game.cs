@@ -51,7 +51,6 @@ public class Game : MonoBehaviour
         if(Levels.StartNewLevel)
         {
             Levels.StartNewLevel = false;
-            ClearLevel();
             enemies.Clear();
             
             // move player to random spawn point
@@ -81,6 +80,7 @@ public class Game : MonoBehaviour
                 Debug.Log("Level 2");
                 PlayerSettingsNormal();
                 Powerups.instance.CreatePowerUps();
+                ClearLevel();
                 CreateBird(owl, spawnPoints[0], true);
                 //CreateBird(owl, spawnPoints[1], true);
                 //CreateBird(owl, spawnPoints[2], true);
@@ -92,6 +92,7 @@ public class Game : MonoBehaviour
                 Debug.Log("Level 3");
                 PlayerSettingsNormal();
                 Powerups.instance.CreatePowerUps();
+                ClearLevel();
                 CreateBird(owl, spawnPoints[0], true);
                 //CreateBird(eagle, spawnPoints[1], true);
                 //CreateBird(eagle, spawnPoints[2], true);

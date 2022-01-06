@@ -18,7 +18,7 @@ public class EnemyController : MonoBehaviour
     public Vector3 position;
     public float currentSpeed;
     public GameObject bomb;
-    int bombAmount = 0;
+    public int bombAmount = 0;
     Vector2 playerPosition2;
     Vector2 oldPosition;
     
@@ -402,14 +402,14 @@ public class EnemyController : MonoBehaviour
             case 0:
                 list.Add(Physics2D.Raycast(playerPosition2, new Vector2(0, 1), distance));
                 list.Add(Physics2D.Raycast(playerPosition2, new Vector2(0, -1), distance));
-                list.Add(Physics2D.Raycast(playerPosition2 + new Vector2(0, 0.5f), new Vector2(-1, 0), distance));
-                list.Add(Physics2D.Raycast(playerPosition2 + new Vector2(0, 0.5f), new Vector2(1, 0), distance));
+                list.Add(Physics2D.Raycast(playerPosition2 + new Vector2(0, -0.5f), new Vector2(-1, 0), distance));
+                list.Add(Physics2D.Raycast(playerPosition2 + new Vector2(0, -0.5f), new Vector2(1, 0), distance));
             break;
             case 1:
                 list.Add(Physics2D.Raycast(playerPosition2, new Vector2(0, 1), distance));
                 list.Add(Physics2D.Raycast(playerPosition2, new Vector2(0, -1), distance));
-                list.Add(Physics2D.Raycast(playerPosition2 + new Vector2(0, -0.5f), new Vector2(-1, 0), distance));
-                list.Add(Physics2D.Raycast(playerPosition2 + new Vector2(0, -0.5f), new Vector2(1, 0), distance));
+                list.Add(Physics2D.Raycast(playerPosition2 + new Vector2(0, 0.5f), new Vector2(-1, 0), distance));
+                list.Add(Physics2D.Raycast(playerPosition2 + new Vector2(0, 0.5f), new Vector2(1, 0), distance));
             break;
             case 2:
                 list.Add(Physics2D.Raycast(playerPosition2 + new Vector2(0.5f, 0), new Vector2(0, 1), distance));

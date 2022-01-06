@@ -5,6 +5,8 @@ using UnityEngine;
 public class NormalState : IEnemyState
 {
     EnemyController enemy;
+    bool seePowerup = false;
+    bool seePlayer = false;
 
     public NormalState(EnemyController enemy)
     {
@@ -21,11 +23,20 @@ public class NormalState : IEnemyState
 
         // if any of the attributes is better
         if(enemy.blastRadius > Player.blastRadius)
+        {
+            seePowerup = false;
             ToChaseState();
+        }
         if(enemy.bombsAtOnce > Player.bombsAtOnce)
+        {
+            seePowerup = false;
             ToChaseState();
+        }
         if(enemy.speed > Player.speed)
+        {
+            seePowerup = false;
             ToChaseState();
+        }
     }
 
     void Play()
@@ -60,53 +71,59 @@ public class NormalState : IEnemyState
             enemy.GoOpposite();
         }
 
-        if(enemy.SeeOtherEnemy(2f) == enemy.direction)
+        if(enemy.SeeOtherEnemy(4f) == enemy.direction)
         {
             enemy.GoOpposite();
         }
  
         // player straight ahead of player
-        if(enemy.SeePlayer(5f) == enemy.direction)
+        if(enemy.SeePlayer(10f) == enemy.direction)
         {
+            seePlayer = true;
             enemy.GoPrimaryDirection();
+            
+            // go drop bomb near player
             if(enemy.SeePlayer(0.5f) == enemy.direction)
             {
-                enemy.GoOpposite();
+                seePlayer = false;
                 enemy.DropBomb();
+                enemy.GoOpposite();
             }
         }
         
-        
-        // legacy
+        // drop bombs everywhere
         if(enemy.DestructibleLeftOrRight(enemy.direction))
         {
-            if(enemy.LookDirection(enemy.direction, false, false))
+            if((!seePowerup) && (!seePlayer))
             {
-                if(!enemy.BombAlive())
+                if(enemy.LookDirection(enemy.direction, false, false))
+                {
+                    if(!enemy.BombAlive())
+                    {
+                        enemy.DropBomb();
+                        enemy.GoOpposite();
+                    }
+                }
+                else if(enemy.LookDirection(enemy.direction, true, false))
+                {
+                    if(!enemy.BombAlive())
+                    {
+                        enemy.DropBomb();
+                        enemy.GoOpposite();
+                    }
+                }
+                else
                 {
                     enemy.DropBomb();
-                    enemy.GoOpposite();
                 }
-            }
-            else if(enemy.LookDirection(enemy.direction, true, false))
-            {
-                if(!enemy.BombAlive())
-                {
-                    enemy.DropBomb();
-                    enemy.GoOpposite();
-                }
-            }
-            else
-            {
-                enemy.DropBomb();
             }
         }
 
-        // this works!
         // if enemy sees powerup
         if(enemy.SeePowerUp(5f) != -1)
         {
             enemy.direction = enemy.SeePowerUp(5f);
+            seePowerup = true;
         }
     }
 
