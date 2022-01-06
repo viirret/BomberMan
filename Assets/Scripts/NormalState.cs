@@ -73,6 +73,7 @@ public class NormalState : IEnemyState
             enemy.GoOpposite();
         }
 
+        // if enemy straight ahead
         if(enemy.SeeOtherEnemy(4f) == enemy.direction)
         {
             enemy.GoOpposite();
@@ -126,6 +127,12 @@ public class NormalState : IEnemyState
         {
             enemy.direction = enemy.SeePowerUp(5f);
             seePowerup = true;
+        }
+
+        // enemy does not let itself get pushed by player
+        if(enemy.GetComponent<BoxCollider2D>().IsTouching(enemy.obj.GetComponent<BoxCollider2D>()))
+        {
+            enemy.MoveOpposite();
         }
     }
 

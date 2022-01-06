@@ -70,7 +70,7 @@ public class Game : MonoBehaviour
                 PlayerSettingsNormal();
                 Powerups.instance.CreatePowerUps();
                 CreateBird(eagle, spawnPoints[0], true);
-                CreateBird(chicken, spawnPoints[1], true);
+                CreateBird(eagle, spawnPoints[1], true);
                 CreateBird(owl, spawnPoints[2], true);
                 currentSong = level1;
                 break;
@@ -79,7 +79,7 @@ public class Game : MonoBehaviour
                 PlayerSettingsNormal();
                 Powerups.instance.CreatePowerUps();
                 ClearLevel();
-                CreateBird(owl, spawnPoints[0], true);
+                CreateBird(eagle, spawnPoints[0], true);
                 CreateBird(owl, spawnPoints[1], true);
                 CreateBird(owl, spawnPoints[2], true);
                 level1.Stop();
@@ -90,9 +90,9 @@ public class Game : MonoBehaviour
                 PlayerSettingsNormal();
                 Powerups.instance.CreatePowerUps();
                 ClearLevel();
-                CreateBird(chicken, spawnPoints[0], true);
-                CreateBird(chicken, spawnPoints[1], true);
-                CreateBird(chicken, spawnPoints[2], true);
+                CreateBird(owl, spawnPoints[0], true);
+                CreateBird(owl, spawnPoints[1], true);
+                CreateBird(owl, spawnPoints[2], true);
                 level2.Stop();
                 currentSong = level3;
                 break;
@@ -160,13 +160,13 @@ public class Game : MonoBehaviour
                 break;
                 case "Eagle":
                     EC.speed = 3;
-                    EC.blastRadius = 2;
+                    EC.blastRadius = 3;
                     EC.bombsAtOnce = 1;
                     EC.lives = 1;
                     EC.killReward = 200;
                 break;
                 case "Owl":
-                    EC.speed = 3;
+                    EC.speed = 4;
                     EC.blastRadius = 3;
                     EC.bombsAtOnce = 1;
                     EC.lives = 1;
@@ -330,7 +330,7 @@ public class Game : MonoBehaviour
             BoxCollider2D bc = star.GetComponent<BoxCollider2D>();
             if(bc.IsTouching(player))
             {
-                Player.AddScore(1000);
+                Player.AddScore(5000);
                 Destroy(star);
             }
 

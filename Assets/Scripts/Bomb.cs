@@ -31,7 +31,7 @@ public class Bomb : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         bomb.AddComponent<BoxCollider2D>();
         BoxCollider2D x = bomb.GetComponent<BoxCollider2D>();
-        x.size = new Vector3(0.7f, 0.7f, 0.7f);
+        x.size = new Vector3(1f, 1f, 1f);
         yield return new WaitForSeconds(1.5f); 
         GoOff();
     }
