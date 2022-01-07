@@ -9,6 +9,7 @@ public class Winner : MonoBehaviour
 {
     static GameObject obj;
     Button main;
+    Button newGame;
     static TMP_Text score;
     AudioSource clickSound;
     void Start()
@@ -18,9 +19,11 @@ public class Winner : MonoBehaviour
         // get elements
         obj = GameObject.Find("winObj");
         main = GameObject.Find("ToMain").GetComponent<Button>();
+        newGame = GameObject.Find("PlayAgain").GetComponent<Button>();
         score = GameObject.Find("GameScore").GetComponent<TMP_Text>();
 
         main.onClick.AddListener(Main);
+        newGame.onClick.AddListener(StartAgain);
         obj.SetActive(false);
     }
 
@@ -49,5 +52,12 @@ public class Winner : MonoBehaviour
         clickSound.Play();
         obj.SetActive(false);
         SceneManager.LoadScene("MainMenu");
+    }
+
+    void StartAgain()
+    {
+        clickSound.Play();
+        obj.SetActive(false);
+        SceneManager.LoadScene("game");
     }
 }

@@ -9,6 +9,7 @@ public class DeadCanvas : MonoBehaviour
     static GameObject obj;
     Button main;
     Button quit;
+    Button playAgain;
     AudioSource clickSound;
     void Start()
     {
@@ -18,9 +19,11 @@ public class DeadCanvas : MonoBehaviour
         obj = GameObject.Find("DeadObj");
         main = GameObject.Find("ToMain").GetComponent<Button>();
         quit = GameObject.Find("Quit").GetComponent<Button>();
+        playAgain = GameObject.Find("PlayAgain").GetComponent<Button>();
 
         // listeners
         main.onClick.AddListener(Main);
+        playAgain.onClick.AddListener(PlayAgain);
         quit.onClick.AddListener(Func.Quit);
 
         // check to pausing of the game
@@ -39,5 +42,12 @@ public class DeadCanvas : MonoBehaviour
         clickSound.Play();
         obj.SetActive(false);
         SceneManager.LoadScene("MainMenu");
+    }
+
+    void PlayAgain()
+    {
+        clickSound.Play();
+        obj.SetActive(false);
+        SceneManager.LoadScene("game");
     }
 }
