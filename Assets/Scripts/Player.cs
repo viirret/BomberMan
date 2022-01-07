@@ -12,5 +12,5 @@ public static class Player
     public static void AddBlastRadius() => blastRadius++;
     public static void AddBombsAtOnce() => bombsAtOnce++;
     public static void RemoveLife() => lives--;
-    public static void AddLife() => ++lives;
+    public static void AddLife() => lives++;
 }

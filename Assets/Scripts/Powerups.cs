@@ -45,8 +45,9 @@ public class Powerups : MonoBehaviour
 
     void Powerup(GameObject prefab, Vector3 position)
     {
-        GameObject obj;
-        obj = Instantiate(prefab, position, Quaternion.identity);
+        GameObject obj = Instantiate(prefab, position, Quaternion.identity);
+
+        // enemies won't go after star
         if(prefab != star)
             obj.tag = "powerup";
         obj.AddComponent<BoxCollider2D>();

@@ -26,7 +26,6 @@ public class InitialState : IEnemyState
         if(doNextFunction)
             NextMovement(dir);
         
-        // changed for development purposes
         if(ready)
             ToNormalState();
     }
@@ -100,15 +99,8 @@ public class InitialState : IEnemyState
     }
 
 
-    public void ToNormalState()
-    {
-        enemy.currentState = enemy.normalState;
-    }
-
-    public void ToChaseState() 
-    {
-        enemy.currentState = enemy.chaseState;
-    }
+    public void ToNormalState() => enemy.currentState = enemy.normalState;
+    public void ToChaseState() {}
     public void ToInitialState() {}
 
 }

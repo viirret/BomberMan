@@ -8,5 +8,4 @@ Movement with WASD-keys, arrow keys or VIM keys.
 
 Press SPACE to drop bomb.
 
-Press ESC to open menu.
-
+Press ESC or P to open menu.
