@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour
         {
             transform.position += new Vector3(0, -1) * speed * Time.deltaTime;
             lookingPosition = new Vector2(0, -1);
-            extraPosition = new Vector2(0, -0.3f);
+            extraPosition = new Vector2(0, -0.28f);
         }
 
         if(Input.GetKey(KeyCode.A) || Input.GetKey("left") || Input.GetKey(KeyCode.H))
@@ -85,14 +85,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // move player to point
     public void MoveToSpawn(Vector3 vec) => transform.position = vec;
 
-    Vector3 ReverseVector(Vector2 vector)
-    {
-        int x =  -(int)(vector.x);
-        int y =  -(int)(vector.y);
-        return new Vector3(x, y);
-    }
+    // return reverse of the vector
+    Vector3 ReverseVector(Vector2 vector) => new Vector3(-(int)vector.x, -(int)vector.y);
 
     IEnumerator WaitBomb()
     {

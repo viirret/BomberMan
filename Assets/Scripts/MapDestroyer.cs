@@ -76,7 +76,7 @@ public class MapDestroyer : MonoBehaviour
                 if(Vector3Int.FloorToInt(enemyControllers[i].GetComponent<EnemyController>().position) == cell)
                     enemyControllers[i].GetComponent<EnemyController>().HitEnemy();
 
-        // destoying a destructible tile
+        // destroying a destructible tile
         if(tile == destructibleTile)
             GameMap.TilemapTop.SetTile(cell, null);
 

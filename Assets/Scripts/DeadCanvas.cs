@@ -24,12 +24,13 @@ public class DeadCanvas : MonoBehaviour
         // listeners
         main.onClick.AddListener(Main);
         playAgain.onClick.AddListener(PlayAgain);
-        quit.onClick.AddListener(Func.Quit);
+        quit.onClick.AddListener(Application.Quit);
 
-        // check to pausing of the game
+        // make everything not active
         obj.SetActive(false);
     }
 
+    // this function is played from Game.cs
     public static void PlayWhenDead()
     {
         obj.SetActive(true);

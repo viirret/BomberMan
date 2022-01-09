@@ -25,7 +25,7 @@ public class PauseMenu : MonoBehaviour
             
             // listeners
             Resume.onClick.AddListener(ResumeGame);
-            Quit.onClick.AddListener(Func.Quit);
+            Quit.onClick.AddListener(Application.Quit);
             Main.onClick.AddListener(MainMenu);
             
             gameIsPaused = false;

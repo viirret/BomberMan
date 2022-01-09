@@ -230,7 +230,7 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    // llok tiles from the player
+    // look tiles from the player
     public bool LookDirection(int dir, bool wall, bool close)
     {
         if(close) 
@@ -501,6 +501,7 @@ public class EnemyController : MonoBehaviour
 
     void FixedUpdate()
     {
+        // enemy position variables
         position = transform.position;
         currentSpeed = Vector3.Distance(oldPosition, transform.position) * 100f;
         oldPosition = transform.position;
@@ -509,6 +510,7 @@ public class EnemyController : MonoBehaviour
         // update tiles
         Tiles();
 
+        // update state
         currentState.UpdateState();
         
         // main movement
@@ -520,5 +522,4 @@ public class EnemyController : MonoBehaviour
             case 3: MoveRight(); break;
         }
     }
-
-} 
+}

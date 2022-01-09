@@ -18,7 +18,7 @@ public class MainMenu : MonoBehaviour
         OptionsButton = GameObject.Find("OptionsButton").GetComponent<Button>();
 
         // listeners for buttons
-        QuitButton.onClick.AddListener(Func.Quit);
+        QuitButton.onClick.AddListener(Application.Quit);
         PlayButton.onClick.AddListener(StartGame);
         OptionsButton.onClick.AddListener(PauseMenu.PauseGame);
 
