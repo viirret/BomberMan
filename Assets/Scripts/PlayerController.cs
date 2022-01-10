@@ -5,11 +5,13 @@ using UnityEngine.Tilemaps;
 
 public class PlayerController : MonoBehaviour
 {
-    float speed;
     public static Vector3Int playerPosition;
     public static Vector3 playerPos;
     public static int bombAmount = 0;
 
+    float speed;
+    int blastRadius;
+    
     // vectors used in raycasting
     Vector2 lookingPosition = new Vector2(0, 0);
     Vector2 extraPosition = new Vector2(0, 0);
@@ -22,7 +24,9 @@ public class PlayerController : MonoBehaviour
 
     void Update() 
     {
+        // update values instantly
         speed = Player.speed;
+        blastRadius = Player.blastRadius;
 
         // z value is -6 by default so changing to match to map
         Vector3Int playerPositionorig = GameMap.TilemapTop.WorldToCell(transform.position);
@@ -68,7 +72,7 @@ public class PlayerController : MonoBehaviour
             var bomb = new GameObject();
             Bomb b = bomb.AddComponent<Bomb>();
             b.pos = transform.position;
-            b.blastRadius = Player.blastRadius;
+            b.blastRadius = blastRadius;
             Destroy(bomb, 3);
             StartCoroutine(WaitBomb());
         }

@@ -11,6 +11,10 @@ public class PauseMenu : MonoBehaviour
     static Button Main;
     static bool created = false;
     static AudioSource clickSound;
+    static GameObject title;
+    static GameObject PlayButton;
+    static GameObject OptionsButton;
+    static GameObject QuitButton;
     void Start()
     {
         if(!created)
@@ -32,9 +36,16 @@ public class PauseMenu : MonoBehaviour
             Pause.SetActive(false);
             Main.gameObject.SetActive(false);
             created = true;
+
         }
         else
             Destroy(this.gameObject);
+        
+        // get elemets from main menu
+        title = GameObject.Find("Title");
+        QuitButton = GameObject.Find("QuitButton");
+        PlayButton = GameObject.Find("PlayButton");
+        OptionsButton = GameObject.Find("OptionsButton");
     }
 
     // Update is called once per frame
@@ -57,6 +68,9 @@ public class PauseMenu : MonoBehaviour
         Scene scene = SceneManager.GetActiveScene();
         if(scene.name == "game")
             Time.timeScale = 1f;
+        if(scene.name == "MainMenu")
+            Active(true);
+
     }
 
     public static void PauseGame()
@@ -70,8 +84,9 @@ public class PauseMenu : MonoBehaviour
             Time.timeScale = 0f;
             Main.gameObject.SetActive(true);
         }
+        if(scene.name == "MainMenu")
+            Active(false);
     }
-
     void MainMenu()
     {
         clickSound.Play();
@@ -79,5 +94,12 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 1f;
         Main.gameObject.SetActive(false);
         Pause.SetActive(false);
+    }
+    static void Active(bool active)
+    {
+        title.SetActive(active);
+        QuitButton.SetActive(active);
+        PlayButton.SetActive(active);
+        OptionsButton.SetActive(active);
     }
 }

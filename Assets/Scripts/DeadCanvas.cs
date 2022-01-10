@@ -30,6 +30,13 @@ public class DeadCanvas : MonoBehaviour
         obj.SetActive(false);
     }
 
+    // play again with "enter"
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Return))
+            PlayAgain();
+    }
+
     // this function is played from Game.cs
     public static void PlayWhenDead()
     {

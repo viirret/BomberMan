@@ -27,6 +27,13 @@ public class Winner : MonoBehaviour
         obj.SetActive(false);
     }
 
+    // play again with enter
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Return))
+            StartAgain();
+    }
+
     public static void Win()
     {
         obj.SetActive(true);
@@ -43,8 +50,8 @@ public class Winner : MonoBehaviour
 
         score.text = 
         "Bomber score: " + Player.score + 
-        "\n\nTime bonus: " + multiplier.ToString("0.##") +
-        "\n\nFinal score: " + (int)FinalScore; 
+        "\nTime bonus: " + multiplier.ToString("0.##") +
+        "\nFinal score: " + (int)FinalScore; 
     }
 
     void Main()
