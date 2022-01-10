@@ -14,6 +14,12 @@ public class PlayerController : MonoBehaviour
     Vector2 lookingPosition = new Vector2(0, 0);
     Vector2 extraPosition = new Vector2(0, 0);
 
+    // if leaving update coroutine won't work properly
+    void Start()
+    {
+        bombAmount = 0;
+    }
+
     void Update() 
     {
         speed = Player.speed;
@@ -66,7 +72,7 @@ public class PlayerController : MonoBehaviour
             Destroy(bomb, 3);
             StartCoroutine(WaitBomb());
         }
-
+ 
         RaycastHit2D vision = Physics2D.Raycast((playerPosition2 + extraPosition), lookingPosition, 0.1f);
         Vector3Int target = GameMap.TilemapTop.WorldToCell(vision.point);
         Tile tile = GameMap.TilemapTop.GetTile<Tile>(target);

@@ -24,6 +24,11 @@ public class Powerups : MonoBehaviour
         foreach(GameObject powerup in GameObject.FindGameObjectsWithTag("powerup"))
             if(powerup)
                 Destroy(powerup);
+        
+        GameObject oldstar = GameObject.Find("star(Clone)");
+        if(oldstar)
+            Destroy(oldstar);
+        
 
         // create spawnpoints for powerups
         AddAllSpawns();
