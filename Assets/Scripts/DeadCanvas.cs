@@ -33,8 +33,9 @@ public class DeadCanvas : MonoBehaviour
     // play again with "enter"
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Return))
-            PlayAgain();
+        if(obj.activeSelf)
+            if(Input.GetKeyDown(KeyCode.Return))
+                PlayAgain();
     }
 
     // this function is played from Game.cs

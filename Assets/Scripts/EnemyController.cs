@@ -479,7 +479,7 @@ public class EnemyController : MonoBehaviour
 
     public void MoveOpposite()
     {
-        transform.position = -position;
+        transform.position = -transform.position;
     }
 
     

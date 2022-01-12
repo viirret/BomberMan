@@ -30,8 +30,9 @@ public class Winner : MonoBehaviour
     // play again with enter
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Return))
-            StartAgain();
+        if(obj.activeSelf)
+            if(Input.GetKeyDown(KeyCode.Return))
+                StartAgain();
     }
 
     public static void Win()

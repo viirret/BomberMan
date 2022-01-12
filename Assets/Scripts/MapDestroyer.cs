@@ -72,7 +72,7 @@ public class MapDestroyer : MonoBehaviour
 
         // if hit any of the enemies
         for(int i = 0; i < enemyControllers.Count; i++)
-            if(enemyControllers[i] != null)
+            if(enemyControllers[i])
                 if(Vector3Int.FloorToInt(enemyControllers[i].GetComponent<EnemyController>().position) == cell)
                     enemyControllers[i].GetComponent<EnemyController>().HitEnemy();
 
@@ -84,7 +84,6 @@ public class MapDestroyer : MonoBehaviour
         if(tile == wallTile)
             return false;
         
-
         // create the explosion effect
         var pos = GameMap.TilemapTop.GetCellCenterWorld(cell);
         tempBomb = Instantiate(explosionPrefab, pos, Quaternion.identity);
