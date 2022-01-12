@@ -129,11 +129,9 @@ public class NormalState : IEnemyState
             seePowerup = true;
         }
 
-        // enemy does not let itself get pushed by player
-        if(enemy.GetComponent<BoxCollider2D>().IsTouching(enemy.obj.GetComponent<BoxCollider2D>()))
-        {
-            enemy.MoveOpposite();
-        }
+        // remove life from player if touching enemy
+        if(enemy.GetComponent<BoxCollider2D>().IsTouching(Game.pc.GetComponent<BoxCollider2D>()))
+            Player.RemoveLife();
     }
 
     public void ToChaseState() => enemy.currentState = enemy.chaseState;

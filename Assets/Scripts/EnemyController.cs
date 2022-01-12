@@ -477,11 +477,6 @@ public class EnemyController : MonoBehaviour
         transform.position += new Vector3(1, 0) * speed * Time.deltaTime;
     }
 
-    public void MoveOpposite()
-    {
-        transform.position = -transform.position;
-    }
-
     
     // update tiles
     void Tiles()

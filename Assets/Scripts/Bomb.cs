@@ -36,16 +36,18 @@ public class Bomb : MonoBehaviour
         bomb.AddComponent<BoxCollider2D>();
         BoxCollider2D x = bomb.GetComponent<BoxCollider2D>();
         x.size = new Vector3(1f, 1f, 1f);
-        yield return new WaitForSeconds(1.5f); 
+        yield return new WaitForSeconds(1.5f);
         GoOff();
     }
 
     // destroy the bomb
     public void GoOff()
     {
-        bombsound.Play();
-        mapdes.Explode(pos);
         if(bomb)
+        {
+            bombsound.Play();
+            mapdes.Explode(pos);
             Destroy(bomb);
+        }
     }
 }

@@ -13,7 +13,7 @@ public class Game : MonoBehaviour
     GameObject yellowBird;
 
     List<Vector3> spawnPoints = new List<Vector3>(4);
-    PlayerController pc;
+    public static PlayerController pc;
     
     AudioSource level1;
     AudioSource level2;
@@ -33,7 +33,6 @@ public class Game : MonoBehaviour
         Levels.level = 1;
         Levels.StartNewLevel = true;
         Player.score = 0;
-        Player.lives = 1;
         PlayerSettingsNormal();
 
 
@@ -69,8 +68,8 @@ public class Game : MonoBehaviour
                 PlayerSettingsNormal();
                 Powerups.instance.CreatePowerUps();
                 CreateBird(eagle, spawnPoints[0], true);
-                CreateBird(eagle, spawnPoints[1], true);
-                CreateBird(owl, spawnPoints[2], true);
+                CreateBird(chicken, spawnPoints[1], true);
+                CreateBird(eagle, spawnPoints[2], true);
                 currentSong = level1;
                 break;
                 
@@ -117,7 +116,7 @@ public class Game : MonoBehaviour
         {
             if(Levels.level == 3)
                 Winner.Win();
-            else   
+            else
                 Levels.NewLevel();
         }
 
@@ -132,7 +131,8 @@ public class Game : MonoBehaviour
         GameObject obj;
         bird.transform.localScale = new Vector3(0.06f, 0.04f, 1f);
         obj = Instantiate(bird, spawn, Quaternion.identity);
-        obj.AddComponent<BoxCollider2D>();
+        BoxCollider2D bc = obj.AddComponent<BoxCollider2D>();
+        bc.size = new Vector2(10f, 10f);
         SpriteRenderer sr = obj.GetComponent<SpriteRenderer>();
         sr.sortingOrder = 1;
         Rigidbody2D b = obj.AddComponent<Rigidbody2D>();
@@ -151,7 +151,7 @@ public class Game : MonoBehaviour
             switch(bird.name)
             {
                 case "Yellow Bird":
-                    EC.speed = 4;
+                    EC.speed = 1;
                     EC.blastRadius = 3;
                     EC.bombsAtOnce = 1;
                     EC.lives = 1;
@@ -172,7 +172,7 @@ public class Game : MonoBehaviour
                     EC.killReward = 500;
                 break;
                 case "Chicken":
-                    EC.speed = 6;
+                    EC.speed = 2;
                     EC.blastRadius = 3;
                     EC.bombsAtOnce = 1;
                     EC.lives = 1;
