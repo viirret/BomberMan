@@ -67,7 +67,7 @@ public class Powerups : MonoBehaviour
         if(prefab == extraLife)
             obj.transform.localScale = new Vector3(0.9f, 0.9f, 1f);
         if(prefab == fire)
-            obj.transform.localScale = new Vector3(0.2f, 0.2f, 1f);
+            obj.transform.localScale = new Vector3(0.15f, 0.15f, 1f);
         if(prefab == bomb || prefab == star)
             obj.transform.localScale = new Vector3(0.1f, 0.1f, 1f);
     }

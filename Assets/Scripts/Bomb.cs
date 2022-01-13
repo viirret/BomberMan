@@ -31,13 +31,16 @@ public class Bomb : MonoBehaviour
     IEnumerator WaitTwo()
     {
         // adding BoxCollider after 0.5s so bird won't get stuck
-        lightup.Play();
-        yield return new WaitForSeconds(0.5f);
-        bomb.AddComponent<BoxCollider2D>();
-        BoxCollider2D x = bomb.GetComponent<BoxCollider2D>();
-        x.size = new Vector3(1f, 1f, 1f);
-        yield return new WaitForSeconds(1.5f);
-        GoOff();
+        if(bomb)
+        {
+            lightup.Play();
+            yield return new WaitForSeconds(0.5f);
+            bomb.AddComponent<BoxCollider2D>();
+            BoxCollider2D x = bomb.GetComponent<BoxCollider2D>();
+            x.size = new Vector3(1f, 1f, 1f);
+            yield return new WaitForSeconds(1.5f);
+            GoOff();
+        }
     }
 
     // destroy the bomb

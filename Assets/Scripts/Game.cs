@@ -67,7 +67,7 @@ public class Game : MonoBehaviour
                 case 1:
                 PlayerSettingsNormal();
                 Powerups.instance.CreatePowerUps();
-                CreateBird(eagle, spawnPoints[0], true);
+                CreateBird(chicken, spawnPoints[0], true);
                 CreateBird(chicken, spawnPoints[1], true);
                 CreateBird(eagle, spawnPoints[2], true);
                 currentSong = level1;
@@ -78,7 +78,7 @@ public class Game : MonoBehaviour
                 Powerups.instance.CreatePowerUps();
                 ClearLevel();
                 CreateBird(eagle, spawnPoints[0], true);
-                CreateBird(owl, spawnPoints[1], true);
+                CreateBird(chicken, spawnPoints[1], true);
                 CreateBird(owl, spawnPoints[2], true);
                 level1.Stop();
                 currentSong = level2;
@@ -176,7 +176,7 @@ public class Game : MonoBehaviour
                     EC.blastRadius = 3;
                     EC.bombsAtOnce = 1;
                     EC.lives = 1;
-                    EC.killReward = 200;
+                    EC.killReward = 100;
                 break;
                 default: break;
             }
@@ -280,7 +280,7 @@ public class Game : MonoBehaviour
             {
                 if(bc.IsTouching(enemies[i].gameObject.GetComponent<BoxCollider2D>()))
                 {
-                    enemies[i].GetComponent<EnemyController>().AddSpeed(5);
+                    enemies[i].GetComponent<EnemyController>().AddSpeed(3);
                     Destroy(lightning);
                 }
             }
